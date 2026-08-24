@@ -126,20 +126,38 @@ body {
    exhaustively up front.
    ========================================================================= */
 
-.p-button {
+/* Scoped to exclude secondary/outlined/text variants — an unscoped
+   `.p-button` selector clobbered them despite their own higher-specificity
+   modifier classes (`.p-button-secondary`, `.p-button-outlined`), because
+   those variant rules live inside `@layer primeng` and this file doesn't;
+   unlayered beats layered regardless of specificity. Confirmed by testing:
+   "Export Excel" (secondary, outlined) rendered as solid primary blue,
+   identical to the default "Vendor" button, until this was scoped. */
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text) {
   color: var(--primary-color-text);
   background: var(--primary-color);
   border-color: var(--primary-color);
 }
 
-.p-button:not(:disabled):hover {
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):hover {
   background: #004568;
   border-color: #004568;
 }
 
-.p-button:not(:disabled):active {
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):active {
   background: #003a56;
   border-color: #003a56;
+}
+
+.p-button.p-button-outlined {
+  color: var(--primary-color);
+  border-color: var(--surface-border);
+}
+
+.p-button.p-button-outlined:not(:disabled):hover {
+  background: var(--highlight-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .p-tag.p-tag-success {
@@ -162,14 +180,19 @@ body {
   background: #94a3b8;
 }
 
-[data-theme='dark'] .p-button:not(:disabled):hover {
+[data-theme='dark'] .p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):hover {
   background: #0369a1;
   border-color: #0369a1;
 }
 
-[data-theme='dark'] .p-button:not(:disabled):active {
+[data-theme='dark'] .p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):active {
   background: #075985;
   border-color: #075985;
+}
+
+[data-theme='dark'] .p-button.p-button-outlined:not(:disabled):hover {
+  background: var(--highlight-bg);
+  border-color: var(--primary-color);
 }
 
 [data-theme='dark'] .p-tag.p-tag-success {
