@@ -3,6 +3,7 @@ import { ShellComponent } from './layout/shell/shell.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { VendorsComponent } from './pages/vendors/vendors.component';
 import { UsersComponent } from './pages/users/users.component';
+import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { PlaceholderComponent } from './pages/placeholder/placeholder.component';
 
 const crumb = (label: string) => `Vendor Portal › ${label}`;
@@ -30,7 +31,7 @@ export const routes: Routes = [
       },
       {
         path: 'invoice-details',
-        component: PlaceholderComponent,
+        component: InvoicesComponent,
         data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details') }
       },
       {

@@ -15,6 +15,25 @@ export const outsourceRequestsData: OutsourceRequest[] = [
   { id: 'opn00201', projectName: 'French EU Translation', serviceType: 'Translation', vendor: 'SNT Ltd', amount: '200,000 INR', rawAmount: 200000, status: 'In Review' }
 ];
 
+export interface Invoice {
+  project: string;
+  status: string;
+  total: string;
+  invoiced: string;
+  remaining: string;
+  start: string;
+  end: string;
+  rawTotal: number;
+}
+
+/** Matches the 4 invoices in the original prototype's app.js exactly. */
+export const invoicesData: Invoice[] = [
+  { project: 'Translation of 2 modules', status: 'Paid & Closed', total: '500,000 INR', invoiced: '500,000 INR', remaining: '0 INR', start: '08/01/2026', end: '09/15/2026', rawTotal: 500000 },
+  { project: 'Voice Over in English for 10 modules', status: 'Paid & Closed', total: '700,000 INR', invoiced: '700,000 INR', remaining: '0 INR', start: '07/27/2026', end: '08/31/2026', rawTotal: 700000 },
+  { project: 'Translate Web Pages', status: 'Pending PM Approval', total: '70,000 INR', invoiced: '63,950 INR', remaining: '6,050 INR', start: '10/01/2026', end: '02/01/2027', rawTotal: 70000 },
+  { project: 'Translation', status: 'In Review', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000 }
+];
+
 export interface Vendor {
   code: string;
   name: string;
