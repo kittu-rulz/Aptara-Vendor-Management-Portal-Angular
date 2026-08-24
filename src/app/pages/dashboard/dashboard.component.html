@@ -30,28 +30,36 @@
   <p-table [value]="requests" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
-        <th>Request ID</th>
+        <th>Actions</th>
+        <th>Award Status</th>
+        <th>RevSys ID</th>
+        <th>Client Name</th>
         <th>Project Name</th>
-        <th>Service Type</th>
-        <th>Vendor</th>
-        <th>Amount</th>
         <th>Status</th>
+        <th>Vendor Name</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td>
+          <button class="row-action" title="View Details & Vendor Match"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="View Audit History"><i class="pi pi-history"></i></button>
+          <button class="row-action" title="Disable Request"><i class="pi pi-trash"></i></button>
+        </td>
+        <td>
+          <i *ngIf="row.awarded" class="pi pi-trophy award-trophy" title="Awarded to Vendor"></i>
+        </td>
         <td class="mono">{{ row.id }}</td>
-        <td><strong>{{ row.projectName }}</strong></td>
-        <td>{{ row.serviceType }}</td>
-        <td>{{ row.vendor }}</td>
-        <td class="amount">{{ row.amount }}</td>
+        <td>{{ row.client }}</td>
+        <td><strong>{{ row.project }}</strong></td>
         <td>
           <p-tag
-            [value]="row.status"
+            [value]="displayStatus(row.status)"
             [severity]="statusSeverity(row.status).severity"
             [styleClass]="statusSeverity(row.status).styleClass || ''"
           ></p-tag>
         </td>
+        <td><strong>{{ row.vendor }}</strong></td>
       </tr>
     </ng-template>
   </p-table>

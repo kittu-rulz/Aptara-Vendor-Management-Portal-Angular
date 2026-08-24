@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
-import { outsourceRequestsData, statusSeverity, OutsourceRequest } from '../../core/mock-data';
+import { outsourceRequestsData, statusSeverity, displayStatus, OutsourceRequest } from '../../core/mock-data';
 
 interface KpiCard {
   label: string;
@@ -23,6 +23,7 @@ interface KpiCard {
 export class DashboardComponent {
   requests: OutsourceRequest[] = outsourceRequestsData;
   statusSeverity = statusSeverity;
+  displayStatus = displayStatus;
 
   kpis: KpiCard[] = [
     { label: 'Outsource Requests', value: '4', trend: '100% Sourced & Active', icon: 'pi pi-folder-open', accent: 'blue' },

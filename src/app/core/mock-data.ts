@@ -166,22 +166,36 @@ export const auditHistoryData: AuditEntry[] = [
   { attr: 'Final Budget', oldVal: '15000.00', newVal: '650000', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12 PM', comment: 'Modified' }
 ];
 
+/** Matches the original prototype's outsourceRequestsData exactly (app.js
+ * line ~83) — id/client/project/status/vendor/awarded/rawAmount. Two of
+ * the four rows previously had fabricated project names and invented
+ * "serviceType"/"amount" fields with no source in the original, found
+ * while auditing this table's columns against the real markup (Actions |
+ * Award Status | RevSys ID | Client Name | Project Name | Status | Vendor
+ * Name — not the Request ID/Project Name/Service Type/Vendor/Amount/Status
+ * this component previously rendered). `status` is stored as the raw
+ * 'Completed' value and displayed as "Outsourcing Completed", exactly
+ * matching the original's inline display transform. */
 export interface OutsourceRequest {
   id: string;
-  projectName: string;
-  serviceType: string;
-  vendor: string;
-  amount: string;
-  rawAmount: number;
+  client: string;
+  project: string;
   status: string;
+  vendor: string;
+  awarded: boolean;
+  rawAmount: number;
 }
 
 export const outsourceRequestsData: OutsourceRequest[] = [
-  { id: 'opn00016', projectName: 'Translation', serviceType: 'Translation', vendor: 'SNT Ltd', amount: '650,000 INR', rawAmount: 650000, status: 'Outsourcing Completed' },
-  { id: 'opn00133', projectName: 'Translate Web Pages', serviceType: 'Translation', vendor: 'SNT Ltd', amount: '70,000 INR', rawAmount: 70000, status: 'Outsourcing Completed' },
-  { id: 'opn00183', projectName: 'Audio/Video Localization', serviceType: 'Audio/Video', vendor: 'SNT Ltd', amount: '1,200,000 INR', rawAmount: 1200000, status: 'Work In Progress' },
-  { id: 'opn00201', projectName: 'French EU Translation', serviceType: 'Translation', vendor: 'SNT Ltd', amount: '200,000 INR', rawAmount: 200000, status: 'In Review' }
+  { id: 'opn00016', client: 'Aura Inc', project: 'Translation', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 650000 },
+  { id: 'opn00133', client: 'Core Info LLP', project: 'Translate Web Pages', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 70000 },
+  { id: 'opn00183', client: 'ABZ Corp', project: 'Voice Over in English for 10 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 700000 },
+  { id: 'opn01019', client: 'PQN Inc', project: 'Translation of 2 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 500000 }
 ];
+
+export function displayStatus(status: string): string {
+  return status === 'Completed' ? 'Outsourcing Completed' : status;
+}
 
 export interface Invoice {
   project: string;
@@ -254,6 +268,14 @@ export type TagSeverity = 'success' | 'secondary' | 'info' | 'warning' | 'danger
 /** Maps a status string to our semantic badge severity — mirrors getBadgeClass()
  * in the original prototype's app.js. See PRIMENG_THEME_TOKENS.md Section 2 for
  * the taxonomy this is built from and the "in-progress" gap it fills. */
+/** Covers every status value in outsourceStatusData (the master list — see
+ * masters/outsource-status), not just the ones that happened to appear in
+ * the small mock datasets. Values that fell through to the generic "info"
+ * default (Invoice Rejected, Invoice Pending from DM/PM, No Invoice
+ * Pending for Approval, Submitted) were a real gap found while auditing
+ * the Invoice Status filter for completeness — they'd have rendered as
+ * neutral blue instead of their actual semantic meaning the moment they
+ * became selectable. */
 export function statusSeverity(status: string): { severity: TagSeverity; styleClass?: string } {
   switch (status) {
     case 'Completed':
@@ -262,6 +284,7 @@ export function statusSeverity(status: string): { severity: TagSeverity; styleCl
     case 'Invoice Approved':
     case 'Approved':
     case 'Active':
+    case 'No Invoice Pending for Approval':
       return { severity: 'success' };
     case 'Awarded':
     case 'Work In Progress':
@@ -269,9 +292,13 @@ export function statusSeverity(status: string): { severity: TagSeverity; styleCl
     case 'In Review':
     case 'Pending PM Approval':
     case 'Invoice Pending for Approval':
+    case 'Invoice Pending from DM':
+    case 'Invoice Pending from PM':
     case 'Enquiry Sent':
+    case 'Submitted':
       return { severity: 'warning' };
     case 'Rejected':
+    case 'Invoice Rejected':
     case 'Cancel Project':
       return { severity: 'danger' };
     case 'Disabled':

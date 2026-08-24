@@ -28,6 +28,19 @@ import {
 const crumb = (label: string) => `Vendor Portal › ${label}`;
 const projectNames = ['Translation', 'Translate Web Pages', 'Voice Over in English for 10 modules', 'Translation of 2 modules'];
 const vendorNames = ['SNT Ltd'];
+const marketSegments = marketSegmentData.map((m) => m['segment'] as string);
+
+// The "Invoice Status" filter previously listed only "Invoice Approved" —
+// the one value that happened to appear in the small mock dataset — rather
+// than the full set of statuses the field can actually take. Derived here
+// from the Outsource Status master (the single source of truth for status
+// values in this app — see masters/outsource-status), scoped to the
+// invoice-specific subset since that master also contains general
+// project-workflow statuses (Work In Progress, Awarded, etc.) that don't
+// belong in a field specifically labeled "Invoice Status".
+const invoiceStatuses = outsourceStatusData
+  .map((s) => s['status'] as string)
+  .filter((s) => s.includes('Invoice'));
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Sign In' } },
@@ -85,7 +98,7 @@ export const routes: Routes = [
             { label: 'End Date', type: 'date' },
             { label: 'Project Name', type: 'select', options: projectNames },
             { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Invoice Status', type: 'select', options: ['Invoice Approved'] }
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
           ]
         }
       },
@@ -113,7 +126,7 @@ export const routes: Routes = [
             { label: 'End Date', type: 'date' },
             { label: 'Project Name', type: 'select', options: projectNames },
             { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Invoice Status', type: 'select', options: ['Invoice Approved'] }
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
           ]
         }
       },
@@ -137,8 +150,8 @@ export const routes: Routes = [
             { label: 'Start Date', type: 'date' },
             { label: 'End Date', type: 'date' },
             { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Market Segment', type: 'select', options: ['E Learning', 'Content IT'] },
-            { label: 'Invoice Status', type: 'select', options: ['Invoice Approved'] }
+            { label: 'Market Segment', type: 'select', options: marketSegments },
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
           ]
         }
       },
