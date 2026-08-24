@@ -1,3 +1,154 @@
+// ---- Reports (Analytics & Reports) — all matched to app.js exactly ----
+
+export interface InvoiceReportRow {
+  client: string;
+  revsys: string;
+  project: string;
+  budget: string;
+  invNo: string;
+  invDate: string;
+  status: string;
+}
+
+export const invoiceReportData: InvoiceReportRow[] = [
+  { client: 'Aura Inc', revsys: 'opn00016', project: 'Translation', budget: '650,000 INR', invNo: 'INV-2026-081', invDate: '21/07/2026', status: 'Invoice Approved' },
+  { client: 'Core Info LLP', revsys: 'opn00133', project: 'Translate Web Pages', budget: '70,000 INR', invNo: 'INV-2026-084', invDate: '05/08/2026', status: 'Invoice Approved' },
+  { client: 'ABZ Corp', revsys: 'opn00183', project: 'Voice Over in English for 10 modules', budget: '700,000 INR', invNo: 'INV-2026-089', invDate: '13/08/2026', status: 'Invoice Approved' },
+  { client: 'PQN Inc', revsys: 'opn01019', project: 'Translation of 2 modules', budget: '500,000 INR', invNo: 'INV-2026-092', invDate: '19/08/2026', status: 'Invoice Approved' }
+];
+
+export interface ProjectReportRow extends InvoiceReportRow {
+  vendor: string;
+}
+
+export const projectReportData: ProjectReportRow[] = [
+  { client: 'Aura Inc', revsys: 'opn00016', project: 'Translation', vendor: 'SNT Ltd', budget: '650,000 INR', invNo: 'INV-2026-081', invDate: '21/07/2026', status: 'Invoice Approved' },
+  { client: 'Core Info LLP', revsys: 'opn00133', project: 'Translate Web Pages', vendor: 'SNT Ltd', budget: '70,000 INR', invNo: 'INV-2026-084', invDate: '05/08/2026', status: 'Invoice Approved' },
+  { client: 'ABZ Corp', revsys: 'opn00183', project: 'Voice Over in English for 10 modules', vendor: 'SNT Ltd', budget: '700,000 INR', invNo: 'INV-2026-089', invDate: '13/08/2026', status: 'Invoice Approved' }
+];
+
+export interface VendorReportRow {
+  customer: string;
+  vendor: string;
+  code: string;
+  invNo: string;
+  status: string;
+}
+
+export const vendorReportData: VendorReportRow[] = [
+  { customer: 'Aura Inc', vendor: 'SNT Ltd', code: '2233', invNo: 'INV-2026-081', status: 'Invoice Approved' },
+  { customer: 'Core Info LLP', vendor: 'SNT Ltd', code: '2233', invNo: 'INV-2026-084', status: 'Invoice Approved' },
+  { customer: 'ABZ Corp', vendor: 'SNT Ltd', code: '2233', invNo: 'INV-2026-089', status: 'Invoice Approved' },
+  { customer: 'PQN Inc', vendor: 'SNT Ltd', code: '2233', invNo: 'INV-2026-092', status: 'Invoice Approved' }
+];
+
+export interface StaffingReportRow {
+  client: string;
+  revsys: string;
+  project: string;
+  vendor: string;
+  budget: string;
+  invNo: string;
+  invDate: string;
+}
+
+export const staffingReportData: StaffingReportRow[] = [
+  { client: 'Aura Inc', revsys: 'opn00016', project: 'Translation', vendor: 'SNT Ltd', budget: '650,000 INR', invNo: 'INV-2026-081', invDate: '21/07/2026' },
+  { client: 'ABZ Corp', revsys: 'opn00183', project: 'Voice Over in English for 10 modules', vendor: 'SNT Ltd', budget: '700,000 INR', invNo: 'INV-2026-089', invDate: '13/08/2026' }
+];
+
+// ---- Masters & Config — all matched to app.js exactly ----
+
+export interface MasterRow {
+  [key: string]: string | boolean;
+}
+
+export const natureOfServicesData: MasterRow[] = [
+  { name: 'eLearning', active: true },
+  { name: 'Technology', active: true },
+  { name: 'Mobile', active: true },
+  { name: 'Translation', active: true },
+  { name: 'Audio/Video', active: true },
+  { name: 'Publishing', active: true },
+  { name: 'Animation', active: true },
+  { name: 'Staffing', active: true },
+  { name: 'NSP', active: true }
+];
+
+export const serviceExecutedData: MasterRow[] = [
+  { service: 'Alfresco', requestType: 'Development', active: true },
+  { service: 'Android', requestType: 'Development', active: true },
+  { service: 'Apps', requestType: 'Development', active: true },
+  { service: 'CSS3/Boot Strap/CSS2', requestType: 'Development', active: true },
+  { service: 'Drupal', requestType: 'Development', active: true },
+  { service: 'HTML5', requestType: 'Development', active: true },
+  { service: 'iOS', requestType: 'Development', active: true },
+  { service: 'Java', requestType: 'Development', active: true },
+  { service: 'Javascript/jQuery/Angular/Node', requestType: 'Development', active: true },
+  { service: 'Joomla', requestType: 'Development', active: true },
+  { service: 'LMS Administration', requestType: 'Development', active: true },
+  { service: 'MongoDB', requestType: 'Development', active: true },
+  { service: 'PHP', requestType: 'Development', active: true },
+  { service: 'Python', requestType: 'Development', active: true }
+];
+
+export const orgTypeData: MasterRow[] = [
+  { type: 'Proprietary', active: true },
+  { type: 'Private Limited Company', active: true },
+  { type: 'Public Limited Company', active: true },
+  { type: 'Limited Liability Partnership (LLP)', active: true },
+  { type: 'One-Person Company', active: true },
+  { type: 'Partnership Firm', active: true }
+];
+
+export const gstData: MasterRow[] = [
+  { type: 'IGST', active: true },
+  { type: 'CGST/ SGST', active: true },
+  { type: 'Tax Exempted', active: true },
+  { type: 'Not Registered with GST', active: true }
+];
+
+export const outsourceStatusData: MasterRow[] = [
+  { status: 'Invoice Approved', active: true },
+  { status: 'Invoice Rejected', active: true },
+  { status: 'Invoice Pending for Approval', active: true },
+  { status: 'Invoice Pending from DM', active: true },
+  { status: 'Invoice Pending from PM', active: true },
+  { status: 'No Invoice Pending for Approval', active: true },
+  { status: 'Submitted', active: true },
+  { status: 'Work In Progress', active: true },
+  { status: 'Enquiry Sent', active: true },
+  { status: 'Awarded', active: true },
+  { status: 'Outsourcing Completed', active: true },
+  { status: 'Cancel Project', active: true }
+];
+
+export interface ConfigRow {
+  key: string;
+  val: string;
+}
+
+export const configData: ConfigRow[] = [{ key: 'IsInvoiceLive', val: 'True' }];
+
+export const entityData: MasterRow[] = [
+  { name: 'Aptara New Media Pvt Ltd.', code: '23001', sbu: '700', loc: 'Pune', active: true },
+  { name: 'Techbooks International Pvt Ltd', code: '22000', sbu: '700', loc: 'Pune', active: true },
+  { name: 'Aptara Technology Pvt Ltd.', code: '22001', sbu: '700', loc: 'Pune', active: true },
+  { name: 'Aptara Learning Pvt. Ltd.', code: '25001', sbu: '700', loc: 'Pune', active: true },
+  { name: 'Aptara Inc', code: '11000', sbu: '700', loc: 'Pune', active: true }
+];
+
+export const marketSegmentData: MasterRow[] = [
+  { segment: 'E Learning', code: '3101', active: true },
+  { segment: 'Content IT', code: '3102', active: true }
+];
+
+export const currencyData: MasterRow[] = [
+  { curr: 'USD', amount: '85', year: '2025', month: 'April', desc: 'Exchange Rate', active: true },
+  { curr: 'USD', amount: '90', year: '2026', month: 'August', desc: 'Exchange Rate', active: true },
+  { curr: 'INR', amount: '1', year: '-', month: '-', desc: 'Base INR', active: true }
+];
+
 export interface AuditEntry {
   attr: string;
   oldVal: string;

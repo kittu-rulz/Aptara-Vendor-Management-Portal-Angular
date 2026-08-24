@@ -1,0 +1,50 @@
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="filter-group">
+      <button class="filter-chip" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
+        {{ countLabel }} ({{ rows.length }})
+      </button>
+      <button class="filter-chip" [class.active]="activeFilter() === 'Active'" (click)="setFilter('Active')">
+        Active
+      </button>
+      <button class="filter-chip" [class.active]="activeFilter() === 'Disabled'" (click)="setFilter('Disabled')">
+        Disabled
+      </button>
+    </div>
+
+    <div class="toolbar-actions">
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
+      <p-button [label]="addLabel" icon="pi pi-plus"></p-button>
+    </div>
+  </div>
+
+  <p-table [value]="filteredRows()" [rows]="10" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Actions</th>
+        <th *ngFor="let col of columns">{{ col.label }}</th>
+        <th>Active Status</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>
+          <button class="row-action" title="Edit"><i class="pi pi-pencil"></i></button>
+          <button class="row-action" title="Disable"><i class="pi pi-power-off"></i></button>
+        </td>
+        <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+        <td>
+          <p-tag [value]="row['active'] ? 'Yes' : 'No'" [severity]="row['active'] ? 'success' : 'secondary'"></p-tag>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length + 2" class="empty-state">
+          <i class="pi pi-search"></i>
+          <div>No records match this filter.</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
