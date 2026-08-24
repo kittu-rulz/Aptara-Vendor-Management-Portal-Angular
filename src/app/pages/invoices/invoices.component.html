@@ -29,10 +29,13 @@
         <th>Project End Date</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-row>
+    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
       <tr>
         <td>
-          <button class="row-action" title="View"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="Submit Invoice"><i class="pi pi-send"></i></button>
+          <button class="row-action" title="View Details"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="View History"><i class="pi pi-history"></i></button>
+          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject"><i class="pi pi-check-circle"></i></button>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>

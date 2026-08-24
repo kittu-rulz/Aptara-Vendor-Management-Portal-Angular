@@ -36,7 +36,9 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
+          <button class="row-action" title="Edit"><i class="pi pi-pencil"></i></button>
           <button class="row-action" title="View"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="History"><i class="pi pi-history"></i></button>
         </td>
         <td><strong>{{ row.first }}</strong></td>
         <td>{{ row.last }}</td>
