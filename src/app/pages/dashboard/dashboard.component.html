@@ -1,0 +1,58 @@
+<section class="dashboard-hero">
+  <div class="hero-copy">
+    <div>
+      <span class="hero-eyebrow">VENDOR OPERATIONS</span>
+      <h2>Good morning, Abhijit</h2>
+      <p>Here's the latest view of your outsource portfolio.</p>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" *ngFor="let kpi of kpis" [class]="'kpi-' + kpi.accent">
+      <div class="kpi-top-row">
+        <div class="kpi-icon"><i [class]="kpi.icon"></i></div>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">{{ kpi.label }}</span>
+        <span class="kpi-value">{{ kpi.value }}</span>
+        <span class="kpi-trend">{{ kpi.trend }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <span class="section-heading"><i class="pi pi-folder-open"></i> Outsource Requests</span>
+    <p-button label="New Outsource Request" icon="pi pi-plus"></p-button>
+  </div>
+
+  <p-table [value]="requests" [rows]="10" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Request ID</th>
+        <th>Project Name</th>
+        <th>Service Type</th>
+        <th>Vendor</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="mono">{{ row.id }}</td>
+        <td><strong>{{ row.projectName }}</strong></td>
+        <td>{{ row.serviceType }}</td>
+        <td>{{ row.vendor }}</td>
+        <td class="amount">{{ row.amount }}</td>
+        <td>
+          <p-tag
+            [value]="row.status"
+            [severity]="statusSeverity(row.status).severity"
+            [styleClass]="statusSeverity(row.status).styleClass || ''"
+          ></p-tag>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

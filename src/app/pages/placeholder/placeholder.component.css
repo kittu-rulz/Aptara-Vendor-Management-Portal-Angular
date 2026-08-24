@@ -1,0 +1,26 @@
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 80px 20px;
+  color: var(--text-color-secondary);
+}
+
+.placeholder i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.placeholder h3 {
+  color: var(--text-color);
+  margin: 0;
+}
+
+.placeholder p {
+  max-width: 360px;
+  font-size: 0.85rem;
+}

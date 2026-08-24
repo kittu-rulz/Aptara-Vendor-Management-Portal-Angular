@@ -1,0 +1,215 @@
+/* =========================================================================
+   APTARA BRAND OVERRIDE — loaded after the base PrimeNG theme (lara-light-blue)
+   so these declarations win the cascade. See PRIMENG_THEME_TOKENS.md in the
+   sibling Aptara-Vendor-Management-Portal repo for the source values and the
+   reasoning behind each one (severity gap, base-theme choice, etc.).
+   ========================================================================= */
+
+:root {
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --primary-color: #005a87;
+  --primary-color-text: #ffffff;
+  --text-color: #0f172a;
+  --text-color-secondary: #64748b;
+
+  --surface-ground: #f1f5f9;
+  --surface-card: #ffffff;
+  --surface-section: #ffffff;
+  --surface-border: #dbe3ed;
+  --surface-hover: #f8fafc;
+
+  --border-radius: 6px;
+  --highlight-bg: #e9f1fa;
+  --highlight-text-color: #005a87;
+
+  /* Custom scales not provided by PrimeNG's legacy theme system — see
+     PRIMENG_THEME_TOKENS.md sections 3-5 */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 19px;
+  --text-xl: 26px;
+  --text-2xl: 28px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-card: 0 1px 3px rgba(25, 39, 63, 0.06);
+  --shadow-main: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+
+  /* Custom taxonomy state with no native PrimeNG severity — see Section 2 of
+     PRIMENG_THEME_TOKENS.md. Consumed by a .p-tag-in-progress / .p-badge-in-progress
+     override below, not a component-provided severity. */
+  --status-in-progress: #7c3aed;
+  --status-in-progress-bg: #f0eff8;
+}
+
+[data-theme='dark'] {
+  --primary-color: #38bdf8;
+  --primary-color-text: #0b1120;
+  --text-color: #f8fafc;
+  --text-color-secondary: #8da2bc;
+
+  --surface-ground: #0b1120;
+  --surface-card: #152238;
+  --surface-section: #111a2e;
+  --surface-border: #223554;
+  --surface-hover: #1c2d4a;
+
+  --highlight-bg: rgba(56, 189, 248, 0.15);
+  --highlight-text-color: #38bdf8;
+
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-main: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+
+  --status-in-progress: #a78bfa;
+  --status-in-progress-bg: rgba(167, 139, 250, 0.15);
+
+  color-scheme: dark;
+}
+
+/* Body/base surfaces follow the same variables PrimeNG components read,
+   so the shell (not just p-* components) stays in sync with the theme. */
+body {
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+  font-family: var(--font-family);
+}
+
+/* Severity gap fill: "in-progress" has no native PrimeNG severity slot.
+   Extends Tag/Badge rather than collapsing it into an existing severity —
+   see PRIMENG_THEME_TOKENS.md Section 2 for why. */
+.p-tag.p-tag-in-progress {
+  background: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
+}
+
+.p-badge.p-badge-in-progress {
+  background: var(--status-in-progress);
+  color: #ffffff;
+}
+
+/* =========================================================================
+   PER-COMPONENT OVERRIDES
+   PrimeNG's legacy theme CSS is compiled from SCSS at build time — most
+   component colors (button, severities) are literal hex values baked into
+   the rules, not var(--primary-color) references, even though the same
+   value exists as a root variable. Overriding the root variable alone (the
+   block above) does NOT recolor these components — confirmed by testing:
+   --primary-color read back correctly as our override, but .p-button's
+   rendered background stayed the theme's stock #3B82F6 until overridden
+   directly here.
+
+   The good news: this file is unlayered CSS, and PrimeNG's compiled CSS is
+   wrapped in `@layer primeng`. Per the CSS cascade, ANY unlayered rule
+   beats ANY layered rule regardless of selector specificity or source
+   order — so these overrides don't need `!important` or specificity
+   games, just the right selector.
+
+   This section only covers what's used in the smoke test (Button, Tag
+   severities) as proof the mechanism works end-to-end. Full coverage
+   across every PrimeNG component PrimeNG ships is a per-component task,
+   best done alongside each redesign step that actually uses that
+   component (table, dialog, stepper, etc.) rather than attempted
+   exhaustively up front.
+   ========================================================================= */
+
+.p-button {
+  color: var(--primary-color-text);
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.p-button:not(:disabled):hover {
+  background: #004568;
+  border-color: #004568;
+}
+
+.p-button:not(:disabled):active {
+  background: #003a56;
+  border-color: #003a56;
+}
+
+.p-tag.p-tag-success {
+  background: #059669;
+}
+
+.p-tag.p-tag-warning {
+  background: #d97706;
+}
+
+.p-tag.p-tag-danger {
+  background: #e11d48;
+}
+
+.p-tag.p-tag-info {
+  background: var(--primary-color);
+}
+
+.p-tag.p-tag-secondary {
+  background: #94a3b8;
+}
+
+[data-theme='dark'] .p-button:not(:disabled):hover {
+  background: #0369a1;
+  border-color: #0369a1;
+}
+
+[data-theme='dark'] .p-button:not(:disabled):active {
+  background: #075985;
+  border-color: #075985;
+}
+
+[data-theme='dark'] .p-tag.p-tag-success {
+  background: #34d399;
+  color: #0b1120;
+}
+
+[data-theme='dark'] .p-tag.p-tag-warning {
+  background: #fbbf24;
+  color: #0b1120;
+}
+
+[data-theme='dark'] .p-tag.p-tag-danger {
+  background: #f87171;
+  color: #0b1120;
+}
+
+[data-theme='dark'] .p-tag.p-tag-secondary {
+  background: #475569;
+}
+
+/* Table — same hardcoded-color pattern as Button/Tag, confirmed by reading
+   the theme source directly (line ~2795 for header, ~2852 for rows) rather
+   than assumed. */
+.p-datatable .p-datatable-thead > tr > th {
+  color: var(--text-color-secondary);
+  background: var(--surface-ground);
+  border-color: var(--surface-border);
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: var(--surface-card);
+  color: var(--text-color);
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-color: var(--surface-border);
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+  background: var(--surface-hover);
+  color: var(--text-color);
+}

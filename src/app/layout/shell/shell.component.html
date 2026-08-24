@@ -1,0 +1,11 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-wrapper" [class.collapsed]="nav.sidebarCollapsed()">
+    <app-header [title]="routeData().title || ''" [breadcrumb]="routeData().breadcrumb || ''"></app-header>
+
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

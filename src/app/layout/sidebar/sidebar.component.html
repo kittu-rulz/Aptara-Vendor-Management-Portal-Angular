@@ -1,0 +1,71 @@
+<aside class="sidebar" [class.collapsed]="nav.sidebarCollapsed()">
+  <div class="brand-header">
+    <span class="brand-name" *ngIf="!nav.sidebarCollapsed()">APTARA</span>
+    <span class="brand-name-icon" *ngIf="nav.sidebarCollapsed()">A</span>
+  </div>
+
+  <nav class="nav-menu">
+    <div class="nav-section-title" *ngIf="!nav.sidebarCollapsed()">MAIN MODULES</div>
+    <a
+      *ngFor="let item of nav.mainModules"
+      class="nav-item"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+    >
+      <i [class]="item.icon"></i>
+      <span *ngIf="!nav.sidebarCollapsed()">{{ item.label }}</span>
+      <span class="nav-badge" *ngIf="item.badge && !nav.sidebarCollapsed()">{{ item.badge }}</span>
+    </a>
+
+    <div class="nav-section-title" *ngIf="!nav.sidebarCollapsed()">ANALYTICS &amp; REPORTS</div>
+    <div class="nav-dropdown-group" [class.open]="openGroup === nav.analytics.label">
+      <div class="nav-item nav-dropdown-toggle" (click)="toggleGroup(nav.analytics.label)">
+        <i [class]="nav.analytics.icon"></i>
+        <span *ngIf="!nav.sidebarCollapsed()">{{ nav.analytics.label }}</span>
+        <i class="pi pi-chevron-down dropdown-arrow" *ngIf="!nav.sidebarCollapsed()"></i>
+      </div>
+      <div class="nav-sub-menu">
+        <a
+          *ngFor="let child of nav.analytics.children"
+          class="nav-sub-item"
+          [routerLink]="child.route"
+          routerLinkActive="active"
+        >
+          <i [class]="child.icon"></i>
+          <span>{{ child.label }}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="nav-section-title" *ngIf="!nav.sidebarCollapsed()">MASTERS &amp; CONFIG</div>
+    <div class="nav-dropdown-group" [class.open]="openGroup === nav.masters.label">
+      <div class="nav-item nav-dropdown-toggle" (click)="toggleGroup(nav.masters.label)">
+        <i [class]="nav.masters.icon"></i>
+        <span *ngIf="!nav.sidebarCollapsed()">{{ nav.masters.label }}</span>
+        <i class="pi pi-chevron-down dropdown-arrow" *ngIf="!nav.sidebarCollapsed()"></i>
+      </div>
+      <div class="nav-sub-menu">
+        <a
+          *ngFor="let child of nav.masters.children"
+          class="nav-sub-item"
+          [routerLink]="child.route"
+          routerLinkActive="active"
+        >
+          <i [class]="child.icon"></i>
+          <span>{{ child.label }}</span>
+        </a>
+      </div>
+    </div>
+
+    <a class="nav-item" [routerLink]="nav.auditTrail.route" routerLinkActive="active">
+      <i [class]="nav.auditTrail.icon"></i>
+      <span *ngIf="!nav.sidebarCollapsed()">{{ nav.auditTrail.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="collapse-btn" (click)="nav.toggleSidebar()">
+      <i class="pi" [class.pi-angle-left]="!nav.sidebarCollapsed()" [class.pi-angle-right]="nav.sidebarCollapsed()"></i>
+    </button>
+  </div>
+</aside>

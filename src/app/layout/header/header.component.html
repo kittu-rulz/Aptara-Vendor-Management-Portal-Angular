@@ -1,0 +1,15 @@
+<header class="top-header">
+  <div class="header-left">
+    <div class="page-title">{{ title }}</div>
+    <div class="breadcrumb" *ngIf="breadcrumb">{{ breadcrumb }}</div>
+  </div>
+
+  <div class="header-right">
+    <button class="icon-btn" title="Notifications">
+      <i class="pi pi-bell"></i>
+    </button>
+    <button class="icon-btn" (click)="nav.toggleTheme()" [title]="nav.darkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+      <i class="pi" [class.pi-sun]="nav.darkTheme()" [class.pi-moon]="!nav.darkTheme()"></i>
+    </button>
+  </div>
+</header>
