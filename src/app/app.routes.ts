@@ -4,6 +4,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { VendorsComponent } from './pages/vendors/vendors.component';
 import { UsersComponent } from './pages/users/users.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
+import { AuditComponent } from './pages/audit/audit.component';
 import { PlaceholderComponent } from './pages/placeholder/placeholder.component';
 
 const crumb = (label: string) => `Vendor Portal › ${label}`;
@@ -36,7 +37,7 @@ export const routes: Routes = [
       },
       {
         path: 'audit-history',
-        component: PlaceholderComponent,
+        component: AuditComponent,
         data: { title: 'Audit Trail', breadcrumb: crumb('Audit Trail') }
       },
       {

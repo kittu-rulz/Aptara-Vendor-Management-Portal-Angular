@@ -1,3 +1,20 @@
+export interface AuditEntry {
+  attr: string;
+  oldVal: string;
+  newVal: string;
+  user: string;
+  date: string;
+  comment: string;
+}
+
+/** Matches the 4 audit rows in the original prototype's app.js exactly. */
+export const auditHistoryData: AuditEntry[] = [
+  { attr: 'Project Outsource Status', oldVal: 'Awarded', newVal: 'Outsourcing Completed', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:13 PM', comment: 'Modified' },
+  { attr: 'Projected Start Date', oldVal: '', newVal: '08-17-2026', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12 PM', comment: 'Added' },
+  { attr: 'Projected End Date', oldVal: '', newVal: '09-30-2026', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12 PM', comment: 'Added' },
+  { attr: 'Final Budget', oldVal: '15000.00', newVal: '650000', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12 PM', comment: 'Modified' }
+];
+
 export interface OutsourceRequest {
   id: string;
   projectName: string;
