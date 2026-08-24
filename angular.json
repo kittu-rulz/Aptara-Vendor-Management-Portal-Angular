@@ -32,6 +32,7 @@
               "node_modules/primeng/resources/primeng.css",
               "node_modules/primeicons/primeicons.css",
               "src/styles/aptara-theme.css",
+              "src/styles/shared-components.css",
               "src/styles.css"
             ],
             "scripts": []

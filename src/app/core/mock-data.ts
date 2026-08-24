@@ -43,6 +43,25 @@ export const vendorsData: Vendor[] = [
   }
 ];
 
+export interface AppUser {
+  first: string;
+  last: string;
+  email: string;
+  phone: string;
+  role: string;
+  vendor: string;
+  status: string;
+}
+
+/** Matches the 5 users in the original prototype's app.js exactly. */
+export const usersData: AppUser[] = [
+  { first: 'Abhijit', last: 'Patil', email: 'Abhijit.Patil@aptaracorp.com', phone: '8789564520', role: 'ENT Vendor Team', vendor: '', status: 'Active' },
+  { first: 'Charlotte', last: 'Kujur', email: 'charlotte.kujur@aptaracorp.com', phone: '8880776910', role: 'Vendor', vendor: 'SNT Ltd', status: 'Active' },
+  { first: 'Darshan', last: 'Delivery Manager', email: 'Darshan.Tare@aptaracorp.com', phone: '9019861434', role: 'Internal User', vendor: '', status: 'Active' },
+  { first: 'Hemant', last: 'Project Manager', email: 'Hemant.Moharir@aptaracorp.com', phone: '7507188192', role: 'Internal User', vendor: '', status: 'Active' },
+  { first: 'Pushpraj', last: 'ENT Vendor', email: 'Pushpraj.Jagadale@aptaracorp.com', phone: '9900998899', role: 'ENT Vendor Team', vendor: '', status: 'Active' }
+];
+
 export type TagSeverity = 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast';
 
 /** Maps a status string to our semantic badge severity — mirrors getBadgeClass()

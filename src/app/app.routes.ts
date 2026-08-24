@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ShellComponent } from './layout/shell/shell.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { VendorsComponent } from './pages/vendors/vendors.component';
+import { UsersComponent } from './pages/users/users.component';
 import { PlaceholderComponent } from './pages/placeholder/placeholder.component';
 
 const crumb = (label: string) => `Vendor Portal › ${label}`;
@@ -24,7 +25,7 @@ export const routes: Routes = [
       },
       {
         path: 'manage-users',
-        component: PlaceholderComponent,
+        component: UsersComponent,
         data: { title: 'Manage Users', breadcrumb: crumb('Manage Users') }
       },
       {

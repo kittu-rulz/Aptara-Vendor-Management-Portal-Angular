@@ -1,0 +1,58 @@
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="filter-group">
+      <button class="filter-chip" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
+        All Users ({{ allUsers.length }})
+      </button>
+      <button class="filter-chip" [class.active]="activeFilter() === 'Internal User'" (click)="setFilter('Internal User')">
+        Internal Users
+      </button>
+      <button class="filter-chip" [class.active]="activeFilter() === 'Vendor'" (click)="setFilter('Vendor')">
+        Vendor Users
+      </button>
+      <button class="filter-chip" [class.active]="activeFilter() === 'ENT Vendor Team'" (click)="setFilter('ENT Vendor Team')">
+        ENT Vendor Team
+      </button>
+    </div>
+
+    <div class="toolbar-actions">
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
+      <p-button label="Add System User" icon="pi pi-user-plus"></p-button>
+    </div>
+  </div>
+
+  <p-table [value]="filteredUsers()" [rows]="10" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Actions</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>User Type</th>
+        <th>Vendor</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>
+          <button class="row-action" title="View"><i class="pi pi-eye"></i></button>
+        </td>
+        <td><strong>{{ row.first }}</strong></td>
+        <td>{{ row.last }}</td>
+        <td>{{ row.email }}</td>
+        <td>{{ row.phone }}</td>
+        <td><p-tag [value]="row.role" severity="info"></p-tag></td>
+        <td>{{ row.vendor || '—' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-state">
+          <i class="pi pi-search"></i>
+          <div>No users match this filter.</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
