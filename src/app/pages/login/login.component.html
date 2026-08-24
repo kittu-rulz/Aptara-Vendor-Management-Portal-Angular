@@ -1,0 +1,178 @@
+<div class="login-overlay active">
+  <!-- Floating Corner Theme Toggle -->
+  <div class="login-corner-controls">
+    <button class="theme-toggle-btn login-theme-toggle" (click)="nav.toggleTheme()" title="Toggle Theme (Light / Dark)" aria-label="Toggle Theme">
+      <i class="pi" [class.pi-sun]="nav.darkTheme()" [class.pi-moon]="!nav.darkTheme()"></i>
+    </button>
+  </div>
+
+  <!-- Background Texture -->
+  <div class="login-bg-mesh"></div>
+  <div class="login-aurora login-aurora-top"></div>
+  <div class="login-aurora login-aurora-bottom"></div>
+  <div class="login-aurora login-aurora-center"></div>
+
+  <div class="login-particle p1"></div>
+  <div class="login-particle p2"></div>
+  <div class="login-particle p3"></div>
+  <div class="login-particle p4"></div>
+
+  <!-- 3D Interactive Stage & Card Shell -->
+  <div
+    class="login-card-stage"
+    #stage
+    [style.transform]="tiltTransform()"
+    (mousemove)="onStageMouseMove($event)"
+    (mouseleave)="onStageMouseLeave()"
+  >
+    <!-- Shell: only holds the animated conic beam border -->
+    <div class="login-card-shell" [class.is-flipping]="isFlipping()">
+      <span class="beam-ring"></span>
+    </div>
+
+    <!-- Flip wrapper: sits on top of the shell, same dimensions -->
+    <div
+      class="login-flip-wrapper"
+      [class.flipped]="flipped()"
+    >
+      <!-- FRONT FACE: Sign In -->
+      <div class="login-card login-card-front">
+        <div class="login-brand">
+          <img src="assets/aptara-logo.svg" alt="APTARA" class="login-logo-img" />
+          <p class="login-subtitle">NextGen Vendor Management Portal</p>
+        </div>
+
+        <form (ngSubmit)="performLogin($event)">
+          <div class="form-group login-field field-anim-1">
+            <label for="login-email">Username / Corporate Email</label>
+            <div class="input-with-icon">
+              <i class="pi pi-envelope"></i>
+              <input
+                type="email"
+                id="login-email"
+                name="email"
+                required
+                placeholder="name@aptaracorp.com"
+                autocomplete="username"
+                [(ngModel)]="email"
+              />
+            </div>
+          </div>
+
+          <div class="form-group login-field field-anim-2">
+            <label for="login-password">Password</label>
+            <div class="input-with-icon">
+              <i class="pi pi-lock"></i>
+              <input
+                [type]="passwordVisible() ? 'text' : 'password'"
+                id="login-password"
+                name="password"
+                required
+                placeholder="Password"
+                autocomplete="current-password"
+                [(ngModel)]="password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="passwordVisible() ? 'Hide password' : 'Show password'"
+              >
+                <i class="pi" [class.pi-eye]="!passwordVisible()" [class.pi-eye-slash]="passwordVisible()"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="login-options field-anim-3">
+            <label class="login-checkbox">
+              <input type="checkbox" name="remember" [(ngModel)]="rememberMe" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link" (click)="goToForgotPassword($event)">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="login-submit field-anim-4" [disabled]="loginInProgress()">
+            <ng-container *ngIf="!loginInProgress(); else signingIn">
+              <span class="btn-shine"></span>
+              <span class="btn-text">Sign In to Vendor Portal</span>
+              <i class="pi pi-arrow-right btn-arrow"></i>
+            </ng-container>
+            <ng-template #signingIn>
+              <span class="btn-text">Verifying Credentials...</span>
+              <i class="pi pi-spin pi-spinner spin-icon"></i>
+            </ng-template>
+          </button>
+        </form>
+
+        <div class="login-footer field-anim-5">
+          <div class="security-pill">
+            <i class="pi pi-lock sec-icon"></i>
+            <span>Protected by Aptara Identity Governance</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BACK FACE: Forgot Password -->
+      <div class="login-card login-card-back">
+        <div class="login-brand">
+          <div class="forgot-icon-wrap">
+            <i class="pi pi-key forgot-key-icon"></i>
+          </div>
+          <h2 class="forgot-title">Reset Your Password</h2>
+          <p class="forgot-desc">Enter your corporate email and we'll send you a secure reset link.</p>
+        </div>
+
+        <form (ngSubmit)="submitForgotPassword($event)">
+          <div class="form-group login-field">
+            <label for="forgot-email">Corporate Email Address</label>
+            <div class="input-with-icon">
+              <i class="pi pi-envelope"></i>
+              <input
+                type="email"
+                id="forgot-email"
+                name="forgotEmail"
+                placeholder="your.name@aptaracorp.com"
+                autocomplete="email"
+                [(ngModel)]="forgotEmail"
+              />
+            </div>
+          </div>
+
+          <div class="forgot-success" *ngIf="forgotSuccess()">
+            <i class="pi pi-check-circle forgot-success-icon"></i>
+            <p>Reset link sent! Check your inbox.</p>
+          </div>
+
+          <!-- Spacer so back card has the same height as front -->
+          <div class="forgot-spacer"></div>
+
+          <button type="submit" class="login-submit" [disabled]="forgotSubmitting()">
+            <ng-container [ngSwitch]="true">
+              <ng-container *ngSwitchCase="forgotSuccess()">
+                <span class="btn-text">Link Sent!</span>
+              </ng-container>
+              <ng-container *ngSwitchCase="forgotSubmitting()">
+                <span class="btn-text">Sending...</span>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <span class="btn-shine"></span>
+                <span class="btn-text">Send Reset Link</span>
+                <i class="pi pi-send btn-arrow"></i>
+              </ng-container>
+            </ng-container>
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <div class="forgot-back-wrap">
+            <a href="#" class="forgot-back-link" (click)="backToSignIn($event)">
+              <i class="pi pi-arrow-left"></i> Back to Sign In
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /flip-wrapper -->
+  </div>
+  <!-- /login-card-stage -->
+</div>

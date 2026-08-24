@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { ShellComponent } from './layout/shell/shell.component';
+import { LoginComponent } from './pages/login/login.component';
+import { authGuard } from './core/auth.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { VendorsComponent } from './pages/vendors/vendors.component';
 import { UsersComponent } from './pages/users/users.component';
@@ -28,9 +30,11 @@ const projectNames = ['Translation', 'Translate Web Pages', 'Voice Over in Engli
 const vendorNames = ['SNT Ltd'];
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent, data: { title: 'Sign In' } },
   {
     path: '',
     component: ShellComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'outsource-requests', pathMatch: 'full' },
       {
