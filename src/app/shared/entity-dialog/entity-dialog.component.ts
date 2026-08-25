@@ -56,4 +56,8 @@ export class EntityDialogComponent implements OnChanges {
     this.save.emit(this.draft);
     this.close();
   }
+
+  trackByKey(_index: number, field: EntityField) {
+    return field.key;
+  }
 }

@@ -8,7 +8,7 @@
   [style]="{ width: '480px' }"
 >
   <div class="entity-form">
-    <div class="form-field" *ngFor="let f of fields">
+    <div class="form-field" *ngFor="let f of fields; trackBy: trackByKey">
       <label>{{ f.label }}</label>
 
       <ng-container [ngSwitch]="f.type || 'text'">

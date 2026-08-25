@@ -1,4 +1,4 @@
-import { Component, Input, WritableSignal, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -27,7 +27,7 @@ type ActiveFilter = 'all' | 'Active' | 'Disabled';
   templateUrl: './master-table.component.html',
   styleUrl: './master-table.component.css'
 })
-export class MasterTableComponent {
+export class MasterTableComponent implements OnInit {
   @Input() rows!: WritableSignal<MasterRow[]>;
   @Input() columns: MasterColumn[] = [];
   @Input() addLabel = 'Item';
@@ -52,10 +52,19 @@ export class MasterTableComponent {
   dialogVisible = false;
   dialogTitle = '';
   dialogModel: MasterRow = {};
+  dialogFields: EntityField[] = [];
   private editingRow: MasterRow | null = null;
 
-  get dialogFields(): EntityField[] {
-    return this.columns.map((c) => ({ key: c.key, label: c.label, type: 'text' }));
+  ngOnInit() {
+    // Computed once from the (static, route-provided) columns input rather
+    // than as a template-bound getter — a getter re-allocates a brand-new
+    // array and brand-new field objects on every change-detection check,
+    // which defeats *ngFor's default identity-based tracking and can spiral
+    // into a render loop (each check destroys/recreates the dialog's field
+    // DOM, which can retrigger PrimeNG's internal dialog observers, which
+    // triggers another check). This was the root cause of the dialog
+    // appearing to hang when opened.
+    this.dialogFields = this.columns.map((c) => ({ key: c.key, label: c.label, type: 'text' }));
   }
 
   setFilter(filter: ActiveFilter) {
