@@ -1,0 +1,36 @@
+<p-dialog
+  *ngIf="visible"
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [header]="title"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '640px' }"
+>
+  <p class="history-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+
+  <p-table [value]="entries" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Attribute</th>
+        <th>Old Value</th>
+        <th>New Value</th>
+        <th>Changed By</th>
+        <th>Timestamp</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td><strong>{{ row.attr }}</strong></td>
+        <td>{{ row.oldVal || '—' }}</td>
+        <td>{{ row.newVal }}</td>
+        <td>{{ row.user }}</td>
+        <td>{{ row.date }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Close" severity="secondary" [outlined]="true" (click)="close()"></p-button>
+  </ng-template>
+</p-dialog>

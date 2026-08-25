@@ -1,3 +1,5 @@
+import { signal } from '@angular/core';
+
 // ---- Reports (Analytics & Reports) — all matched to app.js exactly ----
 
 export interface InvoiceReportRow {
@@ -63,7 +65,7 @@ export interface MasterRow {
   [key: string]: string | boolean;
 }
 
-export const natureOfServicesData: MasterRow[] = [
+export const natureOfServicesData = signal<MasterRow[]>([
   { name: 'eLearning', active: true },
   { name: 'Technology', active: true },
   { name: 'Mobile', active: true },
@@ -73,9 +75,9 @@ export const natureOfServicesData: MasterRow[] = [
   { name: 'Animation', active: true },
   { name: 'Staffing', active: true },
   { name: 'NSP', active: true }
-];
+]);
 
-export const serviceExecutedData: MasterRow[] = [
+export const serviceExecutedData = signal<MasterRow[]>([
   { service: 'Alfresco', requestType: 'Development', active: true },
   { service: 'Android', requestType: 'Development', active: true },
   { service: 'Apps', requestType: 'Development', active: true },
@@ -90,25 +92,25 @@ export const serviceExecutedData: MasterRow[] = [
   { service: 'MongoDB', requestType: 'Development', active: true },
   { service: 'PHP', requestType: 'Development', active: true },
   { service: 'Python', requestType: 'Development', active: true }
-];
+]);
 
-export const orgTypeData: MasterRow[] = [
+export const orgTypeData = signal<MasterRow[]>([
   { type: 'Proprietary', active: true },
   { type: 'Private Limited Company', active: true },
   { type: 'Public Limited Company', active: true },
   { type: 'Limited Liability Partnership (LLP)', active: true },
   { type: 'One-Person Company', active: true },
   { type: 'Partnership Firm', active: true }
-];
+]);
 
-export const gstData: MasterRow[] = [
+export const gstData = signal<MasterRow[]>([
   { type: 'IGST', active: true },
   { type: 'CGST/ SGST', active: true },
   { type: 'Tax Exempted', active: true },
   { type: 'Not Registered with GST', active: true }
-];
+]);
 
-export const outsourceStatusData: MasterRow[] = [
+export const outsourceStatusData = signal<MasterRow[]>([
   { status: 'Invoice Approved', active: true },
   { status: 'Invoice Rejected', active: true },
   { status: 'Invoice Pending for Approval', active: true },
@@ -121,33 +123,33 @@ export const outsourceStatusData: MasterRow[] = [
   { status: 'Awarded', active: true },
   { status: 'Outsourcing Completed', active: true },
   { status: 'Cancel Project', active: true }
-];
+]);
 
 export interface ConfigRow {
   key: string;
   val: string;
 }
 
-export const configData: ConfigRow[] = [{ key: 'IsInvoiceLive', val: 'True' }];
+export const configData = signal<ConfigRow[]>([{ key: 'IsInvoiceLive', val: 'True' }]);
 
-export const entityData: MasterRow[] = [
+export const entityData = signal<MasterRow[]>([
   { name: 'Aptara New Media Pvt Ltd.', code: '23001', sbu: '700', loc: 'Pune', active: true },
   { name: 'Techbooks International Pvt Ltd', code: '22000', sbu: '700', loc: 'Pune', active: true },
   { name: 'Aptara Technology Pvt Ltd.', code: '22001', sbu: '700', loc: 'Pune', active: true },
   { name: 'Aptara Learning Pvt. Ltd.', code: '25001', sbu: '700', loc: 'Pune', active: true },
   { name: 'Aptara Inc', code: '11000', sbu: '700', loc: 'Pune', active: true }
-];
+]);
 
-export const marketSegmentData: MasterRow[] = [
+export const marketSegmentData = signal<MasterRow[]>([
   { segment: 'E Learning', code: '3101', active: true },
   { segment: 'Content IT', code: '3102', active: true }
-];
+]);
 
-export const currencyData: MasterRow[] = [
+export const currencyData = signal<MasterRow[]>([
   { curr: 'USD', amount: '85', year: '2025', month: 'April', desc: 'Exchange Rate', active: true },
   { curr: 'USD', amount: '90', year: '2026', month: 'August', desc: 'Exchange Rate', active: true },
   { curr: 'INR', amount: '1', year: '-', month: '-', desc: 'Base INR', active: true }
-];
+]);
 
 export interface AuditEntry {
   attr: string;
@@ -186,12 +188,12 @@ export interface OutsourceRequest {
   rawAmount: number;
 }
 
-export const outsourceRequestsData: OutsourceRequest[] = [
+export const outsourceRequestsData = signal<OutsourceRequest[]>([
   { id: 'opn00016', client: 'Aura Inc', project: 'Translation', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 650000 },
   { id: 'opn00133', client: 'Core Info LLP', project: 'Translate Web Pages', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 70000 },
   { id: 'opn00183', client: 'ABZ Corp', project: 'Voice Over in English for 10 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 700000 },
   { id: 'opn01019', client: 'PQN Inc', project: 'Translation of 2 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 500000 }
-];
+]);
 
 export function displayStatus(status: string): string {
   return status === 'Completed' ? 'Outsourcing Completed' : status;
@@ -209,12 +211,12 @@ export interface Invoice {
 }
 
 /** Matches the 4 invoices in the original prototype's app.js exactly. */
-export const invoicesData: Invoice[] = [
+export const invoicesData = signal<Invoice[]>([
   { project: 'Translation of 2 modules', status: 'Paid & Closed', total: '500,000 INR', invoiced: '500,000 INR', remaining: '0 INR', start: '08/01/2026', end: '09/15/2026', rawTotal: 500000 },
   { project: 'Voice Over in English for 10 modules', status: 'Paid & Closed', total: '700,000 INR', invoiced: '700,000 INR', remaining: '0 INR', start: '07/27/2026', end: '08/31/2026', rawTotal: 700000 },
   { project: 'Translate Web Pages', status: 'Pending PM Approval', total: '70,000 INR', invoiced: '63,950 INR', remaining: '6,050 INR', start: '10/01/2026', end: '02/01/2027', rawTotal: 70000 },
   { project: 'Translation', status: 'In Review', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000 }
-];
+]);
 
 export interface Vendor {
   code: string;
@@ -230,7 +232,7 @@ export interface Vendor {
 
 /** Matches the single vendor record in the original prototype's app.js —
  * kept faithful rather than padded out with invented rows. */
-export const vendorsData: Vendor[] = [
+export const vendorsData = signal<Vendor[]>([
   {
     code: '2233',
     name: 'SNT Ltd',
@@ -242,7 +244,7 @@ export const vendorsData: Vendor[] = [
     vendorStatus: 'Approved',
     status: 'Active'
   }
-];
+]);
 
 export interface AppUser {
   first: string;
@@ -255,13 +257,13 @@ export interface AppUser {
 }
 
 /** Matches the 5 users in the original prototype's app.js exactly. */
-export const usersData: AppUser[] = [
+export const usersData = signal<AppUser[]>([
   { first: 'Abhijit', last: 'Patil', email: 'Abhijit.Patil@aptaracorp.com', phone: '8789564520', role: 'ENT Vendor Team', vendor: '', status: 'Active' },
   { first: 'Charlotte', last: 'Kujur', email: 'charlotte.kujur@aptaracorp.com', phone: '8880776910', role: 'Vendor', vendor: 'SNT Ltd', status: 'Active' },
   { first: 'Darshan', last: 'Delivery Manager', email: 'Darshan.Tare@aptaracorp.com', phone: '9019861434', role: 'Internal User', vendor: '', status: 'Active' },
   { first: 'Hemant', last: 'Project Manager', email: 'Hemant.Moharir@aptaracorp.com', phone: '7507188192', role: 'Internal User', vendor: '', status: 'Active' },
   { first: 'Pushpraj', last: 'ENT Vendor', email: 'Pushpraj.Jagadale@aptaracorp.com', phone: '9900998899', role: 'ENT Vendor Team', vendor: '', status: 'Active' }
-];
+]);
 
 export type TagSeverity = 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast';
 

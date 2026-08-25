@@ -1,14 +1,14 @@
 <div class="table-card">
   <div class="table-toolbar">
     <div class="filter-group">
-      <button class="filter-chip active">All System Keys ({{ rows.length }})</button>
+      <button class="filter-chip active">All System Keys ({{ rows().length }})</button>
     </div>
     <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
     </div>
   </div>
 
-  <p-table [value]="rows" [rows]="10" styleClass="p-datatable-sm">
+  <p-table [value]="rows()" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>
@@ -18,10 +18,18 @@
     </ng-template>
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><button class="row-action" title="Edit"><i class="pi pi-pencil"></i></button></td>
+        <td><button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button></td>
         <td><strong>{{ row.key }}</strong></td>
         <td>{{ row.val }}</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<app-entity-dialog
+  [(visible)]="dialogVisible"
+  [title]="dialogTitle"
+  [fields]="dialogFields"
+  [model]="dialogModel"
+  (save)="onSave($event)"
+></app-entity-dialog>

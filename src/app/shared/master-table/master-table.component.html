@@ -2,7 +2,7 @@
   <div class="table-toolbar">
     <div class="filter-group">
       <button class="filter-chip" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
-        {{ countLabel }} ({{ rows.length }})
+        {{ countLabel }} ({{ rows().length }})
       </button>
       <button class="filter-chip" [class.active]="activeFilter() === 'Active'" (click)="setFilter('Active')">
         Active
@@ -13,8 +13,8 @@
     </div>
 
     <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
-      <p-button [label]="addLabel" icon="pi pi-plus"></p-button>
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
+      <p-button [label]="addLabel" icon="pi pi-plus" (click)="openAdd()"></p-button>
     </div>
   </div>
 
@@ -29,8 +29,10 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="Edit"><i class="pi pi-pencil"></i></button>
-          <button class="row-action" title="Disable"><i class="pi pi-power-off"></i></button>
+          <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
+          <button class="row-action" [title]="row['active'] ? 'Disable' : 'Enable'" (click)="toggleActive(row)">
+            <i class="pi pi-power-off"></i>
+          </button>
         </td>
         <td *ngFor="let col of columns">{{ row[col.key] }}</td>
         <td>
@@ -48,3 +50,11 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-entity-dialog
+  [(visible)]="dialogVisible"
+  [title]="dialogTitle"
+  [fields]="dialogFields"
+  [model]="dialogModel"
+  (save)="onSave($event)"
+></app-entity-dialog>

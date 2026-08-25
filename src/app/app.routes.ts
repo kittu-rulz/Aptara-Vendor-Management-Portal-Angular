@@ -28,7 +28,7 @@ import {
 const crumb = (label: string) => `Vendor Portal › ${label}`;
 const projectNames = ['Translation', 'Translate Web Pages', 'Voice Over in English for 10 modules', 'Translation of 2 modules'];
 const vendorNames = ['SNT Ltd'];
-const marketSegments = marketSegmentData.map((m) => m['segment'] as string);
+const marketSegments = marketSegmentData().map((m) => m['segment'] as string);
 
 // The "Invoice Status" filter previously listed only "Invoice Approved" —
 // the one value that happened to appear in the small mock dataset — rather
@@ -38,7 +38,7 @@ const marketSegments = marketSegmentData.map((m) => m['segment'] as string);
 // invoice-specific subset since that master also contains general
 // project-workflow statuses (Work In Progress, Awarded, etc.) that don't
 // belong in a field specifically labeled "Invoice Status".
-const invoiceStatuses = outsourceStatusData
+const invoiceStatuses = outsourceStatusData()
   .map((s) => s['status'] as string)
   .filter((s) => s.includes('Invoice'));
 

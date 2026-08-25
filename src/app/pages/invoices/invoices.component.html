@@ -2,7 +2,7 @@
   <div class="table-toolbar">
     <div class="filter-group">
       <button class="filter-chip" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
-        All Invoices ({{ allInvoices.length }})
+        All Invoices ({{ allInvoicesSignal().length }})
       </button>
       <button class="filter-chip" [class.active]="activeFilter() === 'Paid & Closed'" (click)="setFilter('Paid & Closed')">
         Paid &amp; Closed
@@ -13,7 +13,7 @@
     </div>
 
     <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
     </div>
   </div>
 
@@ -32,10 +32,10 @@
     <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
       <tr>
         <td>
-          <button class="row-action" title="Submit Invoice"><i class="pi pi-send"></i></button>
-          <button class="row-action" title="View Details"><i class="pi pi-eye"></i></button>
-          <button class="row-action" title="View History"><i class="pi pi-history"></i></button>
-          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject"><i class="pi pi-check-circle"></i></button>
+          <button class="row-action" title="Submit Invoice" (click)="submitInvoice()"><i class="pi pi-send"></i></button>
+          <button class="row-action" title="View Details" (click)="openView(row)"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="View History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
+          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject" (click)="approveInvoice(row)"><i class="pi pi-check-circle"></i></button>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>
@@ -61,3 +61,18 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-entity-dialog
+  [(visible)]="dialogVisible"
+  [title]="dialogTitle"
+  [fields]="dialogFields"
+  [model]="dialogModel"
+  [readonly]="true"
+></app-entity-dialog>
+
+<app-history-dialog
+  [(visible)]="historyVisible"
+  [title]="historyTitle"
+  [subtitle]="historySubtitle"
+  [entries]="historyEntries"
+></app-history-dialog>

@@ -16,8 +16,8 @@
     </div>
 
     <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
-      <p-button label="Add System User" icon="pi pi-user-plus"></p-button>
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
+      <p-button label="Add System User" icon="pi pi-user-plus" (click)="openAdd()"></p-button>
     </div>
   </div>
 
@@ -36,9 +36,9 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="Edit"><i class="pi pi-pencil"></i></button>
-          <button class="row-action" title="View"><i class="pi pi-eye"></i></button>
-          <button class="row-action" title="History"><i class="pi pi-history"></i></button>
+          <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
+          <button class="row-action" title="View" (click)="openEdit(row)"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
         </td>
         <td><strong>{{ row.first }}</strong></td>
         <td>{{ row.last }}</td>
@@ -58,3 +58,18 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-entity-dialog
+  [(visible)]="dialogVisible"
+  [title]="dialogTitle"
+  [fields]="dialogFields"
+  [model]="dialogModel"
+  (save)="onSave($event)"
+></app-entity-dialog>
+
+<app-history-dialog
+  [(visible)]="historyVisible"
+  [title]="historyTitle"
+  [subtitle]="historySubtitle"
+  [entries]="historyEntries"
+></app-history-dialog>

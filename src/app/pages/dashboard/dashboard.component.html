@@ -8,7 +8,7 @@
   </div>
 
   <div class="kpi-grid">
-    <div class="kpi-card" *ngFor="let kpi of kpis" [class]="'kpi-' + kpi.accent">
+    <div class="kpi-card" *ngFor="let kpi of kpis()" [class]="'kpi-' + kpi.accent">
       <div class="kpi-top-row">
         <div class="kpi-icon"><i [class]="kpi.icon"></i></div>
       </div>
@@ -24,10 +24,10 @@
 <div class="table-card">
   <div class="table-toolbar">
     <span class="section-heading"><i class="pi pi-folder-open"></i> Outsource Requests</span>
-    <p-button label="New Outsource Request" icon="pi pi-plus"></p-button>
+    <p-button label="New Outsource Request" icon="pi pi-plus" (click)="openAdd()"></p-button>
   </div>
 
-  <p-table [value]="requests" [rows]="10" styleClass="p-datatable-sm">
+  <p-table [value]="requestsSignal()" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>
@@ -42,9 +42,9 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="View Details & Vendor Match"><i class="pi pi-eye"></i></button>
-          <button class="row-action" title="View Audit History"><i class="pi pi-history"></i></button>
-          <button class="row-action" title="Disable Request"><i class="pi pi-trash"></i></button>
+          <button class="row-action" title="View Details & Vendor Match" (click)="openView(row)"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="View Audit History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
+          <button class="row-action" title="Disable Request" (click)="disableRequest(row)"><i class="pi pi-trash"></i></button>
         </td>
         <td>
           <i *ngIf="row.awarded" class="pi pi-trophy award-trophy" title="Awarded to Vendor"></i>
@@ -64,3 +64,19 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-entity-dialog
+  [(visible)]="dialogVisible"
+  [title]="dialogTitle"
+  [fields]="dialogFields"
+  [model]="dialogModel"
+  [readonly]="dialogReadonly"
+  (save)="onSave($event)"
+></app-entity-dialog>
+
+<app-history-dialog
+  [(visible)]="historyVisible"
+  [title]="historyTitle"
+  [subtitle]="historySubtitle"
+  [entries]="historyEntries"
+></app-history-dialog>

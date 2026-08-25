@@ -1,0 +1,51 @@
+<p-dialog
+  *ngIf="visible"
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [header]="title"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '480px' }"
+>
+  <div class="entity-form">
+    <div class="form-field" *ngFor="let f of fields">
+      <label>{{ f.label }}</label>
+
+      <ng-container [ngSwitch]="f.type || 'text'">
+        <input
+          *ngSwitchCase="'text'"
+          pInputText
+          class="w-full"
+          [(ngModel)]="draft[f.key]"
+          [readonly]="readonly"
+        />
+        <input
+          *ngSwitchCase="'number'"
+          pInputText
+          type="number"
+          class="w-full"
+          [(ngModel)]="draft[f.key]"
+          [readonly]="readonly"
+        />
+        <p-checkbox
+          *ngSwitchCase="'checkbox'"
+          [(ngModel)]="draft[f.key]"
+          [binary]="true"
+          [disabled]="readonly"
+        ></p-checkbox>
+        <p-dropdown
+          *ngSwitchCase="'select'"
+          [options]="f.options || []"
+          [(ngModel)]="draft[f.key]"
+          [disabled]="readonly"
+          styleClass="w-full"
+        ></p-dropdown>
+      </ng-container>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" [outlined]="true" (click)="close()"></p-button>
+    <p-button *ngIf="!readonly" label="Save" icon="pi pi-check" (click)="onSave()"></p-button>
+  </ng-template>
+</p-dialog>
