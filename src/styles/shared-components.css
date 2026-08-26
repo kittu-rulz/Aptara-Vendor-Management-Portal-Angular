@@ -92,6 +92,23 @@
   color: var(--primary-color);
 }
 
+.row-action:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+
+/* Row-action icon groups sit as bare inline elements inside table cells
+   across every list page. Without this, a PrimeNG table can shrink that
+   column below the icons' combined width and wrap them onto separate
+   lines instead of keeping them in one row. */
+td:has(> .row-action) {
+  white-space: nowrap;
+}
+
+.row-action + .row-action {
+  margin-left: 4px;
+}
+
 /* Enable/Disable row-action icon-swap: rose "power off" when the row is
    active (clicking disables it), emerald "refresh" when disabled (clicking
    re-enables it) — shared across Masters, Vendors, and Users tables. */
@@ -151,6 +168,21 @@
 .mono {
   font-family: monospace;
   color: var(--text-color-secondary);
+}
+
+/* Native checkboxes throughout the app (permission tables, MSME, etc.)
+   never set accent-color, so a checked+disabled box fell back to the
+   browser's generic disabled-control gray — a low-contrast gray checkmark
+   on a barely-lighter gray box, confirmed unreadable against the dark
+   theme regardless of color-scheme. Giving it the brand color and holding
+   opacity at 1 keeps the checkmark legible while :disabled's default
+   not-allowed cursor still signals it isn't interactive. */
+input[type='checkbox'] {
+  accent-color: var(--primary-color);
+}
+
+input[type='checkbox']:disabled {
+  opacity: 1;
 }
 
 .amount {

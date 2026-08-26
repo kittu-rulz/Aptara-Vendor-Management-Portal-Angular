@@ -24,11 +24,10 @@
   border-bottom: 1px solid var(--surface-border);
 }
 
-.brand-name {
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--primary-color);
-  letter-spacing: 0.5px;
+.brand-logo-img {
+  height: 26px;
+  width: auto;
+  display: block;
 }
 
 .brand-name-icon {

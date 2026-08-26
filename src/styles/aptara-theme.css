@@ -133,20 +133,57 @@ body {
    unlayered beats layered regardless of specificity. Confirmed by testing:
    "Export Excel" (secondary, outlined) rendered as solid primary blue,
    identical to the default "Vendor" button, until this was scoped. */
-.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text) {
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-info):not(.p-button-warning):not(.p-button-help) {
   color: var(--primary-color-text);
   background: var(--primary-color);
   border-color: var(--primary-color);
 }
 
-.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):hover {
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-info):not(.p-button-warning):not(.p-button-help):not(:disabled):hover {
   background: #004568;
   border-color: #004568;
 }
 
-.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(:disabled):active {
+.p-button:not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-info):not(.p-button-warning):not(.p-button-help):not(:disabled):active {
   background: #003a56;
   border-color: #003a56;
+}
+
+/* Severity-specific buttons (Submit/Save=success, Cancel=danger, etc.) were
+   previously caught by the brand-primary override above and rendered solid
+   blue regardless of severity, losing the green/red distinction entirely.
+   Excluded above and given their own colors here, matching the Tag severity
+   hexes below so a button and a tag for the same state look identical. */
+.p-button.p-button-success:not(.p-button-outlined):not(.p-button-text) {
+  background: #059669;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.p-button.p-button-success:not(.p-button-outlined):not(.p-button-text):not(:disabled):hover {
+  background: #047857;
+  border-color: #047857;
+}
+
+.p-button.p-button-success:not(.p-button-outlined):not(.p-button-text):not(:disabled):active {
+  background: #036450;
+  border-color: #036450;
+}
+
+.p-button.p-button-danger:not(.p-button-outlined):not(.p-button-text) {
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+}
+
+.p-button.p-button-danger:not(.p-button-outlined):not(.p-button-text):not(:disabled):hover {
+  background: #be123c;
+  border-color: #be123c;
+}
+
+.p-button.p-button-danger:not(.p-button-outlined):not(.p-button-text):not(:disabled):active {
+  background: #9f1239;
+  border-color: #9f1239;
 }
 
 .p-button.p-button-outlined {
@@ -212,6 +249,224 @@ body {
 
 [data-theme='dark'] .p-tag.p-tag-secondary {
   background: #475569;
+}
+
+/* Toast severities ship as pale, near-white pastel backgrounds (e.g.
+   success: rgba(228,248,240,.7)) with matching light text — reads fine on
+   a light page but washes out to near-invisible on the dark surface. */
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-info {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon,
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
+  color: #38bdf8;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-success {
+  background: rgba(52, 211, 153, 0.16);
+  border-color: #34d399;
+  color: #34d399;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon,
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-success .p-toast-icon-close {
+  color: #34d399;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-warn {
+  background: rgba(251, 191, 36, 0.16);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon,
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-warn .p-toast-icon-close {
+  color: #fbbf24;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-error {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: #f87171;
+  color: #f87171;
+}
+
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
+[data-theme='dark'] .p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
+  color: #f87171;
+}
+
+/* =========================================================================
+   FORM CONTROLS — Input, Dropdown, MultiSelect, TabView, Paginator
+   Same hardcoded-color pattern as Button/Tag/Table below: confirmed by
+   reading computed styles directly (getComputedStyle in the running app,
+   both themes) rather than assumed. Every pInputText field, p-dropdown,
+   and p-multiselect rendered a solid white box with stock PrimeNG blue
+   highlight/text — in LIGHT mode this happened to look close enough to
+   pass unnoticed, but in dark mode it left a jarring white box in the
+   middle of an otherwise dark page. Written entirely with var() (no
+   separate [data-theme='dark'] block needed) since --surface-card,
+   --surface-border, --text-color etc. already flip under the dark
+   selector in Section 1 above.
+   ========================================================================= */
+
+.p-inputtext {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+}
+
+.p-inputtext::placeholder {
+  color: var(--text-color-secondary);
+}
+
+.p-inputtext:enabled:hover {
+  border-color: var(--primary-color);
+}
+
+.p-inputtext:enabled:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--highlight-bg);
+}
+
+.p-inputtext:disabled,
+.p-inputtext.p-disabled {
+  background: var(--surface-ground);
+  color: var(--text-color-secondary);
+  opacity: 1;
+}
+
+.p-dropdown,
+.p-multiselect {
+  background: var(--surface-card);
+  border-color: var(--surface-border);
+}
+
+.p-dropdown:not(.p-disabled).p-focus,
+.p-multiselect:not(.p-disabled).p-focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--highlight-bg);
+}
+
+.p-dropdown .p-dropdown-label,
+.p-multiselect .p-multiselect-label {
+  color: var(--text-color);
+  background: transparent;
+}
+
+.p-dropdown .p-dropdown-label.p-placeholder,
+.p-multiselect .p-multiselect-label.p-placeholder {
+  color: var(--text-color-secondary);
+}
+
+.p-dropdown .p-dropdown-trigger,
+.p-multiselect .p-multiselect-trigger {
+  color: var(--text-color-secondary);
+}
+
+.p-dropdown.p-disabled,
+.p-multiselect.p-disabled {
+  background: var(--surface-ground);
+}
+
+.p-dropdown-panel,
+.p-multiselect-panel {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+}
+
+.p-dropdown-panel .p-dropdown-header,
+.p-multiselect-panel .p-multiselect-header {
+  background: var(--surface-ground);
+  border-color: var(--surface-border);
+}
+
+.p-dropdown-panel .p-dropdown-filter,
+.p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+}
+
+.p-dropdown-items .p-dropdown-item,
+.p-multiselect-items .p-multiselect-item {
+  color: var(--text-color);
+}
+
+.p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover,
+.p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
+  background: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.p-dropdown-items .p-dropdown-item.p-highlight,
+.p-multiselect-items .p-multiselect-item.p-highlight {
+  background: var(--highlight-bg);
+  color: var(--highlight-text-color);
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  background: var(--highlight-bg);
+  color: var(--highlight-text-color);
+}
+
+.p-tabview-nav,
+.p-tabview-panels {
+  background: var(--surface-card);
+}
+
+.p-tabview-nav-link {
+  background: transparent;
+  color: var(--text-color-secondary);
+  border-color: var(--surface-border);
+}
+
+.p-tabview-nav li:not(.p-highlight):not(.p-disabled) .p-tabview-nav-link:hover {
+  color: var(--primary-color);
+  border-color: var(--surface-border);
+}
+
+.p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.p-paginator {
+  background: var(--surface-card);
+  color: var(--text-color-secondary);
+}
+
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last,
+.p-paginator .p-paginator-current {
+  color: var(--text-color-secondary);
+}
+
+.p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+  background: var(--surface-hover);
+  color: var(--primary-color);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+  color: var(--text-color-secondary);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: var(--primary-color);
+  color: var(--primary-color-text);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background: var(--surface-hover);
+  color: var(--primary-color);
 }
 
 /* Table — same hardcoded-color pattern as Button/Tag, confirmed by reading

@@ -1,6 +1,11 @@
 <aside class="sidebar" [class.collapsed]="nav.sidebarCollapsed()">
   <div class="brand-header">
-    <span class="brand-name" *ngIf="!nav.sidebarCollapsed()">APTARA</span>
+    <img
+      src="assets/aptara-logo.svg"
+      alt="APTARA"
+      class="brand-logo-img"
+      *ngIf="!nav.sidebarCollapsed()"
+    />
     <span class="brand-name-icon" *ngIf="nav.sidebarCollapsed()">A</span>
   </div>
 
