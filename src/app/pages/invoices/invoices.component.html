@@ -32,10 +32,10 @@
     <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
       <tr>
         <td>
-          <button class="row-action" title="Submit Invoice" (click)="submitInvoice()"><i class="pi pi-send"></i></button>
-          <button class="row-action" title="View Details" (click)="openView(row)"><i class="pi pi-eye"></i></button>
+          <button class="row-action" title="Submit Invoice" (click)="openInvoiceDetail(row)"><i class="pi pi-send"></i></button>
+          <button class="row-action" title="View Details" (click)="openInvoiceDetail(row)"><i class="pi pi-eye"></i></button>
           <button class="row-action" title="View History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
-          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject" (click)="approveInvoice(row)"><i class="pi pi-check-circle"></i></button>
+          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject" (click)="openInvoiceDetail(row)"><i class="pi pi-check-circle"></i></button>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>
@@ -62,13 +62,72 @@
   </p-table>
 </div>
 
-<app-entity-dialog
-  [(visible)]="dialogVisible"
-  [title]="dialogTitle"
-  [fields]="dialogFields"
-  [model]="dialogModel"
-  [readonly]="true"
-></app-entity-dialog>
+<p-dialog
+  *ngIf="detailVisible"
+  [visible]="detailVisible"
+  (visibleChange)="detailVisible = $event"
+  header="Invoice Details"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '560px' }"
+>
+  <p class="history-subtitle" *ngIf="viewingInvoice">{{ viewingInvoice.project }}</p>
+
+  <div class="detail-grid" *ngIf="viewingInvoice">
+    <div class="detail-card">
+      <span class="detail-label">Outsource Budget</span>
+      <span class="detail-val highlight">{{ viewingInvoice.total }}</span>
+    </div>
+    <div class="detail-card">
+      <span class="detail-label">Invoiced Till Date</span>
+      <span class="detail-val">{{ viewingInvoice.invoiced }}</span>
+    </div>
+    <div class="detail-card">
+      <span class="detail-label">Invoice Status</span>
+      <p-tag
+        [value]="viewingInvoice.status"
+        [severity]="statusSeverity(viewingInvoice.status).severity"
+        [styleClass]="statusSeverity(viewingInvoice.status).styleClass || ''"
+      ></p-tag>
+    </div>
+    <div class="detail-card">
+      <span class="detail-label">Invoice Number</span>
+      <span class="detail-val">INV-2026-081</span>
+    </div>
+  </div>
+
+  <div class="past-invoices">
+    <h3 class="subsection-heading"><i class="pi pi-sitemap"></i> Past Invoices</h3>
+    <p-table [value]="[
+      { num: 1, date: '21/07/2026', desc: 'Translation completed for French EU and Spanish EU', amount: '200,000', status: 'Invoice Approved' },
+      { num: 13, date: '13/08/2026', desc: 'Translation completed', amount: '300,000', status: 'Invoice Approved' }
+    ]" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Invoice Number</th>
+          <th>Invoice Date</th>
+          <th>Description</th>
+          <th>Invoice Amount</th>
+          <th>Status</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.num }}</td>
+          <td>{{ row.date }}</td>
+          <td>{{ row.desc }}</td>
+          <td class="amount">{{ row.amount }}</td>
+          <td><p-tag [value]="row.status" severity="success"></p-tag></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Close" severity="secondary" [outlined]="true" (click)="detailVisible = false"></p-button>
+    <p-button label="Approve Invoice" icon="pi pi-check-circle" (click)="approveInvoice()"></p-button>
+  </ng-template>
+</p-dialog>
 
 <app-history-dialog
   [(visible)]="historyVisible"

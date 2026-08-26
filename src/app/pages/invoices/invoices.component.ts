@@ -3,27 +3,17 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { invoicesData, statusSeverity, Invoice, auditHistoryData } from '../../core/mock-data';
-import { EntityDialogComponent, EntityField } from '../../shared/entity-dialog/entity-dialog.component';
 import { HistoryDialogComponent } from '../../shared/history-dialog/history-dialog.component';
 
 type InvoiceFilter = 'all' | 'Paid & Closed' | 'Pending PM Approval';
 
-const VIEW_FIELDS: EntityField[] = [
-  { key: 'project', label: 'Project Name', type: 'text' },
-  { key: 'status', label: 'Status', type: 'text' },
-  { key: 'total', label: 'OutSourcing Amount', type: 'text' },
-  { key: 'invoiced', label: 'Invoiced Till Date', type: 'text' },
-  { key: 'remaining', label: 'Remaining Amount', type: 'text' },
-  { key: 'start', label: 'Project Start Date', type: 'text' },
-  { key: 'end', label: 'Project End Date', type: 'text' }
-];
-
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, TableModule, TagModule, ButtonModule, EntityDialogComponent, HistoryDialogComponent],
+  imports: [CommonModule, TableModule, TagModule, ButtonModule, DialogModule, HistoryDialogComponent],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.css'
 })
@@ -46,34 +36,36 @@ export class InvoicesComponent {
     this.activeFilter.set(filter);
   }
 
-  dialogVisible = false;
-  dialogTitle = 'Invoice Details';
-  dialogFields = VIEW_FIELDS;
-  dialogModel: Partial<Invoice> = {};
+  detailVisible = false;
+  viewingInvoice: Invoice | null = null;
 
   historyVisible = false;
   historyTitle = '';
   historySubtitle = '';
   historyEntries = auditHistoryData;
 
-  openView(inv: Invoice) {
-    this.dialogModel = { ...inv };
-    this.dialogVisible = true;
+  /** Submit Invoice, View Details, and Approve/Reject all open the same
+   * "Invoice Details" modal in the original — matching that exactly rather
+   * than the three separate behaviors this used to have (a toast-only
+   * submit, a dialog with an invented field set, and a direct one-click
+   * approve with no confirmation step). */
+  openInvoiceDetail(inv: Invoice) {
+    this.viewingInvoice = inv;
+    this.detailVisible = true;
   }
 
-  submitInvoice() {
-    this.messages.add({ severity: 'success', summary: 'Invoice Submitted', detail: 'Invoice submitted for approval.' });
+  approveInvoice() {
+    const inv = this.viewingInvoice;
+    if (!inv) return;
+    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, status: 'Paid & Closed' } : i)));
+    this.detailVisible = false;
+    this.messages.add({ severity: 'success', summary: 'Invoice Approved', detail: 'Invoice approved and forwarded for disbursement.' });
   }
 
   openHistory(inv: Invoice) {
     this.historyTitle = 'Invoice Details History';
     this.historySubtitle = inv.project;
     this.historyVisible = true;
-  }
-
-  approveInvoice(inv: Invoice) {
-    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, status: 'Paid & Closed' } : i)));
-    this.messages.add({ severity: 'success', summary: 'Invoice Approved', detail: 'Invoice approved and forwarded for disbursement.' });
   }
 
   exportExcel() {
