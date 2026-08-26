@@ -552,3 +552,147 @@
   font-size: 0.8rem;
   color: var(--text-color);
 }
+
+.form-note {
+  color: #dc2626;
+  margin-top: var(--space-4);
+}
+
+/* Vendor Registration Form's "Services" tab — a search+checklist on the
+   left, a live "Selected Services" summary panel on the right. */
+.services-picker {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.services-list-panel {
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: var(--surface-ground);
+}
+
+.service-search-input {
+  width: 100%;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.services-table {
+  width: 100%;
+  border-collapse: collapse;
+  max-height: 420px;
+  display: block;
+  overflow-y: auto;
+}
+
+.services-table thead,
+.services-table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.services-table th {
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  padding: 8px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.services-select-col {
+  width: 60px;
+}
+
+.services-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--surface-border);
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+.service-request-type-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.services-selected-panel {
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: var(--surface-ground);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.services-selected-panel h3 {
+  margin: 0 0 8px;
+  color: #059669;
+  font-size: 0.95rem;
+  border-bottom: 2px solid #059669;
+  padding-bottom: 6px;
+}
+
+.services-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-color-secondary);
+  gap: 6px;
+  padding: 24px 0;
+}
+
+.services-empty i {
+  font-size: 1.8rem;
+  opacity: 0.5;
+}
+
+.services-empty span {
+  font-size: 0.8rem;
+}
+
+.services-selected-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.service-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  font-size: 0.8rem;
+  color: var(--text-color);
+}
+
+.services-selected-count {
+  margin-top: 10px;
+  padding: 8px;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.85rem;
+}

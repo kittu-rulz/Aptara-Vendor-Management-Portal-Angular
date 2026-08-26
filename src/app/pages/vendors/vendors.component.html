@@ -2,19 +2,19 @@
   <div class="table-toolbar">
     <div class="filter-group include-disable">
       <label>
-        <input type="checkbox" [checked]="includeDisabled()" (change)="toggleIncludeDisabled($any($event.target).checked)" />
-        Include Disable
-      </label>
-      <label>
         <input type="checkbox" [checked]="includeRejected()" (change)="toggleIncludeRejected($any($event.target).checked)" />
         Include Rejected
+      </label>
+      <label>
+        <input type="checkbox" [checked]="includeDisabled()" (change)="toggleIncludeDisabled($any($event.target).checked)" />
+        Include Disable
       </label>
     </div>
 
     <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
-      <p-button label="Generate Registration Link" icon="pi pi-link" severity="secondary" [outlined]="true" (click)="sendRegistrationLink()"></p-button>
-      <p-button label="Vendor" icon="pi pi-plus" routerLink="/manage-vendors/add"></p-button>
+      <p-button label="Export to Excel" icon="pi pi-file-excel" severity="success" (click)="exportExcel()"></p-button>
+      <p-button label="Vendor" icon="pi pi-plus" severity="success" routerLink="/manage-vendors/add"></p-button>
+      <p-button label="Generate Registration Link" icon="pi pi-link" severity="success" (click)="sendRegistrationLink()"></p-button>
     </div>
   </div>
 

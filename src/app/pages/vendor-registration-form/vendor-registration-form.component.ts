@@ -1,28 +1,29 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { MessageService } from 'primeng/api';
-import { vendorsData, Vendor, natureOfServicesData, orgTypeData } from '../../core/mock-data';
+import { vendorsData, Vendor, natureOfServicesData, orgTypeData, gstData, serviceExecutedData } from '../../core/mock-data';
 
 type FormMode = 'add' | 'edit' | 'view';
 
 const COUNTRIES = ['India', 'United States', 'United Kingdom', 'Singapore'];
+const ACCOUNT_TYPES = ['Current', 'Savings'];
 
 /** Real-app-accurate replacement for the old 5-field vendor dialog: matches
  * the production app's 5-tab "Vendor Registration Form" (Company Info /
- * Bank & GST Details / Key Contact / Services / Aptara Document Uploads).
- * Only Company Info has a captured reference screenshot — the other four
- * tabs are reasonably constructed from their names and the vendor data
- * already known to exist. */
+ * Bank & GST Details / Key Contact / Services / Aptara Document Uploads),
+ * confirmed field-for-field against live screenshots of all 5 tabs in
+ * Add/Edit/View. */
 @Component({
   selector: 'app-vendor-registration-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputTextModule, DropdownModule, ButtonModule, TabViewModule],
+  imports: [CommonModule, FormsModule, InputTextModule, DropdownModule, MultiSelectModule, ButtonModule, TabViewModule],
   templateUrl: './vendor-registration-form.component.html'
 })
 export class VendorRegistrationFormComponent {
@@ -34,12 +35,16 @@ export class VendorRegistrationFormComponent {
   private index = this.route.snapshot.paramMap.has('index') ? Number(this.route.snapshot.paramMap.get('index')) : null;
 
   countries = COUNTRIES;
+  accountTypes = ACCOUNT_TYPES;
   organizationTypes = orgTypeData().map((o) => o['type'] as string);
+  gstOptions = gstData().map((g) => g['type'] as string);
   natureOfServiceOptions = natureOfServicesData().map((n) => n['name'] as string);
+  allServiceRows = serviceExecutedData();
 
   draft: Vendor = this.mode === 'add' ? this.blankVendor() : { ...vendorsData()[this.index!] };
 
-  selectedServices: Set<string> = new Set((this.draft.services || '').split(',').map((s) => s.trim()).filter(Boolean));
+  serviceSearch = signal('');
+  selectedServiceNames = signal<Set<string>>(new Set());
 
   get readonly(): boolean {
     return this.mode === 'view';
@@ -52,6 +57,14 @@ export class VendorRegistrationFormComponent {
   get title(): string {
     return 'Vendor Registration Form';
   }
+
+  filteredServiceRows = computed(() => {
+    const q = this.serviceSearch().toLowerCase();
+    if (!q) return this.allServiceRows;
+    return this.allServiceRows.filter((r) => String(r['service']).toLowerCase().includes(q));
+  });
+
+  selectedServiceCount = computed(() => this.selectedServiceNames().size);
 
   private blankVendor(): Vendor {
     return {
@@ -79,24 +92,69 @@ export class VendorRegistrationFormComponent {
       accountNumber: '',
       ifscCode: '',
       branchName: '',
-      accountHolderName: '',
-      contactDesignation: '',
-      contactPhone: '',
-      alternatePhone: ''
+      payeeName: '',
+      accountType: '',
+      msme: false,
+      gstEligibilityList: [],
+      serviceCategories: [],
+      kcFirst: '',
+      kcLast: '',
+      kcDesignation: '',
+      kcDirectNo: '',
+      kcCell: '',
+      kcEmail: '',
+      escSameAsAbove: false,
+      esc1First: '',
+      esc1Last: '',
+      esc1Designation: '',
+      esc1DirectNo: '',
+      esc1Cell: '',
+      esc1Email: '',
+      esc2First: '',
+      esc2Last: '',
+      esc2Designation: '',
+      esc2DirectNo: '',
+      esc2Cell: '',
+      esc2Email: '',
+      aptaraComments: '',
+      selectedServiceNames: []
     };
   }
 
-  toggleService(service: string, checked: boolean) {
-    if (checked) this.selectedServices.add(service);
-    else this.selectedServices.delete(service);
+  private syncServicesFromDraft() {
+    this.selectedServiceNames.set(new Set(this.draft.selectedServiceNames ?? []));
   }
 
-  isServiceSelected(service: string): boolean {
-    return this.selectedServices.has(service);
+  toggleServiceRow(name: string, checked: boolean) {
+    this.selectedServiceNames.update((set) => {
+      const next = new Set(set);
+      if (checked) next.add(name);
+      else next.delete(name);
+      return next;
+    });
+  }
+
+  isServiceRowSelected(name: string): boolean {
+    return this.selectedServiceNames().has(name);
+  }
+
+  toggleEscalationSameAsAbove(checked: boolean) {
+    this.draft.escSameAsAbove = checked;
+    if (checked) {
+      this.draft.esc1First = this.draft.kcFirst;
+      this.draft.esc1Last = this.draft.kcLast;
+      this.draft.esc1Designation = this.draft.kcDesignation;
+      this.draft.esc1DirectNo = this.draft.kcDirectNo;
+      this.draft.esc1Cell = this.draft.kcCell;
+      this.draft.esc1Email = this.draft.kcEmail;
+    }
   }
 
   save() {
-    this.draft.services = Array.from(this.selectedServices).join(', ');
+    this.draft.selectedServiceNames = Array.from(this.selectedServiceNames());
+    this.draft.services = this.draft.serviceCategories.join(', ');
+    this.draft.contact = `${this.draft.kcFirst} ${this.draft.kcLast}`.trim();
+    this.draft.email = this.draft.kcEmail;
     if (this.mode === 'add') {
       const code = String(1000 + vendorsData().length + Math.floor(Math.random() * 100));
       vendorsData.update((list) => [...list, { ...this.draft, code }]);
@@ -111,10 +169,14 @@ export class VendorRegistrationFormComponent {
 
   reset() {
     this.draft = this.mode === 'add' ? this.blankVendor() : { ...vendorsData()[this.index!] };
-    this.selectedServices = new Set((this.draft.services || '').split(',').map((s) => s.trim()).filter(Boolean));
+    this.syncServicesFromDraft();
   }
 
   cancel() {
     this.router.navigate(['/manage-vendors']);
+  }
+
+  constructor() {
+    this.syncServicesFromDraft();
   }
 }

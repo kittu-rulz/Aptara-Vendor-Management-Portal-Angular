@@ -10,7 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
 import { invoicesData, invoicePastData, PastInvoiceRow } from '../../core/mock-data';
 
-type FormMode = 'add' | 'view' | 'approve';
+type FormMode = 'add' | 'view';
 type PastInvoiceField = 'num' | 'date' | 'desc' | 'amount' | 'currency' | 'status' | 'pmUser' | 'dmUser' | 'approvedBy';
 
 const PM_USERS = ['Hemant Project Manager'];
@@ -22,10 +22,12 @@ const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP'];
  * exactly (see screengrabs/_audit-notes.md items 11/12/14) — Project
  * Details are always read-only (pulled from the underlying outsource
  * request, not vendor-editable here), while PM/DM Approval User + Currency
- * are the fields actually submitted. Reached 3 ways from the list: the
- * plus icon (mode 'add' — first submission), the eye icon (mode 'view' —
- * read-only), and the check-circle icon (mode 'approve' — Approve/Reject
- * footer instead of Submit/Cancel). */
+ * are the fields actually submitted. A live screenshot specifically
+ * captured to find the app's "approve/reject" UI showed no such buttons —
+ * just this same page with Submit enabled (green) once PM/DM/Currency are
+ * set, so the plus icon (new submission) and the check-circle icon
+ * (approve an existing submission) both route here in 'add' mode; there is
+ * no distinct read-only "approve" state or separate Reject action. */
 @Component({
   selector: 'app-invoice-detail-page',
   standalone: true,
@@ -58,15 +60,10 @@ export class InvoiceDetailPageComponent {
     return this.mode === 'add';
   }
 
-  get isApprove(): boolean {
-    return this.mode === 'approve';
-  }
-
   /** Matches the confirmed real-app difference between the unsent-invoice
    * form (no PM/DM fields shown) and the already-submitted one: in 'add'
    * mode these fields ARE the submission mechanism, so they always show;
-   * in read-only modes (view/approve) they only render once there's
-   * something to display. */
+   * in 'view' they only render once there's something to display. */
   get showApprovalFields(): boolean {
     return this.isAdd || this.invoice?.hasSubmission === true;
   }
@@ -122,6 +119,7 @@ export class InvoiceDetailPageComponent {
 
   submit() {
     if (!this.invoice || !this.canSubmit) return;
+    const wasAlreadySubmitted = this.invoice.hasSubmission;
     invoicesData.update((list) =>
       list.map((i) =>
         i === this.invoice
@@ -129,21 +127,13 @@ export class InvoiceDetailPageComponent {
           : i
       )
     );
-    this.messages.add({ severity: 'success', summary: 'Invoice Submitted', detail: `${this.invoice.project} invoice submitted for approval.` });
-    this.cancel();
-  }
-
-  approve() {
-    if (!this.invoice) return;
-    invoicesData.update((list) => list.map((i) => (i === this.invoice ? { ...i, status: 'No Invoice Pending for Approval', hasSubmission: true } : i)));
-    this.messages.add({ severity: 'success', summary: 'Invoice Approved', detail: `${this.invoice.project} invoice approved and forwarded for disbursement.` });
-    this.cancel();
-  }
-
-  reject() {
-    if (!this.invoice) return;
-    invoicesData.update((list) => list.map((i) => (i === this.invoice ? { ...i, status: 'Invoice Rejected' } : i)));
-    this.messages.add({ severity: 'warn', summary: 'Invoice Rejected', detail: `${this.invoice.project} invoice was rejected.` });
+    this.messages.add({
+      severity: 'success',
+      summary: wasAlreadySubmitted ? 'Invoice Approved' : 'Invoice Submitted',
+      detail: wasAlreadySubmitted
+        ? `${this.invoice.project} invoice approved and forwarded for disbursement.`
+        : `${this.invoice.project} invoice submitted for approval.`
+    });
     this.cancel();
   }
 

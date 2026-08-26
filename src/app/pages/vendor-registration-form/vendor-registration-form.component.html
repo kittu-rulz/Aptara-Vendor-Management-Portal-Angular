@@ -76,98 +76,229 @@
     </p-tabPanel>
 
     <p-tabPanel header="Bank & GST Details">
-      <div class="form-grid">
-        <div class="form-field">
-          <label>Bank Name</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.bankName" [readonly]="readonly" />
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Bank Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.bankName" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Branch Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.branchName" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Payee Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.payeeName" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Account Type<span class="req">*</span></label>
+            <p-dropdown [options]="accountTypes" [(ngModel)]="draft.accountType" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+          </div>
         </div>
-        <div class="form-field">
-          <label>Account Number</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.accountNumber" [readonly]="readonly" />
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Account No.<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.accountNumber" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>IFSC Code<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.ifscCode" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label class="checkbox-row">
+              <input type="checkbox" [(ngModel)]="draft.msme" [disabled]="readonly" />
+              MSME
+            </label>
+          </div>
         </div>
-        <div class="form-field">
-          <label>IFSC Code</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.ifscCode" [readonly]="readonly" />
-        </div>
-        <div class="form-field">
-          <label>Branch Name</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.branchName" [readonly]="readonly" />
-        </div>
-        <div class="form-field">
-          <label>Account Holder Name</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.accountHolderName" [readonly]="readonly" />
-        </div>
-        <div class="form-field">
-          <label>GST Number</label>
-          <input pInputText class="w-full" [value]="draft.gstNumber" readonly />
+      </div>
+
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-field">
+            <label>GST Eligibility</label>
+            <p-multiSelect [options]="gstOptions" [(ngModel)]="draft.gstEligibilityList" placeholder="Select GST Options" [disabled]="readonly" styleClass="w-full"></p-multiSelect>
+          </div>
+          <div class="form-field">
+            <label>Organization Type</label>
+            <p-dropdown [options]="organizationTypes" [(ngModel)]="draft.organization" placeholder="Select Organization Type" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+          </div>
+          <div class="form-field">
+            <label>Nature of Service Provided</label>
+            <p-multiSelect [options]="natureOfServiceOptions" [(ngModel)]="draft.serviceCategories" placeholder="Select Services" [disabled]="readonly" styleClass="w-full"></p-multiSelect>
+          </div>
         </div>
       </div>
     </p-tabPanel>
 
     <p-tabPanel header="Key Contact">
-      <div class="form-grid">
-        <div class="form-field">
-          <label>Contact Person Name<span class="req">*</span></label>
-          <input pInputText class="w-full" [(ngModel)]="draft.contact" [readonly]="readonly" />
+      <div class="form-section">
+        <h3>Primary Contact Person</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>First Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcFirst" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Last Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcLast" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Designation<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcDesignation" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Direct No<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcDirectNo" [readonly]="readonly" />
+          </div>
         </div>
-        <div class="form-field">
-          <label>Designation</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.contactDesignation" [readonly]="readonly" />
+        <div class="form-grid two-col">
+          <div class="form-field">
+            <label>Cell Number<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcCell" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Email ID<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.kcEmail" [readonly]="readonly" />
+          </div>
         </div>
-        <div class="form-field">
-          <label>Contact Phone<span class="req">*</span></label>
-          <input pInputText class="w-full" [(ngModel)]="draft.contactPhone" [readonly]="readonly" />
+      </div>
+
+      <div class="form-section">
+        <label class="checkbox-row">
+          <input type="checkbox" [ngModel]="draft.escSameAsAbove" (ngModelChange)="toggleEscalationSameAsAbove($event)" [disabled]="readonly" />
+          Same as above
+        </label>
+        <h3>Escalation Contact (Primary)</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>First Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1First" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Last Name<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1Last" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Designation<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1Designation" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Direct No<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1DirectNo" [readonly]="readonly" />
+          </div>
         </div>
-        <div class="form-field">
-          <label>Alternate Phone</label>
-          <input pInputText class="w-full" [(ngModel)]="draft.alternatePhone" [readonly]="readonly" />
+        <div class="form-grid two-col">
+          <div class="form-field">
+            <label>Cell Number<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1Cell" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Email ID<span class="req">*</span></label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc1Email" [readonly]="readonly" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Escalation Contact (Secondary)</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>First Name</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2First" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2Last" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Designation</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2Designation" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Direct No</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2DirectNo" [readonly]="readonly" />
+          </div>
+        </div>
+        <div class="form-grid two-col">
+          <div class="form-field">
+            <label>Cell Number</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2Cell" [readonly]="readonly" />
+          </div>
+          <div class="form-field">
+            <label>Email ID</label>
+            <input pInputText class="w-full" [(ngModel)]="draft.esc2Email" [readonly]="readonly" />
+          </div>
         </div>
       </div>
     </p-tabPanel>
 
     <p-tabPanel header="Services">
-      <div class="form-field">
-        <label>Type of Organization<span class="req">*</span></label>
-        <p-dropdown [options]="organizationTypes" [(ngModel)]="draft.organization" [disabled]="readonly" styleClass="w-full"></p-dropdown>
-      </div>
+      <div class="services-picker">
+        <div class="services-list-panel">
+          <input
+            type="text"
+            class="service-search-input"
+            placeholder="Search service..."
+            [ngModel]="serviceSearch()"
+            (ngModelChange)="serviceSearch.set($event)"
+          />
+          <table class="services-table">
+            <thead>
+              <tr>
+                <th class="services-select-col">Select</th>
+                <th>Service Name</th>
+                <th>Request Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of filteredServiceRows()">
+                <td>
+                  <input
+                    type="checkbox"
+                    [checked]="isServiceRowSelected($any(row['service']))"
+                    [disabled]="readonly"
+                    (change)="toggleServiceRow($any(row['service']), $any($event.target).checked)"
+                  />
+                </td>
+                <td>{{ row['service'] }}</td>
+                <td><span class="service-request-type-badge">{{ row['requestType'] }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div class="form-section">
-        <h3>Nature of Service</h3>
-        <div class="service-checklist">
-          <label class="checkbox-row" *ngFor="let service of natureOfServiceOptions">
-            <input
-              type="checkbox"
-              [checked]="isServiceSelected(service)"
-              [disabled]="readonly"
-              (change)="toggleService(service, $any($event.target).checked)"
-            />
-            {{ service }}
-          </label>
+        <div class="services-selected-panel">
+          <h3>Selected Services</h3>
+          <div class="services-empty" *ngIf="selectedServiceCount() === 0">
+            <i class="pi pi-inbox"></i>
+            <div>No services selected yet.</div>
+            <span>Select services from the left panel</span>
+          </div>
+          <div class="services-selected-list" *ngIf="selectedServiceCount() > 0">
+            <span class="service-chip" *ngFor="let name of selectedServiceNames()">{{ name }}</span>
+          </div>
+          <div class="services-selected-count">{{ selectedServiceCount() }} service(s) selected</div>
         </div>
       </div>
     </p-tabPanel>
 
     <p-tabPanel header="Aptara Document Uploads">
-      <div class="approval-grid">
-        <div class="approval-card">
-          <h3>GST Certificate</h3>
-          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
-        </div>
-        <div class="approval-card">
-          <h3>PAN Card</h3>
-          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
-        </div>
-        <div class="approval-card">
-          <h3>Company Registration Certificate</h3>
-          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
-        </div>
-        <div class="approval-card">
-          <h3>Bank Proof / Cancelled Cheque</h3>
-          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
-        </div>
+      <div class="form-section">
+        <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+        <div class="hint">Note: Maximum 15 files allowed. Each file size should not be greater than 20 MB.(Allowed file extensions:.pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt, .png, .jpg, .jpeg, .zip)</div>
+      </div>
+
+      <div class="form-field">
+        <label>Aptara Comments</label>
+        <textarea pInputText class="w-full request-type-textarea" rows="6" maxlength="4000" [(ngModel)]="draft.aptaraComments" [readonly]="readonly"></textarea>
+        <div class="hint">{{ draft.aptaraComments.length }} / 4000 characters (Remaining: {{ 4000 - draft.aptaraComments.length }})</div>
+        <div class="hint">Note : If your comment reaches 4000 characters, please upload the file instead.</div>
       </div>
     </p-tabPanel>
   </p-tabView>
+
+  <div class="hint form-note" *ngIf="!readonly">Note: Please fill all required fields to enable the Submit button.</div>
 
   <div class="form-actions">
     <p-button *ngIf="!readonly" label="Submit" icon="pi pi-check" severity="success" (click)="save()"></p-button>

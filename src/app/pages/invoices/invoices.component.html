@@ -39,7 +39,7 @@
           </button>
           <a class="row-action" title="View" [routerLink]="['/invoice-details', indexOf(row), 'view']"><i class="pi pi-eye"></i></a>
           <a class="row-action" title="History" [routerLink]="['/invoice-details', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
-          <a *ngIf="row.hasSubmission" class="row-action" title="Approve" [routerLink]="['/invoice-details', indexOf(row), 'approve']"><i class="pi pi-check-circle"></i></a>
+          <a *ngIf="row.hasSubmission" class="row-action" title="Approve" [routerLink]="['/invoice-details', indexOf(row), 'submit']"><i class="pi pi-check-circle"></i></a>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>

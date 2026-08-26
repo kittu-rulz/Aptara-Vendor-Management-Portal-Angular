@@ -119,14 +119,7 @@
   </div>
 
   <div class="form-actions">
-    <ng-container *ngIf="!isApprove">
-      <p-button label="Submit" icon="pi pi-check" severity="success" [disabled]="!canSubmit" (click)="submit()"></p-button>
-      <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
-    </ng-container>
-    <ng-container *ngIf="isApprove">
-      <p-button label="Approve" icon="pi pi-check-circle" severity="success" (click)="approve()"></p-button>
-      <p-button label="Reject" icon="pi pi-times-circle" severity="danger" [outlined]="true" (click)="reject()"></p-button>
-      <p-button label="Cancel" icon="pi pi-times" severity="secondary" [outlined]="true" (click)="cancel()"></p-button>
-    </ng-container>
+    <p-button label="Submit" icon="pi pi-check" severity="success" [disabled]="!canSubmit" (click)="submit()"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
   </div>
 </div>

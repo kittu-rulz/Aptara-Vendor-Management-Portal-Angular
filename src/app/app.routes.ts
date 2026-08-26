@@ -151,11 +151,6 @@ export const routes: Routes = [
         data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details'), mode: 'view' }
       },
       {
-        path: 'invoice-details/:index/approve',
-        component: InvoiceDetailPageComponent,
-        data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details'), mode: 'approve' }
-      },
-      {
         path: 'invoice-details/:index/history',
         component: InvoiceHistoryComponent,
         data: { title: 'Invoice Details History', breadcrumb: crumb('Invoice Details') }

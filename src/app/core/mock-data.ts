@@ -396,10 +396,35 @@ export interface Vendor {
   accountNumber: string;
   ifscCode: string;
   branchName: string;
-  accountHolderName: string;
-  contactDesignation: string;
-  contactPhone: string;
-  alternatePhone: string;
+  payeeName: string;
+  accountType: string;
+  msme: boolean;
+  gstEligibilityList: string[];
+  serviceCategories: string[];
+  kcFirst: string;
+  kcLast: string;
+  kcDesignation: string;
+  kcDirectNo: string;
+  kcCell: string;
+  kcEmail: string;
+  escSameAsAbove: boolean;
+  esc1First: string;
+  esc1Last: string;
+  esc1Designation: string;
+  esc1DirectNo: string;
+  esc1Cell: string;
+  esc1Email: string;
+  esc2First: string;
+  esc2Last: string;
+  esc2Designation: string;
+  esc2DirectNo: string;
+  esc2Cell: string;
+  esc2Email: string;
+  aptaraComments: string;
+  /** Granular per-skill checklist on the Services tab (serviceExecutedData
+   * names, e.g. "Alfresco"/"Android") — distinct from `services`, which
+   * holds the broader Nature of Service category tags shown in the list. */
+  selectedServiceNames: string[];
 }
 
 /** Matches the single vendor record in the original prototype's app.js —
@@ -426,14 +451,36 @@ export const vendorsData = signal<Vendor[]>([
     companyPhone: '8880776910',
     companyFax: '',
     companyWebsite: 'SNTLtd.com',
-    bankName: 'HDFC Bank',
-    accountNumber: 'XXXXXXXX4521',
-    ifscCode: 'HDFC0001234',
-    branchName: 'Wadgaonsheri, Pune',
-    accountHolderName: 'SNT Ltd',
-    contactDesignation: 'Vendor Relationship Manager',
-    contactPhone: '8880776910',
-    alternatePhone: ''
+    bankName: 'IDFC',
+    accountNumber: '100078365739',
+    ifscCode: 'IDFC0007',
+    branchName: 'Wadgaonsheri',
+    payeeName: 'SNT Ltd',
+    accountType: 'Current',
+    msme: true,
+    gstEligibilityList: ['IGST'],
+    serviceCategories: ['Translation', 'Audio/Video'],
+    kcFirst: 'Charlotte',
+    kcLast: 'Kujur',
+    kcDesignation: 'Vendor Relationship Manager',
+    kcDirectNo: '8880776910',
+    kcCell: '8880776910',
+    kcEmail: 'charlotte.kujur@aptaracorp.com',
+    escSameAsAbove: false,
+    esc1First: '',
+    esc1Last: '',
+    esc1Designation: '',
+    esc1DirectNo: '',
+    esc1Cell: '',
+    esc1Email: '',
+    esc2First: '',
+    esc2Last: '',
+    esc2Designation: '',
+    esc2DirectNo: '',
+    esc2Cell: '',
+    esc2Email: '',
+    aptaraComments: '',
+    selectedServiceNames: []
   }
 ]);
 
