@@ -30,8 +30,14 @@
       <tr>
         <td>
           <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
-          <button class="row-action" [title]="row['active'] ? 'Disable' : 'Enable'" (click)="toggleActive(row)">
-            <i class="pi pi-power-off"></i>
+          <button
+            class="row-action"
+            [class.is-disable]="row['active']"
+            [class.is-enable]="!row['active']"
+            [title]="row['active'] ? 'Disable' : 'Enable'"
+            (click)="toggleActive(row)"
+          >
+            <i class="pi" [class.pi-power-off]="row['active']" [class.pi-refresh]="!row['active']"></i>
           </button>
         </td>
         <td *ngFor="let col of columns">{{ row[col.key] }}</td>
