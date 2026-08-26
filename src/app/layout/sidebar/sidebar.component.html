@@ -68,9 +68,7 @@
     </a>
   </nav>
 
-  <div class="sidebar-footer">
-    <button class="collapse-btn" (click)="nav.toggleSidebar()">
-      <i class="pi" [class.pi-angle-left]="!nav.sidebarCollapsed()" [class.pi-angle-right]="nav.sidebarCollapsed()"></i>
-    </button>
-  </div>
+  <button class="collapse-btn" (click)="nav.toggleSidebar()">
+    <i class="pi" [class.pi-angle-left]="!nav.sidebarCollapsed()" [class.pi-angle-right]="nav.sidebarCollapsed()"></i>
+  </button>
 </aside>
