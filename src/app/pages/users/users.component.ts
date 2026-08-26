@@ -90,6 +90,16 @@ export class UsersComponent {
     }
   }
 
+  toggleStatus(u: AppUser) {
+    const next = u.status === 'Active' ? 'Inactive' : 'Active';
+    this.allUsersSignal.update((list) => list.map((row) => (row === u ? { ...row, status: next } : row)));
+    this.messages.add({
+      severity: next === 'Active' ? 'success' : 'warn',
+      summary: next === 'Active' ? 'User Enabled' : 'User Disabled',
+      detail: `${u.first} ${u.last} is now ${next === 'Active' ? 'active' : 'disabled'}.`
+    });
+  }
+
   openHistory(u: AppUser) {
     this.historyTitle = `User History: ${u.first} ${u.last}`;
     this.historySubtitle = u.email;

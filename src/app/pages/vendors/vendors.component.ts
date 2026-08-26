@@ -111,6 +111,16 @@ export class VendorsComponent {
     this.historyVisible = true;
   }
 
+  toggleStatus(v: Vendor) {
+    const next = v.status === 'Active' ? 'Inactive' : 'Active';
+    this.allVendorsSignal.update((list) => list.map((row) => (row === v ? { ...row, status: next } : row)));
+    this.messages.add({
+      severity: next === 'Active' ? 'success' : 'warn',
+      summary: next === 'Active' ? 'Vendor Enabled' : 'Vendor Disabled',
+      detail: `${v.name} is now ${next === 'Active' ? 'active' : 'disabled'}.`
+    });
+  }
+
   sendRegistrationLink() {
     this.messages.add({ severity: 'success', summary: 'Invitation Sent', detail: 'Vendor onboarding link sent via corporate email.' });
   }

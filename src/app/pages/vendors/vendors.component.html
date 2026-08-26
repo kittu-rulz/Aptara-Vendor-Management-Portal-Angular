@@ -51,6 +51,15 @@
           <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
           <button class="row-action" title="View" (click)="openView(row)"><i class="pi pi-eye"></i></button>
           <button class="row-action" title="History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
+          <button
+            class="row-action"
+            [class.is-disable]="row.status === 'Active'"
+            [class.is-enable]="row.status !== 'Active'"
+            [title]="row.status === 'Active' ? 'Disable' : 'Enable'"
+            (click)="toggleStatus(row)"
+          >
+            <i class="pi" [class.pi-power-off]="row.status === 'Active'" [class.pi-refresh]="row.status !== 'Active'"></i>
+          </button>
         </td>
         <td><strong>{{ row.name }}</strong></td>
         <td>{{ row.city }}</td>

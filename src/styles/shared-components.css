@@ -92,6 +92,49 @@
   color: var(--primary-color);
 }
 
+/* Enable/Disable row-action icon-swap: rose "power off" when the row is
+   active (clicking disables it), emerald "refresh" when disabled (clicking
+   re-enables it) — shared across Masters, Vendors, and Users tables. */
+.row-action.is-disable {
+  color: #e11d48;
+}
+
+.row-action.is-disable:hover {
+  background: rgba(225, 29, 72, 0.1);
+  border-color: rgba(225, 29, 72, 0.3);
+  color: #e11d48;
+}
+
+.row-action.is-enable {
+  color: #059669;
+}
+
+.row-action.is-enable:hover {
+  background: rgba(5, 150, 105, 0.1);
+  border-color: rgba(5, 150, 105, 0.3);
+  color: #059669;
+}
+
+[data-theme='dark'] .row-action.is-disable {
+  color: #f87171;
+}
+
+[data-theme='dark'] .row-action.is-disable:hover {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.35);
+  color: #f87171;
+}
+
+[data-theme='dark'] .row-action.is-enable {
+  color: #34d399;
+}
+
+[data-theme='dark'] .row-action.is-enable:hover {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #34d399;
+}
+
 .empty-state {
   text-align: center;
   padding: 40px 16px;
