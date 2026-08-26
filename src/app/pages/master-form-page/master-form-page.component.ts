@@ -37,7 +37,7 @@ export class MasterFormPageComponent {
       : { ...this.config.rows()[this.index!] };
 
   get title(): string {
-    if (this.mode === 'add') return `Add ${this.config.addLabel}`;
+    if (this.mode === 'add') return `Add ${this.config.singularLabel}`;
     if (this.mode === 'view') return `View ${this.config.singularLabel}`;
     return `Edit ${this.config.singularLabel}`;
   }

@@ -16,6 +16,7 @@ export interface MasterFieldConfig {
   label: string;
   type?: 'text' | 'number' | 'select';
   options?: string[];
+  placeholder?: string;
 }
 
 export interface MasterTypeConfig {
@@ -60,7 +61,7 @@ export const MASTER_TYPES: Record<string, MasterTypeConfig> = {
     ],
     fields: [
       { key: 'service', label: 'Service Name', type: 'text' },
-      { key: 'requestType', label: 'Request Type', type: 'select', options: ['Development', 'Design', 'QA'] }
+      { key: 'requestType', label: 'Request Type', type: 'select', options: ['Development', 'Design', 'QA'], placeholder: '-Select Request Type-' }
     ],
     addLabel: 'Service Executed',
     countLabel: 'All',
@@ -151,9 +152,9 @@ export const MASTER_TYPES: Record<string, MasterTypeConfig> = {
     ],
     fields: [
       { key: 'curr', label: 'Currency', type: 'select', options: ['USD', 'INR', 'EUR', 'GBP'] },
-      { key: 'amount', label: 'Amount', type: 'number' },
-      { key: 'year', label: 'Year', type: 'select', options: ['2024', '2025', '2026', '2027'] },
-      { key: 'month', label: 'Month', type: 'select', options: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] },
+      { key: 'amount', label: 'Amount', type: 'number', placeholder: 'Enter Currency Amount' },
+      { key: 'year', label: 'Year', type: 'select', options: ['2024', '2025', '2026', '2027'], placeholder: 'Select Year' },
+      { key: 'month', label: 'Month', type: 'select', options: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], placeholder: 'Select Month' },
       { key: 'desc', label: 'Description', type: 'text' }
     ],
     addLabel: 'Currency',
