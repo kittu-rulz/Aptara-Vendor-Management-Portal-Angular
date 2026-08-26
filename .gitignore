@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Real-app reference screenshots (local audit material only — not for the public repo)
+/screengrabs
