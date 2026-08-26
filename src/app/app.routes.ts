@@ -17,6 +17,8 @@ import { VendorRegistrationFormComponent } from './pages/vendor-registration-for
 import { VendorHistoryComponent } from './pages/vendor-history/vendor-history.component';
 import { UserFormComponent } from './pages/user-form/user-form.component';
 import { UserHistoryComponent } from './pages/user-history/user-history.component';
+import { InvoiceDetailPageComponent } from './pages/invoice-detail-page/invoice-detail-page.component';
+import { InvoiceHistoryComponent } from './pages/invoice-history/invoice-history.component';
 import { ConfigComponent } from './pages/config/config.component';
 import {
   invoiceReportData,
@@ -132,6 +134,26 @@ export const routes: Routes = [
         path: 'invoice-details',
         component: InvoicesComponent,
         data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details') }
+      },
+      {
+        path: 'invoice-details/:index/submit',
+        component: InvoiceDetailPageComponent,
+        data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details'), mode: 'add' }
+      },
+      {
+        path: 'invoice-details/:index/view',
+        component: InvoiceDetailPageComponent,
+        data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details'), mode: 'view' }
+      },
+      {
+        path: 'invoice-details/:index/approve',
+        component: InvoiceDetailPageComponent,
+        data: { title: 'Invoice Details', breadcrumb: crumb('Invoice Details'), mode: 'approve' }
+      },
+      {
+        path: 'invoice-details/:index/history',
+        component: InvoiceHistoryComponent,
+        data: { title: 'Invoice Details History', breadcrumb: crumb('Invoice Details') }
       },
       {
         path: 'audit-history',

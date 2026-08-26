@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { usersData, userHistoryData, AuditEntry } from '../../core/mock-data';
+import { HistoryTableComponent } from '../../shared/history-table/history-table.component';
 
 /** Real-app-accurate "User History" full page, seeded with John Doe's
  * actual captured "Record: Created" entry; every other user correctly
@@ -13,7 +12,7 @@ import { usersData, userHistoryData, AuditEntry } from '../../core/mock-data';
 @Component({
   selector: 'app-user-history',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, HistoryTableComponent],
   templateUrl: './user-history.component.html'
 })
 export class UserHistoryComponent {

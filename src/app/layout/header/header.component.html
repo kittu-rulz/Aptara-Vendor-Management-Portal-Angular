@@ -5,13 +5,18 @@
   </div>
 
   <div class="header-right">
-    <button class="icon-btn" title="Notifications">
+    <button class="icon-btn" title="Notifications" aria-label="Notifications">
       <i class="pi pi-bell"></i>
     </button>
-    <button class="icon-btn" (click)="nav.toggleTheme()" [title]="nav.darkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+    <button
+      class="icon-btn"
+      (click)="nav.toggleTheme()"
+      [title]="nav.darkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      [attr.aria-label]="nav.darkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+    >
       <i class="pi" [class.pi-sun]="nav.darkTheme()" [class.pi-moon]="!nav.darkTheme()"></i>
     </button>
-    <button class="icon-btn" (click)="logout()" title="Sign out">
+    <button class="icon-btn" (click)="logout()" title="Sign out" aria-label="Sign out">
       <i class="pi pi-sign-out"></i>
     </button>
   </div>

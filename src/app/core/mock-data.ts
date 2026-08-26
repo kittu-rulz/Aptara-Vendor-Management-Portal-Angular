@@ -310,6 +310,48 @@ export const invoicesData = signal<Invoice[]>([
   { project: 'Translation', status: '', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000, active: true, hasSubmission: false }
 ]);
 
+/** Real "Invoice Details History" audit trail, captured for the
+ * "Translation of 2 modules" project (2 past invoices submitted/approved).
+ * Every other project correctly shows empty, matching the real app's
+ * default for a project whose invoice history wasn't individually
+ * captured. */
+export const invoiceHistoryData: Record<string, AuditEntry[]> = {
+  'Translation of 2 modules': [
+    { attr: 'Invoice Status (InvoiceDetailID : 13)', oldVal: '', newVal: 'Approved', user: 'Darshan Delivery Manager', date: '08/13/2026 09:01:00 PM', comment: 'Approved' },
+    { attr: 'PM User', oldVal: '', newVal: 'Hemant Project Manager', user: 'Pushpraj ENT Vendor', date: '08/13/2026 08:59:00 PM', comment: 'Added' },
+    { attr: 'DM User', oldVal: '', newVal: 'Darshan Delivery Manager', user: 'Pushpraj ENT Vendor', date: '08/13/2026 08:59:00 PM', comment: 'Added' },
+    { attr: 'CurrencyMasterId', oldVal: '', newVal: '2', user: 'Pushpraj ENT Vendor', date: '08/13/2026 08:59:00 PM', comment: 'Added' },
+    { attr: 'New Invoice (InvoiceDetailID : 2)', oldVal: '', newVal: '', user: 'Charlotte Kujur', date: '08/13/2026 08:58:00 PM', comment: 'Created' },
+    { attr: 'Invoice Status (InvoiceDetailID : 1)', oldVal: '', newVal: 'Approved', user: 'Darshan Delivery Manager', date: '07/21/2026 02:52:00 AM', comment: 'Approved' },
+    { attr: 'PM User', oldVal: '', newVal: 'Hemant Project Manager', user: 'Pushpraj ENT Vendor', date: '07/21/2026 02:47:00 AM', comment: 'Added' },
+    { attr: 'DM User', oldVal: '', newVal: 'Darshan Delivery Manager', user: 'Pushpraj ENT Vendor', date: '07/21/2026 02:47:00 AM', comment: 'Added' },
+    { attr: 'New Invoice (InvoiceDetailID : 1)', oldVal: '', newVal: '', user: 'Charlotte Kujur', date: '07/21/2026 02:44:00 AM', comment: 'Created' }
+  ]
+};
+
+export interface PastInvoiceRow {
+  num: number;
+  date: string;
+  desc: string;
+  amount: string;
+  currency: string;
+  status: string;
+  pmUser: string;
+  dmUser: string;
+  approvedBy: string;
+}
+
+/** Real "Past Invoices" grid rows, captured on the "Translation of 2
+ * modules" project's Invoice Details page. Every other project correctly
+ * shows an empty Past Invoices grid — no submissions were captured for
+ * them. */
+export const invoicePastData: Record<string, PastInvoiceRow[]> = {
+  'Translation of 2 modules': [
+    { num: 1, date: '21/07/2026', desc: 'Translation completed for French EU and Spanish EU', amount: '200,000', currency: '', status: 'Invoice Approved', pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', approvedBy: 'Darshan Delivery Manager' },
+    { num: 13, date: '13/08/2026', desc: 'Translation completed', amount: '300,000', currency: '90 USD 2026 - August', status: 'Invoice Approved', pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', approvedBy: 'Darshan Delivery Manager' }
+  ]
+};
+
 /** Extended against the real production app's 5-tab "Vendor Registration
  * Form" — only the Company Info tab has a captured reference screenshot,
  * so those fields carry the real SNT Ltd values exactly; the other four

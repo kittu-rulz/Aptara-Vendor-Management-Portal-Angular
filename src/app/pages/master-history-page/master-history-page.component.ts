@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { MASTER_TYPES } from '../../core/master-registry';
 import { AuditEntry } from '../../core/mock-data';
+import { HistoryTableComponent } from '../../shared/history-table/history-table.component';
 
 /** Real-app-accurate per-record history page ("Nature Of Service History",
  * "Entity Master History", etc.) — a genuine full page with Export/Back,
@@ -16,7 +15,7 @@ import { AuditEntry } from '../../core/mock-data';
 @Component({
   selector: 'app-master-history-page',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, HistoryTableComponent],
   templateUrl: './master-history-page.component.html'
 })
 export class MasterHistoryPageComponent {

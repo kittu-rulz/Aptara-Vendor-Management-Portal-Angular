@@ -76,31 +76,31 @@
         <th></th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" [ngModel]="columnFilters().id" (ngModelChange)="setColumnFilter('id', $event)" />
+            <input type="text" class="column-filter-input" aria-label="Filter by RevSys ID" [ngModel]="columnFilters().id" (ngModelChange)="setColumnFilter('id', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" [ngModel]="columnFilters().client" (ngModelChange)="setColumnFilter('client', $event)" />
+            <input type="text" class="column-filter-input" aria-label="Filter by Client Name" [ngModel]="columnFilters().client" (ngModelChange)="setColumnFilter('client', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" [ngModel]="columnFilters().project" (ngModelChange)="setColumnFilter('project', $event)" />
+            <input type="text" class="column-filter-input" aria-label="Filter by Project Name" [ngModel]="columnFilters().project" (ngModelChange)="setColumnFilter('project', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" [ngModel]="columnFilters().status" (ngModelChange)="setColumnFilter('status', $event)" />
+            <input type="text" class="column-filter-input" aria-label="Filter by Status" [ngModel]="columnFilters().status" (ngModelChange)="setColumnFilter('status', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" [ngModel]="columnFilters().vendor" (ngModelChange)="setColumnFilter('vendor', $event)" />
+            <input type="text" class="column-filter-input" aria-label="Filter by Vendor Name" [ngModel]="columnFilters().vendor" (ngModelChange)="setColumnFilter('vendor', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>

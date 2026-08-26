@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { outsourceRequestsData, outsourceRequestHistory, AuditEntry } from '../../core/mock-data';
+import { HistoryTableComponent } from '../../shared/history-table/history-table.component';
 
 /** Real-app-accurate "Outsource Request History" full page — replaces the
  * shared 4-row fake modal previously reused for every entity. Populated
@@ -15,7 +14,7 @@ import { outsourceRequestsData, outsourceRequestHistory, AuditEntry } from '../.
 @Component({
   selector: 'app-outsource-request-history',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, HistoryTableComponent],
   templateUrl: './outsource-request-history.component.html'
 })
 export class OutsourceRequestHistoryComponent {

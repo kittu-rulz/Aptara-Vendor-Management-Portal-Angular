@@ -1,0 +1,99 @@
+<div class="table-card">
+  <div class="table-toolbar">
+    <div>
+      <span class="section-heading"><i class="pi pi-history"></i> {{ title }}</span>
+      <div class="history-subtitle" *ngIf="subtitle">{{ subtitle }}</div>
+    </div>
+    <div class="toolbar-actions">
+      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel.emit()"></p-button>
+      <p-button label="Back" icon="pi pi-arrow-left" severity="danger" (click)="back.emit()"></p-button>
+    </div>
+  </div>
+
+  <p-table [value]="filteredEntries()" [rows]="50" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="sortable-th" (click)="toggleSort('attr')">
+          Attribute
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'attr' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'attr' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'attr'"></i></span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('oldVal')">
+          Old Value
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'oldVal' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'oldVal' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'oldVal'"></i></span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('newVal')">
+          New Value
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'newVal' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'newVal' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'newVal'"></i></span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('user')">
+          Changed By
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'user' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'user' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'user'"></i></span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('date')">
+          Changed On
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'date' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'date' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'date'"></i></span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('comment')">
+          Comment
+          <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'comment' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'comment' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'comment'"></i></span>
+        </th>
+      </tr>
+      <tr class="column-filter-row">
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by Attribute" [ngModel]="columnFilters().attr" (ngModelChange)="setColumnFilter('attr', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by Old Value" [ngModel]="columnFilters().oldVal" (ngModelChange)="setColumnFilter('oldVal', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by New Value" [ngModel]="columnFilters().newVal" (ngModelChange)="setColumnFilter('newVal', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by Changed By" [ngModel]="columnFilters().user" (ngModelChange)="setColumnFilter('user', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by Changed On" [ngModel]="columnFilters().date" (ngModelChange)="setColumnFilter('date', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" aria-label="Filter by Comment" [ngModel]="columnFilters().comment" (ngModelChange)="setColumnFilter('comment', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td><strong>{{ row.attr }}</strong></td>
+        <td>{{ row.oldVal || '—' }}</td>
+        <td>{{ row.newVal || '—' }}</td>
+        <td>{{ row.user || '—' }}</td>
+        <td>{{ row.date }}</td>
+        <td>{{ row.comment }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="empty-state">
+          <i class="pi pi-inbox"></i>
+          <div>No records found</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

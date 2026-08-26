@@ -1,27 +1,14 @@
 <div class="table-card">
   <div class="table-toolbar">
-    <div class="filter-group">
-      <button
-        class="filter-chip"
-        [class.active]="activeFilter() === 'all'"
-        (click)="setFilter('all')"
-      >
-        All Vendors ({{ allVendors.length }})
-      </button>
-      <button
-        class="filter-chip"
-        [class.active]="activeFilter() === 'Active'"
-        (click)="setFilter('Active')"
-      >
-        Active
-      </button>
-      <button
-        class="filter-chip"
-        [class.active]="activeFilter() === 'Approved'"
-        (click)="setFilter('Approved')"
-      >
-        Approved
-      </button>
+    <div class="filter-group include-disable">
+      <label>
+        <input type="checkbox" [checked]="includeDisabled()" (change)="toggleIncludeDisabled($any($event.target).checked)" />
+        Include Disable
+      </label>
+      <label>
+        <input type="checkbox" [checked]="includeRejected()" (change)="toggleIncludeRejected($any($event.target).checked)" />
+        Include Rejected
+      </label>
     </div>
 
     <div class="toolbar-actions">
@@ -35,10 +22,10 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>
-        <th>Name of Company</th>
+        <th>Name of the Company</th>
         <th>City</th>
-        <th>Contact Person</th>
-        <th>Email ID</th>
+        <th>Key Contact Person - Name</th>
+        <th>Key Contact Person - Email ID</th>
         <th>Nature of Service</th>
         <th>Type of Organization</th>
         <th>Vendor Status</th>

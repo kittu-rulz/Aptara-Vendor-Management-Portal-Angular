@@ -1,51 +1,28 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
-import { invoicesData, statusSeverity, Invoice, auditHistoryData } from '../../core/mock-data';
-import { HistoryDialogComponent } from '../../shared/history-dialog/history-dialog.component';
+import { invoicesData, statusSeverity, Invoice } from '../../core/mock-data';
 
-const PAST_INVOICES = [
-  {
-    num: 1,
-    date: '21/07/2026',
-    desc: 'Translation completed for French EU and Spanish EU',
-    amount: '200,000',
-    currency: '',
-    status: 'Invoice Approved',
-    pmUser: 'Hemant Project Manager',
-    dmUser: 'Darshan Delivery Manager',
-    approvedBy: 'Darshan Delivery Manager'
-  },
-  {
-    num: 13,
-    date: '13/08/2026',
-    desc: 'Translation completed',
-    amount: '300,000',
-    currency: '90 USD 2026 - August',
-    status: 'Invoice Approved',
-    pmUser: 'Hemant Project Manager',
-    dmUser: 'Darshan Delivery Manager',
-    approvedBy: 'Darshan Delivery Manager'
-  }
-];
-
+/** Real-app-accurate "Invoice Details List" — routes to the dedicated
+ * Invoice Details page (add/view/approve) and Invoice Details History page
+ * instead of the old p-dialog modals. Icon order matches the real list
+ * exactly: plus(new submission) | trash(disable) | eye(view) |
+ * clock(history) | check-circle(approve, only when a submission exists). */
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, TableModule, TagModule, ButtonModule, DialogModule, HistoryDialogComponent],
-  templateUrl: './invoices.component.html',
-  styleUrl: './invoices.component.css'
+  imports: [CommonModule, RouterLink, TableModule, TagModule, ButtonModule],
+  templateUrl: './invoices.component.html'
 })
 export class InvoicesComponent {
   private messages = inject(MessageService);
 
   allInvoicesSignal = invoicesData;
   statusSeverity = statusSeverity;
-  pastInvoices = PAST_INVOICES;
 
   includeDisabled = signal(false);
 
@@ -59,31 +36,8 @@ export class InvoicesComponent {
     this.includeDisabled.set(value);
   }
 
-  detailVisible = false;
-  viewingInvoice: Invoice | null = null;
-
-  historyVisible = false;
-  historyTitle = '';
-  historySubtitle = '';
-  historyEntries = auditHistoryData;
-
-  openInvoiceDetail(inv: Invoice) {
-    this.viewingInvoice = inv;
-    this.detailVisible = true;
-  }
-
-  approveInvoice() {
-    const inv = this.viewingInvoice;
-    if (!inv) return;
-    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, status: 'No Invoice Pending for Approval', hasSubmission: true } : i)));
-    this.detailVisible = false;
-    this.messages.add({ severity: 'success', summary: 'Invoice Approved', detail: 'Invoice approved and forwarded for disbursement.' });
-  }
-
-  openHistory(inv: Invoice) {
-    this.historyTitle = 'Invoice Details History';
-    this.historySubtitle = inv.project;
-    this.historyVisible = true;
+  indexOf(row: Invoice): number {
+    return this.allInvoicesSignal().indexOf(row);
   }
 
   toggleActive(inv: Invoice) {

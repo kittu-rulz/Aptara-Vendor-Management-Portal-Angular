@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { vendorsData, vendorHistoryData, AuditEntry } from '../../core/mock-data';
+import { HistoryTableComponent } from '../../shared/history-table/history-table.component';
 
 /** Real-app-accurate "Vendor History" full page, seeded with SNT Ltd's
  * actual captured change log — every other vendor (there is only one in
@@ -13,7 +12,7 @@ import { vendorsData, vendorHistoryData, AuditEntry } from '../../core/mock-data
 @Component({
   selector: 'app-vendor-history',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, HistoryTableComponent],
   templateUrl: './vendor-history.component.html'
 })
 export class VendorHistoryComponent {

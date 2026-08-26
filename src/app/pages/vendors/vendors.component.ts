@@ -7,8 +7,6 @@ import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { vendorsData, statusSeverity, Vendor } from '../../core/mock-data';
 
-type VendorFilter = 'all' | 'Active' | 'Approved';
-
 @Component({
   selector: 'app-vendors',
   standalone: true,
@@ -22,21 +20,28 @@ export class VendorsComponent {
   allVendorsSignal = vendorsData;
   statusSeverity = statusSeverity;
 
-  activeFilter = signal<VendorFilter>('all');
+  includeDisabled = signal(false);
+  includeRejected = signal(false);
 
   filteredVendors = computed(() => {
-    const filter = this.activeFilter();
     const list = this.allVendorsSignal();
-    if (filter === 'all') return list;
-    return list.filter((v) => v.status === filter || v.vendorStatus === filter);
+    return list.filter((v) => {
+      if (!this.includeDisabled() && v.status !== 'Active') return false;
+      if (!this.includeRejected() && v.vendorStatus === 'Rejected') return false;
+      return true;
+    });
   });
 
   get allVendors() {
     return this.allVendorsSignal();
   }
 
-  setFilter(filter: VendorFilter) {
-    this.activeFilter.set(filter);
+  toggleIncludeDisabled(value: boolean) {
+    this.includeDisabled.set(value);
+  }
+
+  toggleIncludeRejected(value: boolean) {
+    this.includeRejected.set(value);
   }
 
   indexOf(row: Vendor): number {

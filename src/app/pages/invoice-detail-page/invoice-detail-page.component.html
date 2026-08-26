@@ -1,0 +1,132 @@
+<div class="form-card wide" *ngIf="invoice">
+  <div class="form-header-row">
+    <h2>Invoice Details</h2>
+  </div>
+
+  <div class="form-section">
+    <h3>Project Details</h3>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Project Name<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.project" readonly />
+      </div>
+      <div class="form-field">
+        <label>Start Date<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.start" readonly />
+      </div>
+      <div class="form-field">
+        <label>End Date<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.end" readonly />
+      </div>
+      <div class="form-field">
+        <label>Outsourcing Amount<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.total" readonly />
+      </div>
+      <div class="form-field">
+        <label>Invoiced Till Date<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.invoiced" readonly />
+      </div>
+      <div class="form-field">
+        <label>Remaining Amount<span class="req">*</span></label>
+        <input pInputText class="w-full" [value]="invoice.remaining" readonly />
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="showApprovalFields">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>PM Approval User<span class="req">*</span></label>
+        <p-dropdown [options]="pmUsers" [(ngModel)]="pmUser" [disabled]="approvalReadonly || pmNotApplicable" styleClass="w-full"></p-dropdown>
+      </div>
+      <div class="form-field">
+        <label class="checkbox-row">
+          <input type="checkbox" [(ngModel)]="pmNotApplicable" [disabled]="approvalReadonly" />
+          Not Applicable For PM
+        </label>
+      </div>
+      <div class="form-field">
+        <label>DM Approval User<span class="req">*</span></label>
+        <p-dropdown [options]="dmUsers" [(ngModel)]="dmUser" [disabled]="approvalReadonly || dmNotApplicable" styleClass="w-full"></p-dropdown>
+      </div>
+      <div class="form-field">
+        <label class="checkbox-row">
+          <input type="checkbox" [(ngModel)]="dmNotApplicable" [disabled]="approvalReadonly" />
+          Not Applicable For DM
+        </label>
+      </div>
+      <div class="form-field">
+        <label>Currency<span class="req">*</span></label>
+        <p-dropdown [options]="currencies" [(ngModel)]="currency" placeholder="Select Currency" [disabled]="approvalReadonly" styleClass="w-full"></p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Past Invoices</h3>
+    <div class="table-responsive">
+      <p-table [value]="filteredPastInvoices()" [rows]="50" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="sortable-th" (click)="toggleSort('num')">Invoice Number <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'num' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'num' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'num'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('date')">Invoice Date <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'date' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'date' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'date'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('desc')">Description <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'desc' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'desc' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'desc'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('amount')">Invoice Amount <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'amount' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'amount' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'amount'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('currency')">Currency <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'currency' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'currency' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'currency'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('status')">Status <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'status' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'status' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'status'"></i></span></th>
+            <th>Download</th>
+            <th class="sortable-th" (click)="toggleSort('pmUser')">PM User <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'pmUser' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'pmUser' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'pmUser'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('dmUser')">DM User <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'dmUser' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'dmUser' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'dmUser'"></i></span></th>
+            <th class="sortable-th" (click)="toggleSort('approvedBy')">Approved/Rejected By <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'approvedBy' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'approvedBy' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'approvedBy'"></i></span></th>
+          </tr>
+          <tr class="column-filter-row">
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Invoice Number" [ngModel]="columnFilters().num" (ngModelChange)="setColumnFilter('num', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Invoice Date" [ngModel]="columnFilters().date" (ngModelChange)="setColumnFilter('date', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Description" [ngModel]="columnFilters().desc" (ngModelChange)="setColumnFilter('desc', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Invoice Amount" [ngModel]="columnFilters().amount" (ngModelChange)="setColumnFilter('amount', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Currency" [ngModel]="columnFilters().currency" (ngModelChange)="setColumnFilter('currency', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Status" [ngModel]="columnFilters().status" (ngModelChange)="setColumnFilter('status', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by PM User" [ngModel]="columnFilters().pmUser" (ngModelChange)="setColumnFilter('pmUser', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by DM User" [ngModel]="columnFilters().dmUser" (ngModelChange)="setColumnFilter('dmUser', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+            <th><span class="column-filter-input-wrap"><input type="text" class="column-filter-input" aria-label="Filter by Approved/Rejected By" [ngModel]="columnFilters().approvedBy" (ngModelChange)="setColumnFilter('approvedBy', $event)" /><i class="pi pi-filter column-filter-icon"></i></span></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.num }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.desc }}</td>
+            <td class="amount">{{ row.amount }}</td>
+            <td>{{ row.currency || '—' }}</td>
+            <td><p-tag [value]="row.status" severity="success"></p-tag></td>
+            <td><i class="pi pi-download"></i></td>
+            <td>{{ row.pmUser }}</td>
+            <td>{{ row.dmUser }}</td>
+            <td>{{ row.approvedBy }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="10" class="empty-state">
+              <i class="pi pi-inbox"></i>
+              <div>No records found.</div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <ng-container *ngIf="!isApprove">
+      <p-button label="Submit" icon="pi pi-check" severity="success" [disabled]="!canSubmit" (click)="submit()"></p-button>
+      <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
+    </ng-container>
+    <ng-container *ngIf="isApprove">
+      <p-button label="Approve" icon="pi pi-check-circle" severity="success" (click)="approve()"></p-button>
+      <p-button label="Reject" icon="pi pi-times-circle" severity="danger" [outlined]="true" (click)="reject()"></p-button>
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" [outlined]="true" (click)="cancel()"></p-button>
+    </ng-container>
+  </div>
+</div>
