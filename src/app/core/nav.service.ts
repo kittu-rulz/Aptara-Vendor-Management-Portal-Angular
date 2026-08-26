@@ -42,7 +42,7 @@ export class NavService {
     label: 'Masters & Config',
     icon: 'pi pi-sliders-h',
     children: [
-      { label: 'Nature Of Service', route: '/masters/nature-of-service', icon: 'pi pi-layer-group' },
+      { label: 'Nature Of Service', route: '/masters/nature-of-service', icon: 'pi pi-tags' },
       { label: 'Service Executed', route: '/masters/service-executed', icon: 'pi pi-code' },
       { label: 'Organization Type', route: '/masters/organization-type', icon: 'pi pi-building' },
       { label: 'GST Eligibility', route: '/masters/gst-eligibility', icon: 'pi pi-receipt' },
