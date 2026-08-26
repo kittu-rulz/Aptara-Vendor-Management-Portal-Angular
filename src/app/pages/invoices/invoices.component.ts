@@ -8,7 +8,30 @@ import { MessageService } from 'primeng/api';
 import { invoicesData, statusSeverity, Invoice, auditHistoryData } from '../../core/mock-data';
 import { HistoryDialogComponent } from '../../shared/history-dialog/history-dialog.component';
 
-type InvoiceFilter = 'all' | 'Paid & Closed' | 'Pending PM Approval';
+const PAST_INVOICES = [
+  {
+    num: 1,
+    date: '21/07/2026',
+    desc: 'Translation completed for French EU and Spanish EU',
+    amount: '200,000',
+    currency: '',
+    status: 'Invoice Approved',
+    pmUser: 'Hemant Project Manager',
+    dmUser: 'Darshan Delivery Manager',
+    approvedBy: 'Darshan Delivery Manager'
+  },
+  {
+    num: 13,
+    date: '13/08/2026',
+    desc: 'Translation completed',
+    amount: '300,000',
+    currency: '90 USD 2026 - August',
+    status: 'Invoice Approved',
+    pmUser: 'Hemant Project Manager',
+    dmUser: 'Darshan Delivery Manager',
+    approvedBy: 'Darshan Delivery Manager'
+  }
+];
 
 @Component({
   selector: 'app-invoices',
@@ -22,18 +45,18 @@ export class InvoicesComponent {
 
   allInvoicesSignal = invoicesData;
   statusSeverity = statusSeverity;
+  pastInvoices = PAST_INVOICES;
 
-  activeFilter = signal<InvoiceFilter>('all');
+  includeDisabled = signal(false);
 
   filteredInvoices = computed(() => {
-    const filter = this.activeFilter();
     const list = this.allInvoicesSignal();
-    if (filter === 'all') return list;
-    return list.filter((i) => i.status === filter);
+    if (this.includeDisabled()) return list;
+    return list.filter((i) => i.active);
   });
 
-  setFilter(filter: InvoiceFilter) {
-    this.activeFilter.set(filter);
+  toggleIncludeDisabled(value: boolean) {
+    this.includeDisabled.set(value);
   }
 
   detailVisible = false;
@@ -44,11 +67,6 @@ export class InvoicesComponent {
   historySubtitle = '';
   historyEntries = auditHistoryData;
 
-  /** Submit Invoice, View Details, and Approve/Reject all open the same
-   * "Invoice Details" modal in the original — matching that exactly rather
-   * than the three separate behaviors this used to have (a toast-only
-   * submit, a dialog with an invented field set, and a direct one-click
-   * approve with no confirmation step). */
   openInvoiceDetail(inv: Invoice) {
     this.viewingInvoice = inv;
     this.detailVisible = true;
@@ -57,7 +75,7 @@ export class InvoicesComponent {
   approveInvoice() {
     const inv = this.viewingInvoice;
     if (!inv) return;
-    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, status: 'Paid & Closed' } : i)));
+    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, status: 'No Invoice Pending for Approval', hasSubmission: true } : i)));
     this.detailVisible = false;
     this.messages.add({ severity: 'success', summary: 'Invoice Approved', detail: 'Invoice approved and forwarded for disbursement.' });
   }
@@ -66,6 +84,16 @@ export class InvoicesComponent {
     this.historyTitle = 'Invoice Details History';
     this.historySubtitle = inv.project;
     this.historyVisible = true;
+  }
+
+  toggleActive(inv: Invoice) {
+    const next = !inv.active;
+    this.allInvoicesSignal.update((list) => list.map((i) => (i === inv ? { ...i, active: next } : i)));
+    this.messages.add({
+      severity: next ? 'success' : 'warn',
+      summary: next ? 'Enabled' : 'Disabled',
+      detail: `${inv.project} is now ${next ? 'active' : 'disabled'}.`
+    });
   }
 
   exportExcel() {

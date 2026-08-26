@@ -1,15 +1,10 @@
 <div class="table-card">
   <div class="table-toolbar">
-    <div class="filter-group">
-      <button class="filter-chip" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
-        All Invoices ({{ allInvoicesSignal().length }})
-      </button>
-      <button class="filter-chip" [class.active]="activeFilter() === 'Paid & Closed'" (click)="setFilter('Paid & Closed')">
-        Paid &amp; Closed
-      </button>
-      <button class="filter-chip" [class.active]="activeFilter() === 'Pending PM Approval'" (click)="setFilter('Pending PM Approval')">
-        Pending Approval
-      </button>
+    <div class="filter-group include-disable">
+      <label>
+        <input type="checkbox" [checked]="includeDisabled()" (change)="toggleIncludeDisabled($any($event.target).checked)" />
+        Include Disable
+      </label>
     </div>
 
     <div class="toolbar-actions">
@@ -29,17 +24,27 @@
         <th>Project End Date</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+    <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="Submit Invoice" (click)="openInvoiceDetail(row)"><i class="pi pi-send"></i></button>
+          <button class="row-action" title="Add Invoice" (click)="openInvoiceDetail(row)"><i class="pi pi-plus"></i></button>
+          <button
+            class="row-action"
+            [class.is-disable]="row.active"
+            [class.is-enable]="!row.active"
+            [title]="row.active ? 'Disable' : 'Enable'"
+            (click)="toggleActive(row)"
+          >
+            <i class="pi" [class.pi-trash]="row.active" [class.pi-refresh]="!row.active"></i>
+          </button>
           <button class="row-action" title="View Details" (click)="openInvoiceDetail(row)"><i class="pi pi-eye"></i></button>
           <button class="row-action" title="View History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
-          <button *ngIf="rowIndex < 3" class="row-action" title="Approve/Reject" (click)="openInvoiceDetail(row)"><i class="pi pi-check-circle"></i></button>
+          <button *ngIf="row.hasSubmission" class="row-action" title="Approve" (click)="openInvoiceDetail(row)"><i class="pi pi-check-circle"></i></button>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>
           <p-tag
+            *ngIf="row.status"
             [value]="row.status"
             [severity]="statusSeverity(row.status).severity"
             [styleClass]="statusSeverity(row.status).styleClass || ''"
@@ -69,13 +74,13 @@
   header="Invoice Details"
   [modal]="true"
   [draggable]="false"
-  [style]="{ width: '560px' }"
+  [style]="{ width: '640px' }"
 >
   <p class="history-subtitle" *ngIf="viewingInvoice">{{ viewingInvoice.project }}</p>
 
   <div class="detail-grid" *ngIf="viewingInvoice">
     <div class="detail-card">
-      <span class="detail-label">Outsource Budget</span>
+      <span class="detail-label">Outsourcing Amount</span>
       <span class="detail-val highlight">{{ viewingInvoice.total }}</span>
     </div>
     <div class="detail-card">
@@ -83,6 +88,10 @@
       <span class="detail-val">{{ viewingInvoice.invoiced }}</span>
     </div>
     <div class="detail-card">
+      <span class="detail-label">Remaining Amount</span>
+      <span class="detail-val">{{ viewingInvoice.remaining }}</span>
+    </div>
+    <div class="detail-card" *ngIf="viewingInvoice.status">
       <span class="detail-label">Invoice Status</span>
       <p-tag
         [value]="viewingInvoice.status"
@@ -90,42 +99,53 @@
         [styleClass]="statusSeverity(viewingInvoice.status).styleClass || ''"
       ></p-tag>
     </div>
-    <div class="detail-card">
-      <span class="detail-label">Invoice Number</span>
-      <span class="detail-val">INV-2026-081</span>
+    <div class="detail-card" *ngIf="viewingInvoice.pmUser">
+      <span class="detail-label">PM Approval User</span>
+      <span class="detail-val">{{ viewingInvoice.pmUser }}</span>
+    </div>
+    <div class="detail-card" *ngIf="viewingInvoice.dmUser">
+      <span class="detail-label">DM Approval User</span>
+      <span class="detail-val">{{ viewingInvoice.dmUser }}</span>
     </div>
   </div>
 
-  <div class="past-invoices">
+  <div class="past-invoices" *ngIf="viewingInvoice?.hasSubmission">
     <h3 class="subsection-heading"><i class="pi pi-sitemap"></i> Past Invoices</h3>
-    <p-table [value]="[
-      { num: 1, date: '21/07/2026', desc: 'Translation completed for French EU and Spanish EU', amount: '200,000', status: 'Invoice Approved' },
-      { num: 13, date: '13/08/2026', desc: 'Translation completed', amount: '300,000', status: 'Invoice Approved' }
-    ]" styleClass="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Invoice Number</th>
-          <th>Invoice Date</th>
-          <th>Description</th>
-          <th>Invoice Amount</th>
-          <th>Status</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ row.num }}</td>
-          <td>{{ row.date }}</td>
-          <td>{{ row.desc }}</td>
-          <td class="amount">{{ row.amount }}</td>
-          <td><p-tag [value]="row.status" severity="success"></p-tag></td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <div class="table-responsive">
+      <p-table [value]="pastInvoices" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Invoice Number</th>
+            <th>Invoice Date</th>
+            <th>Description</th>
+            <th>Invoice Amount</th>
+            <th>Currency</th>
+            <th>Status</th>
+            <th>PM User</th>
+            <th>DM User</th>
+            <th>Approved/Rejected By</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.num }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.desc }}</td>
+            <td class="amount">{{ row.amount }}</td>
+            <td>{{ row.currency || '—' }}</td>
+            <td><p-tag [value]="row.status" severity="success"></p-tag></td>
+            <td>{{ row.pmUser }}</td>
+            <td>{{ row.dmUser }}</td>
+            <td>{{ row.approvedBy }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
 
   <ng-template pTemplate="footer">
     <p-button label="Close" severity="secondary" [outlined]="true" (click)="detailVisible = false"></p-button>
-    <p-button label="Approve Invoice" icon="pi pi-check-circle" (click)="approveInvoice()"></p-button>
+    <p-button *ngIf="viewingInvoice?.hasSubmission" label="Approve Invoice" icon="pi pi-check-circle" (click)="approveInvoice()"></p-button>
   </ng-template>
 </p-dialog>
 

@@ -208,14 +208,25 @@ export interface Invoice {
   start: string;
   end: string;
   rawTotal: number;
+  active: boolean;
+  /** Whether this project already has a submitted invoice on file — drives
+   * whether the Approve action and Past Invoices grid apply. */
+  hasSubmission: boolean;
+  pmUser?: string;
+  dmUser?: string;
 }
 
-/** Matches the 4 invoices in the original prototype's app.js exactly. */
+/** Status/PM/DM values corrected against the real production app's Invoice
+ * Details List — its Status column reads "No Invoice Pending for Approval"
+ * (or blank, for a project with no submission yet) for these same four
+ * rows, not the "Paid & Closed"/"Pending PM Approval"/"In Review" values
+ * the static prototype used. All other fields (amounts, dates) confirmed
+ * to match the real app exactly. */
 export const invoicesData = signal<Invoice[]>([
-  { project: 'Translation of 2 modules', status: 'Paid & Closed', total: '500,000 INR', invoiced: '500,000 INR', remaining: '0 INR', start: '08/01/2026', end: '09/15/2026', rawTotal: 500000 },
-  { project: 'Voice Over in English for 10 modules', status: 'Paid & Closed', total: '700,000 INR', invoiced: '700,000 INR', remaining: '0 INR', start: '07/27/2026', end: '08/31/2026', rawTotal: 700000 },
-  { project: 'Translate Web Pages', status: 'Pending PM Approval', total: '70,000 INR', invoiced: '63,950 INR', remaining: '6,050 INR', start: '10/01/2026', end: '02/01/2027', rawTotal: 70000 },
-  { project: 'Translation', status: 'In Review', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000 }
+  { project: 'Translation of 2 modules', status: 'No Invoice Pending for Approval', total: '500,000 INR', invoiced: '500,000 INR', remaining: '0 INR', start: '08/01/2026', end: '09/15/2026', rawTotal: 500000, active: true, hasSubmission: true, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager' },
+  { project: 'Voice Over in English for 10 modules', status: 'No Invoice Pending for Approval', total: '700,000 INR', invoiced: '700,000 INR', remaining: '0 INR', start: '07/27/2026', end: '08/31/2026', rawTotal: 700000, active: true, hasSubmission: true, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager' },
+  { project: 'Translate Web Pages', status: 'No Invoice Pending for Approval', total: '70,000 INR', invoiced: '63,950 INR', remaining: '6,050 INR', start: '10/01/2026', end: '02/01/2027', rawTotal: 70000, active: true, hasSubmission: true, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager' },
+  { project: 'Translation', status: '', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000, active: true, hasSubmission: false }
 ]);
 
 export interface Vendor {
