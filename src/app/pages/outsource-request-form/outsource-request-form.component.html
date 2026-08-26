@@ -196,8 +196,8 @@
   </div>
 
   <div class="form-actions">
-    <p-button *ngIf="!isCompleted" label="Send Enquiry" icon="pi pi-send" severity="info" [outlined]="true" (click)="sendEnquiry()"></p-button>
-    <p-button *ngIf="!isCompleted" label="Submit" icon="pi pi-check" severity="success" (click)="save()"></p-button>
+    <p-button *ngIf="!isCompleted" label="Send Enquiry" icon="pi pi-send" severity="info" [outlined]="true" [disabled]="readonly" (click)="sendEnquiry()"></p-button>
+    <p-button *ngIf="!isCompleted" label="Submit" icon="pi pi-check" severity="success" [disabled]="readonly" (click)="save()"></p-button>
     <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
   </div>
 </div>

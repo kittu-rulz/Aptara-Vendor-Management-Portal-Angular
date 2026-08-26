@@ -10,19 +10,18 @@ import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
 import { outsourceRequestsData, OutsourceRequest, displayStatus, statusSeverity, entityData, marketSegmentData } from '../../core/mock-data';
 
-type FormMode = 'add' | 'view';
+type FormMode = 'add' | 'view' | 'complete';
 
 const CURRENCIES = ['USD', 'INR', 'EUR', 'GBP'];
 const PM_USERS = ['Hemant Project Manager'];
 const DM_USERS = ['Darshan Delivery Manager'];
 const STAGED_FILES = ['Band 6 Skills Definitions (1).pptx', 'Full file w Career Ladders and Skills.pptx'];
 
-/** Real-app-accurate replacement for the old 5-field dialog: matches the
- * production app's "Outsource Request" create page and "Outsource
- * Completed" view/edit page — see screengrabs/_audit-notes.md. Since every
- * seeded request is already Awarded + Completed, Edit/View always render
- * the fuller "Outsource Completed" layout; only a brand-new request uses
- * the simpler create layout. */
+/** Real-app-accurate replacement for the old 5-field dialog: matches both
+ * the production app's "Outsource Request" page (add AND view — confirmed
+ * live that View renders the simpler create-style layout even for an
+ * already-awarded record) and its separate "Outsource Completed" page,
+ * reached only via the list's distinct trophy/Award icon. */
 @Component({
   selector: 'app-outsource-request-form',
   standalone: true,
@@ -51,20 +50,24 @@ export class OutsourceRequestFormComponent {
       ? this.blankRequest()
       : { ...outsourceRequestsData()[this.index!] };
 
+  /** "View" (eye icon) and "Outsourcing Complete" (trophy icon) are two
+   * separate real-app actions/pages, not one merged page — confirmed by a
+   * live-app screenshot showing the same already-awarded record's View
+   * page rendering the simpler "Outsource Request" layout (no PM/DM
+   * approval, no Awarded Vendor section) while the trophy icon opens the
+   * fuller "Outsource Completed" layout. Only 'complete' mode renders the
+   * fuller layout. */
   get isCompleted(): boolean {
-    return this.mode !== 'add';
+    return this.mode === 'complete';
   }
 
   get title(): string {
     return this.isCompleted ? 'Outsource Completed' : 'Outsource Request';
   }
 
-  /** The real app's "Outsource Completed" page only ever shows a Cancel
-   * button (no Update/Submit) — once a request is awarded and completed
-   * it's effectively a read-only record there, so every field is disabled
-   * whenever isCompleted, regardless of the specific mode. */
+  /** Both 'view' and 'complete' are read-only — only 'add' allows editing. */
   get readonly(): boolean {
-    return this.isCompleted;
+    return this.mode !== 'add';
   }
 
   private blankRequest(): OutsourceRequest {

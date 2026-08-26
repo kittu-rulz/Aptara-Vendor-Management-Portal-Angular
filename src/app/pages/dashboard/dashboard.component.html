@@ -122,7 +122,9 @@
           <a class="row-action" title="History" [routerLink]="['/outsource-requests', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
         </td>
         <td>
-          <i *ngIf="row.awarded" class="pi pi-trophy award-trophy" title="Awarded to Vendor"></i>
+          <a *ngIf="row.awarded" class="row-action award-trophy" title="Outsourcing Complete" [routerLink]="['/outsource-requests', indexOf(row), 'complete']">
+            <i class="pi pi-trophy"></i>
+          </a>
         </td>
         <td class="mono">{{ row.id }}</td>
         <td>{{ row.client }}</td>

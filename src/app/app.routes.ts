@@ -76,6 +76,11 @@ export const routes: Routes = [
         data: { title: 'Outsource Request', breadcrumb: crumb('Outsource Requests'), mode: 'view' }
       },
       {
+        path: 'outsource-requests/:index/complete',
+        component: OutsourceRequestFormComponent,
+        data: { title: 'Outsource Completed', breadcrumb: crumb('Outsource Requests'), mode: 'complete' }
+      },
+      {
         path: 'outsource-requests/:index/history',
         component: OutsourceRequestHistoryComponent,
         data: { title: 'Outsource Request History', breadcrumb: crumb('Outsource Requests') }
