@@ -56,6 +56,13 @@ export class NavService {
 
   readonly auditTrail: NavGroup = { label: 'Audit Trail', route: '/audit-history', icon: 'pi pi-history' };
 
+  /** The real app's captured top navigation (Manage Vendor | Manage User |
+   * Invoice Details | Reports | Master Data) has no Audit Trail entry at
+   * all for this user/role. The route and page stay fully functional —
+   * only the sidebar link is hidden, matching real-app nav visibility
+   * without deleting anything. */
+  readonly showAuditTrail = false;
+
   toggleSidebar() {
     this.sidebarCollapsed.update((v) => !v);
   }

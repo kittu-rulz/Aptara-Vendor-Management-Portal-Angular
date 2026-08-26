@@ -15,7 +15,7 @@
   <p-table [value]="filteredInvoices()" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
-        <th>Actions</th>
+        <th>Action</th>
         <th>Project Name</th>
         <th>Status</th>
         <th>OutSourcing Amount</th>
@@ -27,7 +27,7 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <a class="row-action" title="New Invoice Submission" [routerLink]="['/invoice-details', indexOf(row), 'submit']"><i class="pi pi-plus"></i></a>
+          <a class="row-action" title="Submit Invoice" [routerLink]="['/invoice-details', indexOf(row), 'submit']"><i class="pi pi-plus"></i></a>
           <button
             class="row-action"
             [class.is-disable]="row.active"
@@ -38,8 +38,8 @@
             <i class="pi" [class.pi-trash]="row.active" [class.pi-refresh]="!row.active"></i>
           </button>
           <a class="row-action" title="View" [routerLink]="['/invoice-details', indexOf(row), 'view']"><i class="pi pi-eye"></i></a>
-          <a class="row-action" title="History" [routerLink]="['/invoice-details', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
-          <a *ngIf="row.hasSubmission" class="row-action" title="Approve" [routerLink]="['/invoice-details', indexOf(row), 'submit']"><i class="pi pi-check-circle"></i></a>
+          <a class="row-action" title="View History" [routerLink]="['/invoice-details', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
+          <a *ngIf="row.hasSubmission" class="row-action" title="Approve/Reject" [routerLink]="['/invoice-details', indexOf(row), 'submit']"><i class="pi pi-check-circle"></i></a>
         </td>
         <td><strong>{{ row.project }}</strong></td>
         <td>

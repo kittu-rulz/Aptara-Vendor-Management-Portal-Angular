@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
 import { NavService } from '../../core/nav.service';
 
@@ -26,6 +27,8 @@ import { NavService } from '../../core/nav.service';
 })
 export class LoginComponent {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private auth = inject(AuthService);
   nav = inject(NavService);
 
@@ -38,8 +41,15 @@ export class LoginComponent {
   passwordVisible = signal(false);
   loginInProgress = signal(false);
 
-  // Flip state
-  flipped = signal(false);
+  /** Forgot Password is routable (`/forgot-password`) so it's a real,
+   * linkable/refreshable screen matching the original app's separate
+   * page — but the flip-card transition itself is preserved exactly:
+   * navigating there via the "Forgot Password?" link just updates the URL
+   * (Location.go, not a router navigation) so this same component instance
+   * keeps animating instead of being destroyed and recreated. Landing here
+   * directly via that URL (refresh/deep link) starts already flipped, with
+   * no animation to play. */
+  flipped = signal(this.route.snapshot.data['forgot'] === true);
   isFlipping = signal(false);
 
   // Forgot-password form
@@ -100,11 +110,13 @@ export class LoginComponent {
     this.forgotSuccess.set(false);
     this.forgotSubmitting.set(false);
     this.setFlipped(true);
+    this.location.go('/forgot-password');
   }
 
   backToSignIn(e?: Event) {
     e?.preventDefault();
     this.setFlipped(false);
+    this.location.go('/login');
   }
 
   performLogin(e: Event) {

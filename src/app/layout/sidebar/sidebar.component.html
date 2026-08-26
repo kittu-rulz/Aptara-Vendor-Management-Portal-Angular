@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <a class="nav-item" [routerLink]="nav.auditTrail.route" routerLinkActive="active">
+    <a *ngIf="nav.showAuditTrail" class="nav-item" [routerLink]="nav.auditTrail.route" routerLinkActive="active">
       <i [class]="nav.auditTrail.icon"></i>
       <span *ngIf="!nav.sidebarCollapsed()">{{ nav.auditTrail.label }}</span>
     </a>

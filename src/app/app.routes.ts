@@ -54,6 +54,7 @@ const invoiceStatuses = outsourceStatusData()
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Sign In' } },
+  { path: 'forgot-password', component: LoginComponent, data: { title: 'Forgot Password', forgot: true } },
   {
     path: '',
     component: ShellComponent,
@@ -203,7 +204,8 @@ export const routes: Routes = [
             { key: 'vendor', label: 'Selected Vendor Name' },
             { key: 'budget', label: 'Project Budget' },
             { key: 'invNo', label: 'Invoice No' },
-            { key: 'invDate', label: 'Invoice Date' }
+            { key: 'invDate', label: 'Invoice Date' },
+            { key: 'status', label: 'Invoice Status', isStatus: true }
           ],
           filters: [
             { label: 'Start Date', type: 'date', field: 'invDate', range: 'start' },
@@ -365,7 +367,7 @@ export const routes: Routes = [
           rows: marketSegmentData,
           columns: [
             { key: 'segment', label: 'Market Segment' },
-            { key: 'code', label: 'Segment Code' }
+            { key: 'code', label: 'Market Segment Code' }
           ],
           addLabel: 'Market Segment',
           countLabel: 'All Segments',

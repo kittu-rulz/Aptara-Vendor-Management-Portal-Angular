@@ -128,7 +128,7 @@ export const MASTER_TYPES: Record<string, MasterTypeConfig> = {
     rows: marketSegmentData,
     columns: [
       { key: 'segment', label: 'Market Segment' },
-      { key: 'code', label: 'Segment Code' }
+      { key: 'code', label: 'Market Segment Code' }
     ],
     fields: [
       { key: 'segment', label: 'Market Segment', type: 'text' },

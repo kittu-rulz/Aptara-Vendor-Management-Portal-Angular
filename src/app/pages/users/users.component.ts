@@ -7,8 +7,6 @@ import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { usersData, AppUser } from '../../core/mock-data';
 
-type UserFilter = 'all' | 'Internal User' | 'Vendor' | 'ENT Vendor Team';
-
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -21,21 +19,20 @@ export class UsersComponent {
 
   allUsersSignal = usersData;
 
-  activeFilter = signal<UserFilter>('all');
+  includeDisabled = signal(false);
 
   filteredUsers = computed(() => {
-    const filter = this.activeFilter();
     const list = this.allUsersSignal();
-    if (filter === 'all') return list;
-    return list.filter((u) => u.role === filter);
+    if (this.includeDisabled()) return list;
+    return list.filter((u) => u.status === 'Active');
   });
 
   get allUsers() {
     return this.allUsersSignal();
   }
 
-  setFilter(filter: UserFilter) {
-    this.activeFilter.set(filter);
+  toggleIncludeDisabled(value: boolean) {
+    this.includeDisabled.set(value);
   }
 
   indexOf(row: AppUser): number {
