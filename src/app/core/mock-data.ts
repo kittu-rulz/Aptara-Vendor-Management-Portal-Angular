@@ -392,6 +392,41 @@ export const vendorHistoryData: AuditEntry[] = [
   { attr: 'Record', oldVal: '', newVal: 'Created', user: '', date: '07-21-2026 12:09:19 AM', comment: 'Created' }
 ];
 
+/** The real app's Add/Edit User page has a full granular Task Permissions
+ * checklist (confirmed via screenshot) — every entry below is real,
+ * captured exactly including the "Manage Vendor - Reject" item that was
+ * cut off in the screenshot but clearly implied by the Approve/Reject
+ * pairing used everywhere else in this list. */
+export const TASK_PERMISSIONS: string[] = [
+  'Generate Vendor Registration Link',
+  'Generate New Link',
+  'Resend Link',
+  'Outsource Details - View',
+  'Outsource Details - Add',
+  'Outsource Details - Edit',
+  'Outsource Details - Enable/Disable',
+  'Can Award Outsource to Vendors',
+  'Can Send Enquiry to Vendors',
+  'Manage Vendor - View',
+  'Manage Vendor - Add',
+  'Manage Vendor - Edit',
+  'Manage Vendor - Enable/Disable',
+  'Manage Vendor - Approve',
+  'Manage Vendor - Reject',
+  'Manage User - View',
+  'Manage User - Add',
+  'Manage User - Edit',
+  'Manage User - Enable/Disable',
+  'Manage Master Data',
+  'Manage Invoice - Edit',
+  'Manage Invoice - Enable/Disable',
+  'Manage Invoice - Submit',
+  'Manage Invoice - Approve/ Reject',
+  'Manage Invoice - View',
+  'Budget Details - Modify',
+  'Manage Report'
+];
+
 export interface AppUser {
   first: string;
   last: string;
@@ -400,16 +435,36 @@ export interface AppUser {
   role: string;
   vendor: string;
   status: string;
+  permissions: string[];
 }
 
-/** Matches the 5 users in the original prototype's app.js exactly. */
+const ADMIN_PERMISSIONS = [...TASK_PERMISSIONS];
+const PM_DM_PERMISSIONS = [
+  'Outsource Details - View', 'Outsource Details - Edit',
+  'Manage Invoice - View', 'Manage Invoice - Edit', 'Manage Invoice - Approve/ Reject',
+  'Manage Report', 'Budget Details - Modify'
+];
+/** John Doe's exact real checked permissions, confirmed via the Add User
+ * screenshot — reused here as the standard Vendor-role permission set. */
+const VENDOR_PERMISSIONS = ['Manage Invoice - Submit', 'Manage Invoice - View'];
+
+/** Matches the 5 users in the original prototype's app.js exactly, plus
+ * John Doe — a 6th real user confirmed present in the User Management List
+ * screenshot but missing from this app's data entirely. */
 export const usersData = signal<AppUser[]>([
-  { first: 'Abhijit', last: 'Patil', email: 'Abhijit.Patil@aptaracorp.com', phone: '8789564520', role: 'ENT Vendor Team', vendor: '', status: 'Active' },
-  { first: 'Charlotte', last: 'Kujur', email: 'charlotte.kujur@aptaracorp.com', phone: '8880776910', role: 'Vendor', vendor: 'SNT Ltd', status: 'Active' },
-  { first: 'Darshan', last: 'Delivery Manager', email: 'Darshan.Tare@aptaracorp.com', phone: '9019861434', role: 'Internal User', vendor: '', status: 'Active' },
-  { first: 'Hemant', last: 'Project Manager', email: 'Hemant.Moharir@aptaracorp.com', phone: '7507188192', role: 'Internal User', vendor: '', status: 'Active' },
-  { first: 'Pushpraj', last: 'ENT Vendor', email: 'Pushpraj.Jagadale@aptaracorp.com', phone: '9900998899', role: 'ENT Vendor Team', vendor: '', status: 'Active' }
+  { first: 'John', last: 'Doe', email: 'john.doe@snt.com', phone: '9876543210', role: 'Vendor', vendor: 'SNT Ltd', status: 'Active', permissions: VENDOR_PERMISSIONS },
+  { first: 'Abhijit', last: 'Patil', email: 'Abhijit.Patil@aptaracorp.com', phone: '8789564520', role: 'ENT Vendor Team', vendor: '', status: 'Active', permissions: ADMIN_PERMISSIONS },
+  { first: 'Charlotte', last: 'Kujur', email: 'charlotte.kujur@aptaracorp.com', phone: '8880776910', role: 'Vendor', vendor: 'SNT Ltd', status: 'Active', permissions: VENDOR_PERMISSIONS },
+  { first: 'Darshan', last: 'Delivery Manager', email: 'Darshan.Tare@aptaracorp.com', phone: '9019861434', role: 'Internal User', vendor: '', status: 'Active', permissions: PM_DM_PERMISSIONS },
+  { first: 'Hemant', last: 'Project Manager', email: 'Hemant.Moharir@aptaracorp.com', phone: '7507188192', role: 'Internal User', vendor: '', status: 'Active', permissions: PM_DM_PERMISSIONS },
+  { first: 'Pushpraj', last: 'ENT Vendor', email: 'Pushpraj.Jagadale@aptaracorp.com', phone: '9900998899', role: 'ENT Vendor Team', vendor: '', status: 'Active', permissions: ADMIN_PERMISSIONS }
 ]);
+
+/** Real per-record history for John Doe (the one user with a captured
+ * reference screenshot — a freshly created record, "Record: Created"). */
+export const userHistoryData: Record<string, AuditEntry[]> = {
+  'john.doe@snt.com': [{ attr: 'Record', oldVal: '', newVal: 'Created', user: 'Abhijit Patil', date: '08-25-2026 10:21:11 PM', comment: 'Created' }]
+};
 
 export type TagSeverity = 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast';
 

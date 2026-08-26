@@ -415,9 +415,110 @@
   margin-bottom: 0;
 }
 
+.form-grid.six-col {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.permissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.permissions-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--surface-ground);
+  color: var(--text-color-secondary);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.permissions-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--surface-border);
+  color: var(--text-color);
+}
+
+.permissions-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.permissions-table tbody tr:hover {
+  background: var(--surface-hover);
+}
+
+.permissions-checkbox-col {
+  width: 44px;
+}
+
 .history-subtitle {
   margin-top: 2px;
   color: var(--text-color-secondary);
   font-size: var(--text-sm);
   font-weight: 400;
+}
+
+/* Per-column sortable header + filter row (real-app table pattern:
+   sort icon next to the column label, and a filter input + funnel icon
+   directly below it, always visible — not a popup overlay). */
+.sortable-th {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable-th:hover {
+  color: var(--primary-color);
+}
+
+.sort-icons {
+  display: inline-flex;
+  margin-left: 6px;
+}
+
+.sort-icons .pi {
+  font-size: 0.7rem;
+  color: var(--text-color-secondary);
+}
+
+.sortable-th:hover .sort-icons .pi {
+  color: var(--primary-color);
+}
+
+.column-filter-row th {
+  padding: 6px 10px 10px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.column-filter-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  padding: 4px 8px;
+}
+
+.column-filter-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+.column-filter-icon {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  pointer-events: none;
 }

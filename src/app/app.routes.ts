@@ -15,6 +15,8 @@ import { OutsourceRequestFormComponent } from './pages/outsource-request-form/ou
 import { OutsourceRequestHistoryComponent } from './pages/outsource-request-history/outsource-request-history.component';
 import { VendorRegistrationFormComponent } from './pages/vendor-registration-form/vendor-registration-form.component';
 import { VendorHistoryComponent } from './pages/vendor-history/vendor-history.component';
+import { UserFormComponent } from './pages/user-form/user-form.component';
+import { UserHistoryComponent } from './pages/user-history/user-history.component';
 import { ConfigComponent } from './pages/config/config.component';
 import {
   invoiceReportData,
@@ -105,6 +107,26 @@ export const routes: Routes = [
         path: 'manage-users',
         component: UsersComponent,
         data: { title: 'Manage Users', breadcrumb: crumb('Manage Users') }
+      },
+      {
+        path: 'manage-users/add',
+        component: UserFormComponent,
+        data: { title: 'Add User', breadcrumb: crumb('Manage Users'), mode: 'add' }
+      },
+      {
+        path: 'manage-users/:index/edit',
+        component: UserFormComponent,
+        data: { title: 'Edit User', breadcrumb: crumb('Manage Users'), mode: 'edit' }
+      },
+      {
+        path: 'manage-users/:index/view',
+        component: UserFormComponent,
+        data: { title: 'View User', breadcrumb: crumb('Manage Users'), mode: 'view' }
+      },
+      {
+        path: 'manage-users/:index/history',
+        component: UserHistoryComponent,
+        data: { title: 'User History', breadcrumb: crumb('Manage Users') }
       },
       {
         path: 'invoice-details',

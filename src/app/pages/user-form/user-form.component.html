@@ -1,0 +1,62 @@
+<div class="form-card wide">
+  <h2>{{ title }}</h2>
+
+  <div class="form-grid six-col">
+    <div class="form-field">
+      <label>First Name<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.first" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Last Name<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.last" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Email<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.email" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Contact<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.phone" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Type<span class="req">*</span></label>
+      <p-dropdown [options]="userTypes" [(ngModel)]="draft.role" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+    </div>
+    <div class="form-field">
+      <label>Vendors</label>
+      <p-dropdown [options]="vendorNames" [(ngModel)]="draft.vendor" [disabled]="readonly" [showClear]="true" styleClass="w-full"></p-dropdown>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Task Permissions</h3>
+    <table class="permissions-table">
+      <thead>
+        <tr>
+          <th class="permissions-checkbox-col">
+            <input type="checkbox" [checked]="allSelected" [disabled]="readonly" (change)="toggleAll($any($event.target).checked)" />
+          </th>
+          <th>Task Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let permission of allPermissions">
+          <td class="permissions-checkbox-col">
+            <input
+              type="checkbox"
+              [checked]="isChecked(permission)"
+              [disabled]="readonly"
+              (change)="togglePermission(permission, $any($event.target).checked)"
+            />
+          </td>
+          <td>{{ permission }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions">
+    <p-button *ngIf="!readonly" label="Submit" icon="pi pi-check" severity="success" (click)="save()"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
+  </div>
+</div>

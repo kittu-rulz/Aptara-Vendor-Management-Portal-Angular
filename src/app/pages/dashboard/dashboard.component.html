@@ -39,12 +39,71 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>
-        <th>Award Status</th>
-        <th>RevSys ID</th>
-        <th>Client Name</th>
-        <th>Project Name</th>
-        <th>Status</th>
-        <th>Vendor Name</th>
+        <th>Award</th>
+        <th class="sortable-th" (click)="toggleSort('id')">
+          RevSys ID
+          <span class="sort-icons">
+            <i class="pi pi-sort-alt" [class.pi-sort-amount-up-alt]="sortField() === 'id' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'id' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'id'"></i>
+          </span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('client')">
+          Client Name
+          <span class="sort-icons">
+            <i [class.pi-sort-amount-up-alt]="sortField() === 'client' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'client' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'client'" class="pi"></i>
+          </span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('project')">
+          Project Name
+          <span class="sort-icons">
+            <i [class.pi-sort-amount-up-alt]="sortField() === 'project' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'project' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'project'" class="pi"></i>
+          </span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('status')">
+          Status
+          <span class="sort-icons">
+            <i [class.pi-sort-amount-up-alt]="sortField() === 'status' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'status' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'status'" class="pi"></i>
+          </span>
+        </th>
+        <th class="sortable-th" (click)="toggleSort('vendor')">
+          Vendor Name
+          <span class="sort-icons">
+            <i [class.pi-sort-amount-up-alt]="sortField() === 'vendor' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'vendor' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'vendor'" class="pi"></i>
+          </span>
+        </th>
+      </tr>
+      <tr class="column-filter-row">
+        <th></th>
+        <th></th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [ngModel]="columnFilters().id" (ngModelChange)="setColumnFilter('id', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [ngModel]="columnFilters().client" (ngModelChange)="setColumnFilter('client', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [ngModel]="columnFilters().project" (ngModelChange)="setColumnFilter('project', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [ngModel]="columnFilters().status" (ngModelChange)="setColumnFilter('status', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
+        <th>
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [ngModel]="columnFilters().vendor" (ngModelChange)="setColumnFilter('vendor', $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>

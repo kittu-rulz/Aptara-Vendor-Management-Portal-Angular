@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -18,7 +19,7 @@ interface KpiCard {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, TableModule, TagModule, ButtonModule],
+  imports: [CommonModule, FormsModule, RouterLink, TableModule, TagModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -31,14 +32,54 @@ export class DashboardComponent {
 
   includeDisabled = signal(false);
 
+  columnFilters = signal<Record<'id' | 'client' | 'project' | 'status' | 'vendor', string>>({
+    id: '',
+    client: '',
+    project: '',
+    status: '',
+    vendor: ''
+  });
+
+  sortField = signal<'id' | 'client' | 'project' | 'status' | 'vendor' | null>(null);
+  sortAsc = signal(true);
+
   filteredRequests = computed(() => {
     const list = this.requestsSignal();
-    if (this.includeDisabled()) return list;
-    return list.filter((r) => r.active);
+    const activeOnly = this.includeDisabled() ? list : list.filter((r) => r.active);
+    const filters = this.columnFilters();
+    const filtered = activeOnly.filter((r) =>
+      (r.id ?? '').toLowerCase().includes(filters.id.toLowerCase()) &&
+      (r.client ?? '').toLowerCase().includes(filters.client.toLowerCase()) &&
+      (r.project ?? '').toLowerCase().includes(filters.project.toLowerCase()) &&
+      this.displayStatus(r.status).toLowerCase().includes(filters.status.toLowerCase()) &&
+      (r.vendor ?? '').toLowerCase().includes(filters.vendor.toLowerCase())
+    );
+
+    const field = this.sortField();
+    if (!field) return filtered;
+    const asc = this.sortAsc() ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      const av = field === 'status' ? this.displayStatus(a.status) : String(a[field] ?? '');
+      const bv = field === 'status' ? this.displayStatus(b.status) : String(b[field] ?? '');
+      return av.localeCompare(bv) * asc;
+    });
   });
 
   toggleIncludeDisabled(value: boolean) {
     this.includeDisabled.set(value);
+  }
+
+  setColumnFilter(field: 'id' | 'client' | 'project' | 'status' | 'vendor', value: string) {
+    this.columnFilters.update((f) => ({ ...f, [field]: value }));
+  }
+
+  toggleSort(field: 'id' | 'client' | 'project' | 'status' | 'vendor') {
+    if (this.sortField() === field) {
+      this.sortAsc.update((v) => !v);
+    } else {
+      this.sortField.set(field);
+      this.sortAsc.set(true);
+    }
   }
 
   kpis = computed<KpiCard[]>(() => {
