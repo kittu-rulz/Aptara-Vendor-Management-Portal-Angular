@@ -1,0 +1,203 @@
+<div class="form-card wide">
+  <div class="form-header-row">
+    <h2>{{ title }}</h2>
+    <div class="form-status-badge" *ngIf="isCompleted">
+      <span class="status-label">Status</span>
+      <p-tag [value]="displayStatus(draft.status)" [severity]="statusSeverity(draft.status).severity" [styleClass]="statusSeverity(draft.status).styleClass || ''"></p-tag>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field">
+      <label>RevSys ID</label>
+      <input pInputText class="w-full" [value]="draft.id" readonly />
+    </div>
+    <div class="form-field">
+      <label>Client Name<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.client" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Project Name<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.project" [readonly]="readonly" />
+    </div>
+
+    <div class="form-field">
+      <label>Outsource Budget<span class="req">*</span></label>
+      <input pInputText type="number" class="w-full" [(ngModel)]="draft.outsourceBudget" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Currency</label>
+      <p-dropdown [options]="currencies" [(ngModel)]="draft.outsourceCurrency" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+    </div>
+    <div class="form-field">
+      <label>Expected Start Date<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.expectedStart" [readonly]="readonly" placeholder="DD/MM/YYYY" />
+    </div>
+    <div class="form-field">
+      <label>Expected End Date<span class="req">*</span></label>
+      <input pInputText class="w-full" [(ngModel)]="draft.expectedEnd" [readonly]="readonly" placeholder="DD/MM/YYYY" />
+    </div>
+
+    <div class="form-field">
+      <label>Awarded Budget<span class="req">*</span></label>
+      <input pInputText type="number" class="w-full" [(ngModel)]="draft.awardedBudget" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Currency</label>
+      <p-dropdown [options]="currencies" [(ngModel)]="draft.awardedCurrency" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+    </div>
+
+    <ng-container *ngIf="isCompleted">
+      <div class="form-field">
+        <label>Vendor Projected Start Date<span class="req">*</span></label>
+        <input pInputText class="w-full" [(ngModel)]="draft.vendorProjectedStart" [readonly]="readonly" placeholder="DD/MM/YYYY" />
+      </div>
+      <div class="form-field">
+        <label>Vendor Projected End Date<span class="req">*</span></label>
+        <input pInputText class="w-full" [(ngModel)]="draft.vendorProjectedEnd" [readonly]="readonly" placeholder="DD/MM/YYYY" />
+      </div>
+      <div class="form-field">
+        <label>PM Approval User</label>
+        <p-dropdown [options]="pmUsers" [(ngModel)]="draft.pmUser" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+      </div>
+      <div class="form-field">
+        <label>DM Approval User</label>
+        <p-dropdown [options]="dmUsers" [(ngModel)]="draft.dmUser" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+      </div>
+    </ng-container>
+
+    <div class="form-field">
+      <label>Entity</label>
+      <p-dropdown [options]="entities" [(ngModel)]="draft.entity" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+    </div>
+    <div class="form-field">
+      <label>Company Code</label>
+      <input pInputText class="w-full" [(ngModel)]="draft.companyCode" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>SBU</label>
+      <input pInputText class="w-full" [(ngModel)]="draft.sbu" [readonly]="readonly" />
+    </div>
+    <div class="form-field">
+      <label>Market Segment</label>
+      <p-dropdown [options]="marketSegments" [(ngModel)]="draft.marketSegment" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+    </div>
+    <div class="form-field">
+      <label>Market Segment Code</label>
+      <input pInputText class="w-full" [(ngModel)]="draft.marketSegmentCode" [readonly]="readonly" />
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="!isCompleted">
+    <h3>Request Type</h3>
+    <label class="checkbox-row">
+      <input type="checkbox" [checked]="true" disabled />
+      {{ draft.requestType }}
+    </label>
+    <textarea
+      pInputText
+      class="w-full request-type-textarea"
+      rows="6"
+      maxlength="4000"
+      [(ngModel)]="draft.requestTypeDetail"
+      [readonly]="readonly"
+    ></textarea>
+    <div class="hint">{{ draft.requestTypeDetail.length }} / 4000 characters (Remaining: {{ remaining(draft.requestTypeDetail) }})</div>
+  </div>
+
+  <div class="form-section" *ngIf="isCompleted">
+    <div class="approval-grid">
+      <div class="approval-card">
+        <h3>PM Approval</h3>
+        <label class="checkbox-row">
+          <input type="checkbox" [(ngModel)]="draft.pmApprovalSecured" [disabled]="readonly" />
+          PM Approval Secured
+        </label>
+        <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+      </div>
+      <div class="approval-card">
+        <h3>Ops Head Approval</h3>
+        <label class="checkbox-row">
+          <input type="checkbox" [(ngModel)]="draft.opsHeadApprovalSecured" [disabled]="readonly" />
+          Ops Head Approval Secured
+        </label>
+        <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+      </div>
+    </div>
+    <div class="approval-grid">
+      <div class="approval-card">
+        <h3>Upload Files for Award</h3>
+        <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+      </div>
+      <div class="approval-card">
+        <h3>SOP Document</h3>
+        <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>{{ isCompleted ? 'Awarded Vendor' : 'Select Vendors for Outsource Enquiries' }}</h3>
+    <div class="table-responsive">
+      <p-table [value]="[{ vendor: draft.vendor, requestType: 'Translation,VoiceOver', services: 'Audio,Subtitling,Translation', status: 'No' }]" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 60px">Select</th>
+            <th>Vendor Name</th>
+            <th>Request Type</th>
+            <th>Services</th>
+            <th *ngIf="!isCompleted">Enquiry Status</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td><input type="checkbox" [checked]="isCompleted" disabled /></td>
+            <td>{{ row.vendor }}</td>
+            <td>{{ row.requestType }}</td>
+            <td>{{ row.services }}</td>
+            <td *ngIf="!isCompleted">{{ row.status }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="!isCompleted">
+    <div class="comments-grid">
+      <div>
+        <h3>Aptara Comments</h3>
+        <textarea pInputText class="w-full request-type-textarea" rows="5" maxlength="4000" [(ngModel)]="draft.aptaraComments" [readonly]="readonly"></textarea>
+        <div class="hint">{{ draft.aptaraComments.length }} / 4000 characters (Remaining: {{ remaining(draft.aptaraComments) }})</div>
+      </div>
+      <div>
+        <h3>Instruction For Vendors</h3>
+        <textarea pInputText class="w-full request-type-textarea" rows="5" maxlength="4000" [(ngModel)]="draft.instructionForVendors" [readonly]="readonly"></textarea>
+        <div class="hint">{{ draft.instructionForVendors.length }} / 4000 characters (Remaining: {{ remaining(draft.instructionForVendors) }})</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" [class.collapsed]="isCompleted">
+    <h3>Project Scope {{ isCompleted ? '& Request Details' : 'Uploaded By PM' }}</h3>
+    <ng-container *ngIf="!isCompleted">
+      <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+      <table class="file-list">
+        <thead>
+          <tr><th>Files</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of stagedFiles">
+            <td><i class="pi pi-file"></i> {{ f }}</td>
+            <td><button class="row-action" title="Download"><i class="pi pi-download"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+
+  <div class="form-actions">
+    <p-button *ngIf="!isCompleted" label="Send Enquiry" icon="pi pi-send" severity="info" [outlined]="true" (click)="sendEnquiry()"></p-button>
+    <p-button *ngIf="!isCompleted" label="Submit" icon="pi pi-check" severity="success" (click)="save()"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
+  </div>
+</div>

@@ -178,6 +178,14 @@ export const auditHistoryData: AuditEntry[] = [
  * this component previously rendered). `status` is stored as the raw
  * 'Completed' value and displayed as "Outsourcing Completed", exactly
  * matching the original's inline display transform. */
+/** Extended against the real production app's "Outsource Request" /
+ * "Outsource Completed" pages — a request that's still being sourced shows
+ * the simpler create-style form, but every row in this mock dataset is
+ * already Awarded + Completed (matching the original), so in practice
+ * every existing row renders as the fuller "Outsource Completed" page.
+ * Field values for opn00016 are the real app's actual data (confirmed via
+ * screenshot); the other three rows reuse the same entity/company/SBU
+ * defaults since no reference screenshot exists for them specifically. */
 export interface OutsourceRequest {
   id: string;
   client: string;
@@ -186,14 +194,87 @@ export interface OutsourceRequest {
   vendor: string;
   awarded: boolean;
   rawAmount: number;
+  active: boolean;
+  outsourceBudget: number;
+  outsourceCurrency: string;
+  awardedBudget: number;
+  awardedCurrency: string;
+  expectedStart: string;
+  expectedEnd: string;
+  vendorProjectedStart: string;
+  vendorProjectedEnd: string;
+  entity: string;
+  companyCode: string;
+  sbu: string;
+  marketSegment: string;
+  marketSegmentCode: string;
+  pmUser: string;
+  dmUser: string;
+  pmApprovalSecured: boolean;
+  opsHeadApprovalSecured: boolean;
+  requestType: string;
+  requestTypeDetail: string;
+  instructionForVendors: string;
+  aptaraComments: string;
 }
 
+const DEFAULT_ENTITY = { entity: 'Aptara New Media Pvt Ltd.', companyCode: '23001', sbu: '700', marketSegment: 'E Learning', marketSegmentCode: '3101' };
+
 export const outsourceRequestsData = signal<OutsourceRequest[]>([
-  { id: 'opn00016', client: 'Aura Inc', project: 'Translation', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 650000 },
-  { id: 'opn00133', client: 'Core Info LLP', project: 'Translate Web Pages', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 70000 },
-  { id: 'opn00183', client: 'ABZ Corp', project: 'Voice Over in English for 10 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 700000 },
-  { id: 'opn01019', client: 'PQN Inc', project: 'Translation of 2 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 500000 }
+  {
+    id: 'opn00016', client: 'Aura Inc', project: 'Translation', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 650000, active: true,
+    outsourceBudget: 15000, outsourceCurrency: 'USD', awardedBudget: 650000, awardedCurrency: 'INR',
+    expectedStart: '17/08/2026', expectedEnd: '25/09/2026', vendorProjectedStart: '17/08/2026', vendorProjectedEnd: '30/09/2026',
+    ...DEFAULT_ENTITY, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', pmApprovalSecured: true, opsHeadApprovalSecured: false,
+    requestType: 'Translation', requestTypeDetail: 'Language: Korean, Japanese, Thai\nVolume: 8000 words\nDialect: Korean, Japanese, Thai\nAny Specific Instruction: -\nPreferred Vendor: -',
+    instructionForVendors: 'Translate attached document in Korean, Japanese, Thai', aptaraComments: ''
+  },
+  {
+    id: 'opn00133', client: 'Core Info LLP', project: 'Translate Web Pages', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 70000, active: true,
+    outsourceBudget: 2000, outsourceCurrency: 'USD', awardedBudget: 70000, awardedCurrency: 'INR',
+    expectedStart: '05/08/2026', expectedEnd: '01/10/2026', vendorProjectedStart: '05/08/2026', vendorProjectedEnd: '01/10/2026',
+    ...DEFAULT_ENTITY, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', pmApprovalSecured: true, opsHeadApprovalSecured: false,
+    requestType: 'Translation', requestTypeDetail: 'Language: Spanish\nVolume: 3000 words\nDialect: Spanish (EU)\nAny Specific Instruction: -\nPreferred Vendor: -',
+    instructionForVendors: 'Translate web page content into Spanish', aptaraComments: ''
+  },
+  {
+    id: 'opn00183', client: 'ABZ Corp', project: 'Voice Over in English for 10 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 700000, active: true,
+    outsourceBudget: 18000, outsourceCurrency: 'USD', awardedBudget: 700000, awardedCurrency: 'INR',
+    expectedStart: '27/07/2026', expectedEnd: '31/08/2026', vendorProjectedStart: '27/07/2026', vendorProjectedEnd: '31/08/2026',
+    ...DEFAULT_ENTITY, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', pmApprovalSecured: true, opsHeadApprovalSecured: false,
+    requestType: 'Voice Over', requestTypeDetail: 'Language: English\nVolume: 10 modules\nDialect: English (US)\nAny Specific Instruction: -\nPreferred Vendor: -',
+    instructionForVendors: 'Record voice over for 10 e-learning modules', aptaraComments: ''
+  },
+  {
+    id: 'opn01019', client: 'PQN Inc', project: 'Translation of 2 modules', status: 'Completed', vendor: 'SNT Ltd', awarded: true, rawAmount: 500000, active: true,
+    outsourceBudget: 13000, outsourceCurrency: 'USD', awardedBudget: 500000, awardedCurrency: 'INR',
+    expectedStart: '01/08/2026', expectedEnd: '15/09/2026', vendorProjectedStart: '01/08/2026', vendorProjectedEnd: '15/09/2026',
+    ...DEFAULT_ENTITY, pmUser: 'Hemant Project Manager', dmUser: 'Darshan Delivery Manager', pmApprovalSecured: true, opsHeadApprovalSecured: false,
+    requestType: 'Translation', requestTypeDetail: 'Language: French\nVolume: 2 modules\nDialect: French (EU)\nAny Specific Instruction: -\nPreferred Vendor: -',
+    instructionForVendors: 'Translate 2 e-learning modules into French', aptaraComments: ''
+  }
 ]);
+
+/** Real per-record change history for opn00016 (the only request with a
+ * captured reference screenshot) — every other request shows empty
+ * ("No records found"), matching the default state for an unmodified
+ * record elsewhere in the real app. */
+export const outsourceRequestHistory: Record<string, AuditEntry[]> = {
+  opn00016: [
+    { attr: 'Project Outsource Status', oldVal: 'Awarded', newVal: 'Outsourcing Completed', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:13:00 PM', comment: 'Modified' },
+    { attr: 'Projected Start Date', oldVal: '', newVal: '08-17-2026', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Added' },
+    { attr: 'Projected End Date', oldVal: '', newVal: '09-30-2026', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Added' },
+    { attr: 'Project Outsource Status', oldVal: 'Enquiry Sent', newVal: 'Awarded', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Modified' },
+    { attr: 'Final Currency', oldVal: 'USD', newVal: 'INR', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Modified' },
+    { attr: 'Final Budget', oldVal: '15000.00', newVal: '650000', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Modified' },
+    { attr: 'PM Approval Secured', oldVal: 'false', newVal: 'true', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:12:00 PM', comment: 'Modified' },
+    { attr: 'PM User', oldVal: '', newVal: 'Hemant Project Manager', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:11:00 PM', comment: 'Modified' },
+    { attr: 'DM User', oldVal: '', newVal: 'Darshan Delivery Manager', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:11:00 PM', comment: 'Modified' },
+    { attr: 'Project Outsource Status', oldVal: 'Submitted', newVal: 'Work In Progress', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:09:00 PM', comment: 'Modified' },
+    { attr: 'Enquiry Send', oldVal: 'false', newVal: 'true', user: 'Pushpraj ENT Vendor', date: '08-09-2026 09:09:00 PM', comment: 'Modified' },
+    { attr: 'PM Uploaded Files', oldVal: '', newVal: 'Band 6 Skills Definitions (1).pptx, Full file w Career Ladders and Skills.pptx', user: 'Hemant Project Manager', date: '08-09-2026 09:08:00 PM', comment: 'Added' }
+  ]
+};
 
 export function displayStatus(status: string): string {
   return status === 'Completed' ? 'Outsourcing Completed' : status;

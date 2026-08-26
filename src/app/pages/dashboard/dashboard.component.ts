@@ -1,12 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { outsourceRequestsData, statusSeverity, displayStatus, OutsourceRequest, auditHistoryData, vendorsData, invoicesData } from '../../core/mock-data';
-import { EntityDialogComponent, EntityField } from '../../shared/entity-dialog/entity-dialog.component';
-import { HistoryDialogComponent } from '../../shared/history-dialog/history-dialog.component';
+import { outsourceRequestsData, statusSeverity, displayStatus, OutsourceRequest, vendorsData, invoicesData } from '../../core/mock-data';
 
 interface KpiCard {
   label: string;
@@ -16,26 +15,10 @@ interface KpiCard {
   accent: 'blue' | 'purple' | 'emerald' | 'amber';
 }
 
-const VIEW_FIELDS: EntityField[] = [
-  { key: 'id', label: 'RevSys ID', type: 'text' },
-  { key: 'client', label: 'Client Name', type: 'text' },
-  { key: 'project', label: 'Project Name', type: 'text' },
-  { key: 'vendor', label: 'Vendor Name', type: 'text' },
-  { key: 'rawAmount', label: 'Budget (INR)', type: 'number' }
-];
-
-const ADD_FIELDS: EntityField[] = [
-  { key: 'client', label: 'Client Name', type: 'text' },
-  { key: 'project', label: 'Project Name', type: 'text' },
-  { key: 'vendor', label: 'Vendor Name', type: 'text' },
-  { key: 'rawAmount', label: 'Budget (INR)', type: 'number' },
-  { key: 'awarded', label: 'Awarded to Vendor', type: 'checkbox' }
-];
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, TableModule, TagModule, ButtonModule, EntityDialogComponent, HistoryDialogComponent],
+  imports: [CommonModule, RouterLink, TableModule, TagModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -45,6 +28,18 @@ export class DashboardComponent {
   requestsSignal = outsourceRequestsData;
   statusSeverity = statusSeverity;
   displayStatus = displayStatus;
+
+  includeDisabled = signal(false);
+
+  filteredRequests = computed(() => {
+    const list = this.requestsSignal();
+    if (this.includeDisabled()) return list;
+    return list.filter((r) => r.active);
+  });
+
+  toggleIncludeDisabled(value: boolean) {
+    this.includeDisabled.set(value);
+  }
 
   kpis = computed<KpiCard[]>(() => {
     const requests = this.requestsSignal();
@@ -58,56 +53,21 @@ export class DashboardComponent {
     ];
   });
 
-  dialogVisible = false;
-  dialogReadonly = false;
-  dialogTitle = '';
-  dialogFields: EntityField[] = VIEW_FIELDS;
-  dialogModel: Partial<OutsourceRequest> = {};
-
-  historyVisible = false;
-  historyTitle = '';
-  historySubtitle = '';
-  historyEntries = auditHistoryData;
-
-  openView(req: OutsourceRequest) {
-    this.dialogReadonly = true;
-    this.dialogTitle = `Outsource Request: ${req.id}`;
-    this.dialogFields = VIEW_FIELDS;
-    this.dialogModel = { ...req };
-    this.dialogVisible = true;
+  indexOf(row: OutsourceRequest): number {
+    return this.requestsSignal().indexOf(row);
   }
 
-  openAdd() {
-    this.dialogReadonly = false;
-    this.dialogTitle = 'New Outsource Request';
-    this.dialogFields = ADD_FIELDS;
-    this.dialogModel = { vendor: 'SNT Ltd', rawAmount: 0, awarded: false };
-    this.dialogVisible = true;
+  toggleActive(req: OutsourceRequest) {
+    const next = !req.active;
+    this.requestsSignal.update((list) => list.map((r) => (r === req ? { ...r, active: next } : r)));
+    this.messages.add({
+      severity: next ? 'success' : 'warn',
+      summary: next ? 'Request Enabled' : 'Request Disabled',
+      detail: `Request ${req.id} is now ${next ? 'active' : 'disabled'}.`
+    });
   }
 
-  onSave(draft: Record<string, any>) {
-    const id = 'opn' + String(Math.floor(10000 + Math.random() * 89999));
-    const newRequest: OutsourceRequest = {
-      id,
-      client: draft['client'] ?? '',
-      project: draft['project'] ?? '',
-      vendor: draft['vendor'] ?? '',
-      rawAmount: Number(draft['rawAmount']) || 0,
-      awarded: Boolean(draft['awarded']),
-      status: 'Completed'
-    };
-    this.requestsSignal.update((list) => [...list, newRequest]);
-    this.messages.add({ severity: 'success', summary: 'Outsource Request Created', detail: `Request ${id} added to the portfolio.` });
-  }
-
-  openHistory(req: OutsourceRequest) {
-    this.historyTitle = `Audit History: ${req.id}`;
-    this.historySubtitle = `${req.client} • ${req.project}`;
-    this.historyVisible = true;
-  }
-
-  disableRequest(req: OutsourceRequest) {
-    this.requestsSignal.update((list) => list.filter((r) => r !== req));
-    this.messages.add({ severity: 'warn', summary: 'Request Disabled', detail: `Request ${req.id} disabled from view.` });
+  exportExcel() {
+    this.messages.add({ severity: 'success', summary: 'Report Exported', detail: 'Report exported to Excel (.csv).' });
   }
 }

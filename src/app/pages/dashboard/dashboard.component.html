@@ -23,11 +23,19 @@
 
 <div class="table-card">
   <div class="table-toolbar">
-    <span class="section-heading"><i class="pi pi-folder-open"></i> Outsource Requests</span>
-    <p-button label="New Outsource Request" icon="pi pi-plus" (click)="openAdd()"></p-button>
+    <div class="filter-group include-disable">
+      <label>
+        <input type="checkbox" [checked]="includeDisabled()" (change)="toggleIncludeDisabled($any($event.target).checked)" />
+        Include Disable
+      </label>
+    </div>
+    <div class="toolbar-actions">
+      <p-button label="Export to Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
+      <p-button label="Outsource Request" icon="pi pi-plus" routerLink="/outsource-requests/add"></p-button>
+    </div>
   </div>
 
-  <p-table [value]="requestsSignal()" [rows]="10" styleClass="p-datatable-sm">
+  <p-table [value]="filteredRequests()" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>
@@ -42,9 +50,17 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="View Details & Vendor Match" (click)="openView(row)"><i class="pi pi-eye"></i></button>
-          <button class="row-action" title="View Audit History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
-          <button class="row-action" title="Disable Request" (click)="disableRequest(row)"><i class="pi pi-trash"></i></button>
+          <button
+            class="row-action"
+            [class.is-disable]="row.active"
+            [class.is-enable]="!row.active"
+            [title]="row.active ? 'Disable' : 'Enable'"
+            (click)="toggleActive(row)"
+          >
+            <i class="pi" [class.pi-trash]="row.active" [class.pi-refresh]="!row.active"></i>
+          </button>
+          <a class="row-action" title="View" [routerLink]="['/outsource-requests', indexOf(row), 'view']"><i class="pi pi-eye"></i></a>
+          <a class="row-action" title="History" [routerLink]="['/outsource-requests', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
         </td>
         <td>
           <i *ngIf="row.awarded" class="pi pi-trophy award-trophy" title="Awarded to Vendor"></i>
@@ -64,19 +80,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<app-entity-dialog
-  [(visible)]="dialogVisible"
-  [title]="dialogTitle"
-  [fields]="dialogFields"
-  [model]="dialogModel"
-  [readonly]="dialogReadonly"
-  (save)="onSave($event)"
-></app-entity-dialog>
-
-<app-history-dialog
-  [(visible)]="historyVisible"
-  [title]="historyTitle"
-  [subtitle]="historySubtitle"
-  [entries]="historyEntries"
-></app-history-dialog>

@@ -11,6 +11,8 @@ import { ReportPageComponent } from './pages/report-page/report-page.component';
 import { MasterPageComponent } from './pages/master-page/master-page.component';
 import { MasterFormPageComponent } from './pages/master-form-page/master-form-page.component';
 import { MasterHistoryPageComponent } from './pages/master-history-page/master-history-page.component';
+import { OutsourceRequestFormComponent } from './pages/outsource-request-form/outsource-request-form.component';
+import { OutsourceRequestHistoryComponent } from './pages/outsource-request-history/outsource-request-history.component';
 import { ConfigComponent } from './pages/config/config.component';
 import {
   invoiceReportData,
@@ -56,6 +58,21 @@ export const routes: Routes = [
         path: 'outsource-requests',
         component: DashboardComponent,
         data: { title: 'Outsource Requests', breadcrumb: crumb('Outsource Requests') }
+      },
+      {
+        path: 'outsource-requests/add',
+        component: OutsourceRequestFormComponent,
+        data: { title: 'Outsource Request', breadcrumb: crumb('Outsource Requests'), mode: 'add' }
+      },
+      {
+        path: 'outsource-requests/:index/view',
+        component: OutsourceRequestFormComponent,
+        data: { title: 'Outsource Request', breadcrumb: crumb('Outsource Requests'), mode: 'view' }
+      },
+      {
+        path: 'outsource-requests/:index/history',
+        component: OutsourceRequestHistoryComponent,
+        data: { title: 'Outsource Request History', breadcrumb: crumb('Outsource Requests') }
       },
       {
         path: 'manage-vendors',
