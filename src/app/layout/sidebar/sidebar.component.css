@@ -42,6 +42,16 @@
   padding: 16px 12px;
 }
 
+/* overflow-y: auto above also clips horizontally (per spec, an axis left
+   at 'visible' next to a non-'visible' axis computes to 'auto' too), which
+   cut off the collapsed flyout card right where it starts escaping via
+   `left: 100%` — it never got a chance to render past the rail's own
+   edge. The collapsed icon rail is short enough to never need its own
+   scroll, so dropping the clip here is safe. */
+.sidebar.collapsed .nav-menu {
+  overflow: visible;
+}
+
 .nav-section-title {
   font-size: 0.65rem;
   font-weight: 700;
@@ -121,6 +131,38 @@
 
 .nav-dropdown-group.open .nav-sub-menu {
   display: flex;
+}
+
+/* Collapsed rail: the inline-accordion sub-menu above has no room in a
+   68px column (nav-sub-menu's own left indent/border alone eats most of
+   it), so sub-items rendered as a bare, cramped icon stack with clipped
+   labels. Replaced with a hover-triggered flyout card instead, positioned
+   off the group's own box — the standard icon-rail sidebar pattern. */
+.sidebar.collapsed .nav-dropdown-group {
+  position: relative;
+}
+
+.sidebar.collapsed .nav-sub-menu {
+  display: none;
+}
+
+.sidebar.collapsed .nav-dropdown-group:hover .nav-sub-menu {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin: 0 0 0 8px;
+  padding: 8px;
+  min-width: 220px;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-main);
+  z-index: 200;
+}
+
+.sidebar.collapsed .nav-sub-item {
+  white-space: nowrap;
 }
 
 .nav-sub-item {
