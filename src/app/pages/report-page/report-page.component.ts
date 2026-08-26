@@ -1,10 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { MessageService } from 'primeng/api';
 import { statusSeverity } from '../../core/mock-data';
 
@@ -16,7 +18,7 @@ export interface ReportColumn {
 
 export interface ReportFilter {
   label: string;
-  type: 'date' | 'select';
+  type: 'date' | 'select' | 'multiselect';
   options?: string[];
   /** Row key this filter matches against. Omitted when the report's rows
    * carry no matching field (e.g. Market Segment on Vendor Report) — those
@@ -33,24 +35,24 @@ function parseDdMmYyyy(value: string): Date | null {
   return new Date(y, m - 1, d);
 }
 
-/** Generic report table shared by all 4 Analytics & Reports pages. Search
- * is click-to-apply (matching the real app: filters don't live-filter as
- * you type/select — you set them, then click Search). Each ReportFilter
- * that declares a `field` is wired to the matching row key; filters with
- * no `field` (no matching data in the mock rows) stay visual-only. */
+/** Generic report table shared by all 4 Analytics & Reports pages, matching
+ * the real app's confirmed structure exactly: a filter card (grid of
+ * fields, Search/Export bottom-right) above a separate results table card
+ * that starts EMPTY ("No records found") until Search is clicked — it does
+ * not show all rows by default. The results table itself is independently
+ * sortable/filterable/paginated (25 rows/page), same as every other real
+ * list in this app. */
 @Component({
   selector: 'app-report-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, TagModule, ButtonModule],
-  templateUrl: './report-page.component.html',
-  styleUrl: './report-page.component.css'
+  imports: [CommonModule, FormsModule, TableModule, TagModule, ButtonModule, DropdownModule, MultiSelectModule],
+  templateUrl: './report-page.component.html'
 })
 export class ReportPageComponent {
   private route = inject(ActivatedRoute);
   private messages = inject(MessageService);
   private data = this.route.snapshot.data;
 
-  icon: string = this.data['icon'] ?? 'pi pi-file';
   heading: string = this.data['heading'] ?? 'Report';
   filters: ReportFilter[] = this.data['filters'] ?? [];
   columns: ReportColumn[] = this.data['columns'] ?? [];
@@ -58,18 +60,58 @@ export class ReportPageComponent {
 
   statusSeverity = statusSeverity;
 
-  filterValues: string[] = this.filters.map(() => '');
-  displayRows = signal<any[]>(this.rows);
+  /** Matches the real app's default state: Invoice Status filters start
+   * pre-selected with "Invoice Approved" (visible as a chip token on every
+   * captured Reports screenshot, before any user interaction). */
+  filterValues: (string | string[])[] = this.filters.map((f) => (f.type === 'multiselect' ? ['Invoice Approved'] : ''));
 
-  setFilterValue(index: number, value: string) {
+  /** Empty by default — the real app never shows all rows on page load,
+   * only after Search is explicitly clicked. */
+  hasSearched = signal(false);
+  searchedRows = signal<any[]>([]);
+
+  columnFilters = signal<Record<string, string>>({});
+  sortField = signal<string | null>(null);
+  sortAsc = signal(true);
+
+  displayRows = computed(() => {
+    const filters = this.columnFilters();
+    let list = this.searchedRows().filter((row) =>
+      this.columns.every((col) => String(row[col.key] ?? '').toLowerCase().includes((filters[col.key] ?? '').toLowerCase()))
+    );
+
+    const field = this.sortField();
+    if (field) {
+      const asc = this.sortAsc() ? 1 : -1;
+      list = [...list].sort((a, b) => String(a[field] ?? '').localeCompare(String(b[field] ?? '')) * asc);
+    }
+    return list;
+  });
+
+  setFilterValue(index: number, value: string | string[]) {
     this.filterValues[index] = value;
+  }
+
+  setColumnFilter(key: string, value: string) {
+    this.columnFilters.update((f) => ({ ...f, [key]: value }));
+  }
+
+  toggleSort(key: string) {
+    if (this.sortField() === key) {
+      this.sortAsc.update((v) => !v);
+    } else {
+      this.sortField.set(key);
+      this.sortAsc.set(true);
+    }
   }
 
   search() {
     const startIdx = this.filters.findIndex((f) => f.range === 'start');
     const endIdx = this.filters.findIndex((f) => f.range === 'end');
-    const startDate = startIdx >= 0 && this.filterValues[startIdx] ? new Date(this.filterValues[startIdx]) : null;
-    const endDate = endIdx >= 0 && this.filterValues[endIdx] ? new Date(this.filterValues[endIdx]) : null;
+    const startVal = startIdx >= 0 ? (this.filterValues[startIdx] as string) : '';
+    const endVal = endIdx >= 0 ? (this.filterValues[endIdx] as string) : '';
+    const startDate = startVal ? new Date(startVal) : null;
+    const endDate = endVal ? new Date(endVal) : null;
     const dateField = this.filters[startIdx >= 0 ? startIdx : endIdx]?.field;
 
     const filtered = this.rows.filter((row) => {
@@ -81,18 +123,29 @@ export class ReportPageComponent {
         }
       }
       return this.filters.every((f, i) => {
-        if (f.type !== 'select' || !f.field) return true;
+        if (!f.field) return true;
         const value = this.filterValues[i];
+        if (f.type === 'multiselect') {
+          const selected = value as string[];
+          if (!selected || selected.length === 0) return true;
+          return selected.includes(row[f.field]);
+        }
+        if (f.type !== 'select') return true;
         if (!value) return true;
         return row[f.field] === value;
       });
     });
 
-    this.displayRows.set(filtered);
+    this.hasSearched.set(true);
+    this.searchedRows.set(filtered);
     this.messages.add({
       severity: 'success',
       summary: 'Report Filtered',
       detail: `${filtered.length} of ${this.rows.length} record${this.rows.length === 1 ? '' : 's'} match.`
     });
+  }
+
+  exportExcel() {
+    this.messages.add({ severity: 'success', summary: 'Report Exported', detail: 'Report exported to Excel (.csv).' });
   }
 }

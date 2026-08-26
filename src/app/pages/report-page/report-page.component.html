@@ -1,34 +1,61 @@
-<div class="table-card">
-  <div class="table-toolbar report-toolbar">
-    <div class="toolbar-header-row">
-      <span class="section-heading"><i [class]="icon"></i> {{ heading }}</span>
-      <div class="toolbar-actions">
-        <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
-        <p-button label="Search" icon="pi pi-search" (click)="search()"></p-button>
-      </div>
-    </div>
+<div class="form-card wide">
+  <h2>{{ heading }}</h2>
 
-    <div class="report-filter-bar">
-      <div class="filter-item" *ngFor="let f of filters; let i = index">
-        <label>{{ f.label }}</label>
-        <input
-          *ngIf="f.type === 'date'"
-          type="date"
-          [ngModel]="filterValues[i]"
-          (ngModelChange)="setFilterValue(i, $event)"
-        />
-        <select *ngIf="f.type === 'select'" [ngModel]="filterValues[i]" (ngModelChange)="setFilterValue(i, $event)">
-          <option value="">Select {{ f.label }}</option>
-          <option *ngFor="let opt of f.options">{{ opt }}</option>
-        </select>
-      </div>
+  <div class="form-grid">
+    <div class="form-field" *ngFor="let f of filters; let i = index">
+      <label>{{ f.label }}</label>
+      <input
+        *ngIf="f.type === 'date'"
+        type="date"
+        pInputText
+        class="w-full"
+        [ngModel]="filterValues[i]"
+        (ngModelChange)="setFilterValue(i, $event)"
+      />
+      <p-dropdown
+        *ngIf="f.type === 'select'"
+        [options]="f.options"
+        [ngModel]="filterValues[i]"
+        (ngModelChange)="setFilterValue(i, $event)"
+        [placeholder]="'Select ' + f.label"
+        [showClear]="true"
+        styleClass="w-full"
+      ></p-dropdown>
+      <p-multiSelect
+        *ngIf="f.type === 'multiselect'"
+        [options]="f.options"
+        [ngModel]="filterValues[i]"
+        (ngModelChange)="setFilterValue(i, $event)"
+        [placeholder]="'Select ' + f.label"
+        styleClass="w-full"
+      ></p-multiSelect>
     </div>
   </div>
 
-  <p-table [value]="displayRows()" [rows]="10" styleClass="p-datatable-sm">
+  <div class="form-actions align-right">
+    <p-button label="Search" icon="pi pi-search" (click)="search()"></p-button>
+    <p-button label="Export" icon="pi pi-file-excel" severity="success" (click)="exportExcel()"></p-button>
+  </div>
+</div>
+
+<div class="table-card">
+  <p-table [value]="displayRows()" [rows]="25" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
-        <th *ngFor="let col of columns">{{ col.label }}</th>
+        <th *ngFor="let col of columns" class="sortable-th" (click)="toggleSort(col.key)">
+          {{ col.label }}
+          <span class="sort-icons">
+            <i class="pi" [class.pi-sort-amount-up-alt]="sortField() === col.key && sortAsc()" [class.pi-sort-amount-down]="sortField() === col.key && !sortAsc()" [class.pi-sort-alt]="sortField() !== col.key"></i>
+          </span>
+        </th>
+      </tr>
+      <tr class="column-filter-row">
+        <th *ngFor="let col of columns">
+          <span class="column-filter-input-wrap">
+            <input type="text" class="column-filter-input" [attr.aria-label]="'Filter by ' + col.label" [ngModel]="columnFilters()[col.key]" (ngModelChange)="setColumnFilter(col.key, $event)" />
+            <i class="pi pi-filter column-filter-icon"></i>
+          </span>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>
@@ -48,7 +75,7 @@
       <tr>
         <td [attr.colspan]="columns.length" class="empty-state">
           <i class="pi pi-search"></i>
-          <div>No records found.</div>
+          <div>No records found</div>
         </td>
       </tr>
     </ng-template>

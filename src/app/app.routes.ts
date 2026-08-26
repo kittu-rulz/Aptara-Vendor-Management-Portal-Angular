@@ -188,7 +188,7 @@ export const routes: Routes = [
             { label: 'End Date', type: 'date', field: 'invDate', range: 'end' },
             { label: 'Project Name', type: 'select', options: projectNames, field: 'project' },
             { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
+            { label: 'Invoice Status', type: 'multiselect', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
@@ -205,18 +205,17 @@ export const routes: Routes = [
             { key: 'client', label: 'Client Name' },
             { key: 'revsys', label: 'RevSys ID' },
             { key: 'project', label: 'Project Name' },
-            { key: 'vendor', label: 'Selected Vendor' },
+            { key: 'vendor', label: 'Selected Vendor Name' },
             { key: 'budget', label: 'Project Budget' },
             { key: 'invNo', label: 'Invoice No' },
-            { key: 'invDate', label: 'Invoice Date' },
-            { key: 'status', label: 'Invoice Status', isStatus: true }
+            { key: 'invDate', label: 'Invoice Date' }
           ],
           filters: [
             { label: 'Start Date', type: 'date', field: 'invDate', range: 'start' },
             { label: 'End Date', type: 'date', field: 'invDate', range: 'end' },
             { label: 'Project Name', type: 'select', options: projectNames, field: 'project' },
             { label: 'Vendor Name', type: 'select', options: vendorNames, field: 'vendor' },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
+            { label: 'Invoice Status', type: 'multiselect', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
@@ -233,7 +232,7 @@ export const routes: Routes = [
             { key: 'customer', label: 'Customer Name' },
             { key: 'vendor', label: 'Vendor Name' },
             { key: 'code', label: 'Vendor Code' },
-            { key: 'invNo', label: 'Invoice No' },
+            { key: 'invNo', label: 'InvoiceNo' },
             { key: 'status', label: 'Invoice Status', isStatus: true }
           ],
           filters: [
@@ -241,7 +240,7 @@ export const routes: Routes = [
             { label: 'End Date', type: 'date' },
             { label: 'Vendor Name', type: 'select', options: vendorNames, field: 'vendor' },
             { label: 'Market Segment', type: 'select', options: marketSegments },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
+            { label: 'Invoice Status', type: 'multiselect', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
