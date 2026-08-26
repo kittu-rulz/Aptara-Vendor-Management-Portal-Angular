@@ -27,7 +27,7 @@
     <div class="toolbar-actions">
       <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
       <p-button label="Generate Registration Link" icon="pi pi-link" severity="secondary" [outlined]="true" (click)="sendRegistrationLink()"></p-button>
-      <p-button label="Vendor" icon="pi pi-plus" (click)="openAdd()"></p-button>
+      <p-button label="Vendor" icon="pi pi-plus" routerLink="/manage-vendors/add"></p-button>
     </div>
   </div>
 
@@ -48,9 +48,7 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
-          <button class="row-action" title="View" (click)="openView(row)"><i class="pi pi-eye"></i></button>
-          <button class="row-action" title="History" (click)="openHistory(row)"><i class="pi pi-history"></i></button>
+          <a class="row-action" title="Edit" [routerLink]="['/manage-vendors', indexOf(row), 'edit']"><i class="pi pi-pencil"></i></a>
           <button
             class="row-action"
             [class.is-disable]="row.status === 'Active'"
@@ -60,6 +58,8 @@
           >
             <i class="pi" [class.pi-power-off]="row.status === 'Active'" [class.pi-refresh]="row.status !== 'Active'"></i>
           </button>
+          <a class="row-action" title="View" [routerLink]="['/manage-vendors', indexOf(row), 'view']"><i class="pi pi-eye"></i></a>
+          <a class="row-action" title="History" [routerLink]="['/manage-vendors', indexOf(row), 'history']"><i class="pi pi-history"></i></a>
         </td>
         <td><strong>{{ row.name }}</strong></td>
         <td>{{ row.city }}</td>
@@ -93,19 +93,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<app-entity-dialog
-  [(visible)]="dialogVisible"
-  [title]="dialogTitle"
-  [fields]="dialogFields"
-  [model]="dialogModel"
-  [readonly]="dialogReadonly"
-  (save)="onSave($event)"
-></app-entity-dialog>
-
-<app-history-dialog
-  [(visible)]="historyVisible"
-  [title]="historyTitle"
-  [subtitle]="historySubtitle"
-  [entries]="historyEntries"
-></app-history-dialog>

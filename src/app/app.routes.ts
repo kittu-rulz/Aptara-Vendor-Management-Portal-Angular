@@ -13,6 +13,8 @@ import { MasterFormPageComponent } from './pages/master-form-page/master-form-pa
 import { MasterHistoryPageComponent } from './pages/master-history-page/master-history-page.component';
 import { OutsourceRequestFormComponent } from './pages/outsource-request-form/outsource-request-form.component';
 import { OutsourceRequestHistoryComponent } from './pages/outsource-request-history/outsource-request-history.component';
+import { VendorRegistrationFormComponent } from './pages/vendor-registration-form/vendor-registration-form.component';
+import { VendorHistoryComponent } from './pages/vendor-history/vendor-history.component';
 import { ConfigComponent } from './pages/config/config.component';
 import {
   invoiceReportData,
@@ -78,6 +80,26 @@ export const routes: Routes = [
         path: 'manage-vendors',
         component: VendorsComponent,
         data: { title: 'Manage Vendors', breadcrumb: crumb('Manage Vendors') }
+      },
+      {
+        path: 'manage-vendors/add',
+        component: VendorRegistrationFormComponent,
+        data: { title: 'Vendor Registration Form', breadcrumb: crumb('Manage Vendors'), mode: 'add' }
+      },
+      {
+        path: 'manage-vendors/:index/edit',
+        component: VendorRegistrationFormComponent,
+        data: { title: 'Vendor Registration Form', breadcrumb: crumb('Manage Vendors'), mode: 'edit' }
+      },
+      {
+        path: 'manage-vendors/:index/view',
+        component: VendorRegistrationFormComponent,
+        data: { title: 'Vendor Registration Form', breadcrumb: crumb('Manage Vendors'), mode: 'view' }
+      },
+      {
+        path: 'manage-vendors/:index/history',
+        component: VendorHistoryComponent,
+        data: { title: 'Vendor History', breadcrumb: crumb('Manage Vendors') }
       },
       {
         path: 'manage-users',

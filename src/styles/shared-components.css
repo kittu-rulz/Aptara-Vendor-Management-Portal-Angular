@@ -400,3 +400,24 @@
 .table-responsive {
   overflow-x: auto;
 }
+
+.form-grid.two-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.service-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px 16px;
+}
+
+.service-checklist .checkbox-row {
+  margin-bottom: 0;
+}
+
+.history-subtitle {
+  margin-top: 2px;
+  color: var(--text-color-secondary);
+  font-size: var(--text-sm);
+  font-weight: 400;
+}

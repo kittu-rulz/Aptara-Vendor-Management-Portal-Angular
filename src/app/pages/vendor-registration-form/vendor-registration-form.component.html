@@ -1,0 +1,177 @@
+<div class="form-card wide">
+  <h2>{{ title }}</h2>
+
+  <p-tabView>
+    <p-tabPanel header="Company Info">
+      <div class="form-field" *ngIf="mode !== 'add'">
+        <label>Vendor Code</label>
+        <input pInputText class="w-full" [value]="draft.code" readonly />
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Company Name<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.name" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Country<span class="req">*</span></label>
+          <p-dropdown [options]="countries" [(ngModel)]="draft.country" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+        </div>
+        <div class="form-field">
+          <label>City<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.city" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>GST Number<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.gstNumber" [readonly]="readonly" />
+        </div>
+
+        <div class="form-field">
+          <label>Pin Code<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.pinCode" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Establishment Date<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.establishmentDate" [readonly]="readonly" placeholder="DD/MM/YYYY" />
+        </div>
+        <div class="form-field">
+          <label>Company PAN<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.companyPan" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Company Certifications</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.companyCertifications" [readonly]="readonly" />
+        </div>
+      </div>
+
+      <div class="form-grid two-col">
+        <div class="form-field">
+          <label>Head Office Address<span class="req">*</span></label>
+          <textarea pInputText class="w-full request-type-textarea" rows="3" [(ngModel)]="draft.headOfficeAddress" [readonly]="readonly"></textarea>
+        </div>
+        <div class="form-field">
+          <label>Address Line 2</label>
+          <textarea pInputText class="w-full request-type-textarea" rows="3" [(ngModel)]="draft.addressLine2" [readonly]="readonly"></textarea>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Company Phone</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.companyPhone" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Company Fax</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.companyFax" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Company Email<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.email" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Company Website<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.companyWebsite" [readonly]="readonly" />
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Bank & GST Details">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Bank Name</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.bankName" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Account Number</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.accountNumber" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>IFSC Code</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.ifscCode" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Branch Name</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.branchName" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Account Holder Name</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.accountHolderName" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>GST Number</label>
+          <input pInputText class="w-full" [value]="draft.gstNumber" readonly />
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Key Contact">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Contact Person Name<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.contact" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Designation</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.contactDesignation" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Contact Phone<span class="req">*</span></label>
+          <input pInputText class="w-full" [(ngModel)]="draft.contactPhone" [readonly]="readonly" />
+        </div>
+        <div class="form-field">
+          <label>Alternate Phone</label>
+          <input pInputText class="w-full" [(ngModel)]="draft.alternatePhone" [readonly]="readonly" />
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Services">
+      <div class="form-field">
+        <label>Type of Organization<span class="req">*</span></label>
+        <p-dropdown [options]="organizationTypes" [(ngModel)]="draft.organization" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+      </div>
+
+      <div class="form-section">
+        <h3>Nature of Service</h3>
+        <div class="service-checklist">
+          <label class="checkbox-row" *ngFor="let service of natureOfServiceOptions">
+            <input
+              type="checkbox"
+              [checked]="isServiceSelected(service)"
+              [disabled]="readonly"
+              (change)="toggleService(service, $any($event.target).checked)"
+            />
+            {{ service }}
+          </label>
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Aptara Document Uploads">
+      <div class="approval-grid">
+        <div class="approval-card">
+          <h3>GST Certificate</h3>
+          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+        </div>
+        <div class="approval-card">
+          <h3>PAN Card</h3>
+          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+        </div>
+        <div class="approval-card">
+          <h3>Company Registration Certificate</h3>
+          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+        </div>
+        <div class="approval-card">
+          <h3>Bank Proof / Cancelled Cheque</h3>
+          <p-button label="Select Files" icon="pi pi-plus" [disabled]="readonly"></p-button>
+        </div>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+
+  <div class="form-actions">
+    <p-button *ngIf="!readonly" label="Submit" icon="pi pi-check" severity="success" (click)="save()"></p-button>
+    <p-button *ngIf="!readonly" label="Reset" icon="pi pi-refresh" severity="secondary" (click)="reset()"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
+  </div>
+</div>

@@ -310,6 +310,12 @@ export const invoicesData = signal<Invoice[]>([
   { project: 'Translation', status: '', total: '650,000 INR', invoiced: '0 INR', remaining: '650,000 INR', start: '08/17/2026', end: '09/25/2026', rawTotal: 650000, active: true, hasSubmission: false }
 ]);
 
+/** Extended against the real production app's 5-tab "Vendor Registration
+ * Form" — only the Company Info tab has a captured reference screenshot,
+ * so those fields carry the real SNT Ltd values exactly; the other four
+ * tabs (Bank & GST Details, Key Contact, Services, Aptara Document
+ * Uploads) are reasonably constructed from their tab names and the data
+ * already known to exist (contact person, services, organization type). */
 export interface Vendor {
   code: string;
   name: string;
@@ -320,6 +326,25 @@ export interface Vendor {
   organization: string;
   vendorStatus: string;
   status: string;
+  country: string;
+  gstNumber: string;
+  pinCode: string;
+  establishmentDate: string;
+  companyPan: string;
+  companyCertifications: string;
+  headOfficeAddress: string;
+  addressLine2: string;
+  companyPhone: string;
+  companyFax: string;
+  companyWebsite: string;
+  bankName: string;
+  accountNumber: string;
+  ifscCode: string;
+  branchName: string;
+  accountHolderName: string;
+  contactDesignation: string;
+  contactPhone: string;
+  alternatePhone: string;
 }
 
 /** Matches the single vendor record in the original prototype's app.js —
@@ -334,9 +359,38 @@ export const vendorsData = signal<Vendor[]>([
     services: 'Translation, Audio/Video',
     organization: 'Private Limited Company',
     vendorStatus: 'Approved',
-    status: 'Active'
+    status: 'Active',
+    country: 'India',
+    gstNumber: '27ADFG78654D',
+    pinCode: '411014',
+    establishmentDate: '01/04/2025',
+    companyPan: 'ADFG78654D',
+    companyCertifications: '',
+    headOfficeAddress: 'Trade Star, 4th Floor, Ganesh Nagar, Wadgaonsheri',
+    addressLine2: 'pune - 411014',
+    companyPhone: '8880776910',
+    companyFax: '',
+    companyWebsite: 'SNTLtd.com',
+    bankName: 'HDFC Bank',
+    accountNumber: 'XXXXXXXX4521',
+    ifscCode: 'HDFC0001234',
+    branchName: 'Wadgaonsheri, Pune',
+    accountHolderName: 'SNT Ltd',
+    contactDesignation: 'Vendor Relationship Manager',
+    contactPhone: '8880776910',
+    alternatePhone: ''
   }
 ]);
+
+/** Real per-record change history for SNT Ltd (the one vendor with a
+ * captured reference screenshot). */
+export const vendorHistoryData: AuditEntry[] = [
+  { attr: 'VendorCode', oldVal: '0', newVal: '2233', user: 'Pushpraj ENT Vendor', date: '07-21-2026 01:15:00 AM', comment: 'Modified' },
+  { attr: 'Company Email ID', oldVal: 'charlotte.kujur@gmail.com', newVal: 'charlotte.kujur@aptaracorp.com', user: 'Pushpraj ENT Vendor', date: '07-21-2026 01:14:00 AM', comment: 'Modified' },
+  { attr: 'Head Office Address 1', oldVal: 'Trade Star, 4th Floor, Wadgaonsheri', newVal: 'Trade Star, 4th Floor, Ganesh Nagar, Wadgaonsheri', user: 'Charlotte Kujur', date: '07-21-2026 12:13:00 AM', comment: 'Modified' },
+  { attr: 'Record', oldVal: '', newVal: '', user: 'Pushpraj ENT Vendor', date: '07-21-2026 12:10:32 AM', comment: 'Approved' },
+  { attr: 'Record', oldVal: '', newVal: 'Created', user: '', date: '07-21-2026 12:09:19 AM', comment: 'Created' }
+];
 
 export interface AppUser {
   first: string;
