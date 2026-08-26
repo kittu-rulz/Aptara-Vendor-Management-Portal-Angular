@@ -38,14 +38,16 @@
       <input pInputText class="w-full" [(ngModel)]="draft.expectedEnd" [readonly]="readonly" placeholder="DD/MM/YYYY" />
     </div>
 
-    <div class="form-field">
-      <label>Awarded Budget<span class="req">*</span></label>
-      <input pInputText type="number" class="w-full" [(ngModel)]="draft.awardedBudget" [readonly]="readonly" />
-    </div>
-    <div class="form-field">
-      <label>Currency</label>
-      <p-dropdown [options]="currencies" [(ngModel)]="draft.awardedCurrency" [disabled]="readonly" styleClass="w-full"></p-dropdown>
-    </div>
+    <ng-container *ngIf="!isNewRequest">
+      <div class="form-field">
+        <label>Awarded Budget<span class="req">*</span></label>
+        <input pInputText type="number" class="w-full" [(ngModel)]="draft.awardedBudget" [readonly]="readonly" />
+      </div>
+      <div class="form-field">
+        <label>Currency</label>
+        <p-dropdown [options]="currencies" [(ngModel)]="draft.awardedCurrency" [disabled]="readonly" styleClass="w-full"></p-dropdown>
+      </div>
+    </ng-container>
 
     <ng-container *ngIf="isCompleted">
       <div class="form-field">
@@ -89,12 +91,19 @@
   </div>
 
   <div class="form-section" *ngIf="!isCompleted">
-    <h3>Request Type</h3>
-    <label class="checkbox-row">
+    <h3>Request Type <span class="req-note" *ngIf="isNewRequest">(Note: Please select at least one Request Type and fill in all fields related to the selected Request Type.)</span></h3>
+    <ng-container *ngIf="isNewRequest">
+      <label class="checkbox-row" *ngFor="let type of requestTypeOptions">
+        <input type="checkbox" [checked]="draft.requestType === type" (change)="selectRequestType(type)" />
+        {{ type }}
+      </label>
+    </ng-container>
+    <label class="checkbox-row" *ngIf="!isNewRequest">
       <input type="checkbox" [checked]="true" disabled />
       {{ draft.requestType }}
     </label>
     <textarea
+      *ngIf="draft.requestType"
       pInputText
       class="w-full request-type-textarea"
       rows="6"
@@ -102,7 +111,7 @@
       [(ngModel)]="draft.requestTypeDetail"
       [readonly]="readonly"
     ></textarea>
-    <div class="hint">{{ draft.requestTypeDetail.length }} / 4000 characters (Remaining: {{ remaining(draft.requestTypeDetail) }})</div>
+    <div class="hint" *ngIf="draft.requestType">{{ draft.requestTypeDetail.length }} / 4000 characters (Remaining: {{ remaining(draft.requestTypeDetail) }})</div>
   </div>
 
   <div class="form-section" *ngIf="isCompleted">

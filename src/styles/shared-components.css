@@ -558,6 +558,13 @@
   margin-top: var(--space-4);
 }
 
+.req-note {
+  color: #dc2626;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  margin-left: 8px;
+}
+
 /* Vendor Registration Form's "Services" tab — a search+checklist on the
    left, a live "Selected Services" summary panel on the right. */
 .services-picker {

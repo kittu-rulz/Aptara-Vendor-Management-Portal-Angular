@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
-import { outsourceRequestsData, OutsourceRequest, displayStatus, statusSeverity, entityData, marketSegmentData } from '../../core/mock-data';
+import { outsourceRequestsData, OutsourceRequest, displayStatus, statusSeverity, entityData, marketSegmentData, natureOfServicesData } from '../../core/mock-data';
 
 type FormMode = 'add' | 'view' | 'complete';
 
@@ -41,6 +41,7 @@ export class OutsourceRequestFormComponent {
   dmUsers = DM_USERS;
   entities = entityData().map((e) => e['name'] as string);
   marketSegments = marketSegmentData().map((m) => m['segment'] as string);
+  requestTypeOptions = natureOfServicesData().map((n) => n['name'] as string);
   stagedFiles = STAGED_FILES;
   displayStatus = displayStatus;
   statusSeverity = statusSeverity;
@@ -70,6 +71,17 @@ export class OutsourceRequestFormComponent {
     return this.mode !== 'add';
   }
 
+  /** A genuinely blank new request has no Awarded Budget section at all
+   * (confirmed on the real blank Add form — that field only exists once a
+   * vendor has actually been awarded) and no Request Type pre-selected. */
+  get isNewRequest(): boolean {
+    return this.mode === 'add';
+  }
+
+  selectRequestType(type: string) {
+    this.draft.requestType = this.draft.requestType === type ? '' : type;
+  }
+
   private blankRequest(): OutsourceRequest {
     return {
       id: '',
@@ -81,9 +93,9 @@ export class OutsourceRequestFormComponent {
       rawAmount: 0,
       active: true,
       outsourceBudget: 0,
-      outsourceCurrency: 'USD',
+      outsourceCurrency: '',
       awardedBudget: 0,
-      awardedCurrency: 'INR',
+      awardedCurrency: '',
       expectedStart: '',
       expectedEnd: '',
       vendorProjectedStart: '',
@@ -97,7 +109,7 @@ export class OutsourceRequestFormComponent {
       dmUser: '',
       pmApprovalSecured: false,
       opsHeadApprovalSecured: false,
-      requestType: 'Translation',
+      requestType: '',
       requestTypeDetail: '',
       instructionForVendors: '',
       aptaraComments: ''
