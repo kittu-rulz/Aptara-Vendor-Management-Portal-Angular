@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
 import { configData, ConfigRow } from '../../core/mock-data';
@@ -14,7 +13,7 @@ import { configData, ConfigRow } from '../../core/mock-data';
 @Component({
   selector: 'app-config',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ButtonModule, DropdownModule],
+  imports: [CommonModule, FormsModule, TableModule, DropdownModule],
   templateUrl: './config.component.html',
   styleUrl: './config.component.css'
 })
@@ -44,9 +43,5 @@ export class ConfigComponent {
 
   cancelEdit() {
     this.editingKey = null;
-  }
-
-  exportExcel() {
-    this.messages.add({ severity: 'success', summary: 'Report Exported', detail: 'Report exported to Excel (.csv).' });
   }
 }

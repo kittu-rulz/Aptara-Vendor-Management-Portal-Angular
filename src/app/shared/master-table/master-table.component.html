@@ -22,7 +22,7 @@
           <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === col.key && sortAsc()" [class.pi-sort-amount-down]="sortField() === col.key && !sortAsc()" [class.pi-sort-alt]="sortField() !== col.key"></i></span>
         </th>
         <th class="sortable-th" (click)="toggleSort('active')">
-          Active
+          {{ activeLabel }}
           <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'active' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'active' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'active'"></i></span>
         </th>
       </tr>
@@ -35,7 +35,7 @@
           </span>
         </th>
         <th>
-          <select class="column-filter-select" aria-label="Filter by Active" [ngModel]="activeFilterValue()" (ngModelChange)="setActiveFilter($event)">
+          <select class="column-filter-select" [attr.aria-label]="'Filter by ' + activeLabel" [ngModel]="activeFilterValue()" (ngModelChange)="setActiveFilter($event)">
             <option value="">Select</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>

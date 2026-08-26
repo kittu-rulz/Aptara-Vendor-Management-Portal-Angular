@@ -393,7 +393,8 @@ export const routes: Routes = [
           ],
           addLabel: 'Currency',
           countLabel: 'All Currencies',
-          masterType: 'currency'
+          masterType: 'currency',
+          activeLabel: 'IsActive'
         }
       },
       {

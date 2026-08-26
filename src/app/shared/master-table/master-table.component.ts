@@ -34,6 +34,10 @@ export class MasterTableComponent {
   @Input() addLabel = 'Item';
   @Input() countLabel = 'All';
   @Input() masterType!: string;
+  /** Currency Master uniquely labels this column "IsActive" instead of
+   * "Active" — confirmed against a live screenshot; every other master
+   * uses "Active". */
+  @Input() activeLabel = 'Active';
 
   private messages = inject(MessageService);
 

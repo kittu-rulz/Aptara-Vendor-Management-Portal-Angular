@@ -1,1 +1,8 @@
-<app-history-table [title]="title" [entries]="entries" (exportExcel)="exportExcel()" (back)="back()"></app-history-table>
+<app-history-table
+  [title]="title"
+  [entries]="entries"
+  lastColumnLabel="Action"
+  defaultSortField="date"
+  (exportExcel)="exportExcel()"
+  (back)="back()"
+></app-history-table>

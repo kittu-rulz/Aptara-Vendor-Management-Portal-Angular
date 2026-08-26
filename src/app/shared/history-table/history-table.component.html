@@ -34,7 +34,7 @@
           <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'date' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'date' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'date'"></i></span>
         </th>
         <th class="sortable-th" (click)="toggleSort('comment')">
-          Comment
+          {{ lastColumnLabel }}
           <span class="sort-icons"><i class="pi" [class.pi-sort-amount-up-alt]="sortField() === 'comment' && sortAsc()" [class.pi-sort-amount-down]="sortField() === 'comment' && !sortAsc()" [class.pi-sort-alt]="sortField() !== 'comment'"></i></span>
         </th>
       </tr>
@@ -71,7 +71,7 @@
         </th>
         <th>
           <span class="column-filter-input-wrap">
-            <input type="text" class="column-filter-input" aria-label="Filter by Comment" [ngModel]="columnFilters().comment" (ngModelChange)="setColumnFilter('comment', $event)" />
+            <input type="text" class="column-filter-input" [attr.aria-label]="'Filter by ' + lastColumnLabel" [ngModel]="columnFilters().comment" (ngModelChange)="setColumnFilter('comment', $event)" />
             <i class="pi pi-filter column-filter-icon"></i>
           </span>
         </th>

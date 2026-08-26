@@ -19,4 +19,5 @@ export class MasterPageComponent {
   addLabel: string = this.data['addLabel'] ?? 'Item';
   countLabel: string = this.data['countLabel'] ?? 'All';
   masterType: string = this.data['masterType'] ?? '';
+  activeLabel: string = this.data['activeLabel'] ?? 'Active';
 }

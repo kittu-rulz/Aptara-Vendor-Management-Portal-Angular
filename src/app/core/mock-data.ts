@@ -146,10 +146,23 @@ export const marketSegmentData = signal<MasterRow[]>([
 ]);
 
 export const currencyData = signal<MasterRow[]>([
-  { curr: 'USD', amount: '85', year: '2025', month: 'April', desc: 'Exchange Rate', active: true },
-  { curr: 'USD', amount: '90', year: '2026', month: 'August', desc: 'Exchange Rate', active: true },
-  { curr: 'INR', amount: '1', year: '-', month: '-', desc: 'Base INR', active: true }
+  { curr: 'USD', amount: '85', year: '2025', month: 'April', desc: 'Description', active: true },
+  { curr: 'USD', amount: '90', year: '2026', month: 'August', desc: 'Description', active: true },
+  { curr: 'INR', amount: '1', year: '', month: '', desc: '', active: true }
 ]);
+
+/** Real "Currency Master History" audit trail, captured for the USD/85/
+ * 2025/April row (row index 0) — the one Master row across all 8 master
+ * types with a captured non-empty history. Every other master row/type
+ * correctly shows empty, matching the real app's default for an
+ * unmodified record. */
+export const currencyHistoryData: AuditEntry[] = [
+  { attr: 'Currency', oldVal: 'USD', newVal: 'USD', user: 'Pushpraj ENT Vendor', date: '08/06/2026 08:01:15 AM', comment: 'Modified' },
+  { attr: 'Currency Amount', oldVal: '0.00', newVal: '85', user: 'Pushpraj ENT Vendor', date: '08/06/2026 08:01:15 AM', comment: 'Modified' },
+  { attr: 'Month', oldVal: 'July', newVal: 'April', user: 'Pushpraj ENT Vendor', date: '08/06/2026 08:01:15 AM', comment: 'Modified' },
+  { attr: 'Year', oldVal: '2046', newVal: '2025', user: 'Pushpraj ENT Vendor', date: '08/06/2026 08:01:15 AM', comment: 'Modified' },
+  { attr: 'Record', oldVal: '', newVal: 'Created', user: 'Pushpraj ENT Vendor', date: '08/04/2026 11:28:02 PM', comment: 'Created' }
+];
 
 export interface AuditEntry {
   attr: string;

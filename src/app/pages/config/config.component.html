@@ -1,14 +1,5 @@
 <div class="table-card">
-  <div class="table-toolbar">
-    <div class="filter-group">
-      <button class="filter-chip active">All System Keys ({{ rows().length }})</button>
-    </div>
-    <div class="toolbar-actions">
-      <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
-    </div>
-  </div>
-
-  <p-table [value]="rows()" [rows]="10" styleClass="p-datatable-sm">
+  <p-table [value]="rows()" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th>Action</th>
