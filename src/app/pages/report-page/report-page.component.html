@@ -4,15 +4,20 @@
       <span class="section-heading"><i [class]="icon"></i> {{ heading }}</span>
       <div class="toolbar-actions">
         <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"></p-button>
-        <p-button label="Search" icon="pi pi-search"></p-button>
+        <p-button label="Search" icon="pi pi-search" (click)="search()"></p-button>
       </div>
     </div>
 
     <div class="report-filter-bar">
-      <div class="filter-item" *ngFor="let f of filters">
+      <div class="filter-item" *ngFor="let f of filters; let i = index">
         <label>{{ f.label }}</label>
-        <input *ngIf="f.type === 'date'" type="date" />
-        <select *ngIf="f.type === 'select'">
+        <input
+          *ngIf="f.type === 'date'"
+          type="date"
+          [ngModel]="filterValues[i]"
+          (ngModelChange)="setFilterValue(i, $event)"
+        />
+        <select *ngIf="f.type === 'select'" [ngModel]="filterValues[i]" (ngModelChange)="setFilterValue(i, $event)">
           <option value="">Select {{ f.label }}</option>
           <option *ngFor="let opt of f.options">{{ opt }}</option>
         </select>
@@ -20,7 +25,7 @@
     </div>
   </div>
 
-  <p-table [value]="rows" [rows]="10" styleClass="p-datatable-sm">
+  <p-table [value]="displayRows()" [rows]="10" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th *ngFor="let col of columns">{{ col.label }}</th>

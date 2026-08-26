@@ -157,11 +157,11 @@ export const routes: Routes = [
             { key: 'status', label: 'Invoice Status', isStatus: true }
           ],
           filters: [
-            { label: 'Start Date', type: 'date' },
-            { label: 'End Date', type: 'date' },
-            { label: 'Project Name', type: 'select', options: projectNames },
+            { label: 'Start Date', type: 'date', field: 'invDate', range: 'start' },
+            { label: 'End Date', type: 'date', field: 'invDate', range: 'end' },
+            { label: 'Project Name', type: 'select', options: projectNames, field: 'project' },
             { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
@@ -185,11 +185,11 @@ export const routes: Routes = [
             { key: 'status', label: 'Invoice Status', isStatus: true }
           ],
           filters: [
-            { label: 'Start Date', type: 'date' },
-            { label: 'End Date', type: 'date' },
-            { label: 'Project Name', type: 'select', options: projectNames },
-            { label: 'Vendor Name', type: 'select', options: vendorNames },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
+            { label: 'Start Date', type: 'date', field: 'invDate', range: 'start' },
+            { label: 'End Date', type: 'date', field: 'invDate', range: 'end' },
+            { label: 'Project Name', type: 'select', options: projectNames, field: 'project' },
+            { label: 'Vendor Name', type: 'select', options: vendorNames, field: 'vendor' },
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
@@ -212,9 +212,9 @@ export const routes: Routes = [
           filters: [
             { label: 'Start Date', type: 'date' },
             { label: 'End Date', type: 'date' },
-            { label: 'Vendor Name', type: 'select', options: vendorNames },
+            { label: 'Vendor Name', type: 'select', options: vendorNames, field: 'vendor' },
             { label: 'Market Segment', type: 'select', options: marketSegments },
-            { label: 'Invoice Status', type: 'select', options: invoiceStatuses }
+            { label: 'Invoice Status', type: 'select', options: invoiceStatuses, field: 'status' }
           ]
         }
       },
@@ -237,10 +237,10 @@ export const routes: Routes = [
             { key: 'invDate', label: 'Invoice Date' }
           ],
           filters: [
-            { label: 'Start Date', type: 'date' },
-            { label: 'End Date', type: 'date' },
-            { label: 'Project Name', type: 'select', options: projectNames },
-            { label: 'Vendor Name', type: 'select', options: vendorNames }
+            { label: 'Start Date', type: 'date', field: 'invDate', range: 'start' },
+            { label: 'End Date', type: 'date', field: 'invDate', range: 'end' },
+            { label: 'Project Name', type: 'select', options: projectNames, field: 'project' },
+            { label: 'Vendor Name', type: 'select', options: vendorNames, field: 'vendor' }
           ]
         }
       },
