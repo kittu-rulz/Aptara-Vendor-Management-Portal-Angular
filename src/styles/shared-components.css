@@ -210,3 +210,82 @@
   outline: none;
   border-color: var(--primary-color);
 }
+
+/* Routed Add/Edit/View form pages — replaces the old modal-dialog pattern
+   to match the real app, where every Add/Edit/View is its own page rather
+   than a popup. Shared across Masters, Config, and future entity forms. */
+.form-card {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-8);
+}
+
+.form-card h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.form-card h3 {
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 var(--space-4);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-5) var(--space-6);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space-5);
+}
+
+.form-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.form-field label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-field .req {
+  color: #e11d48;
+  margin-left: 2px;
+}
+
+.form-field .hint {
+  font-size: var(--text-xs);
+  color: var(--text-color-secondary);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: var(--space-8);
+}
+
+.form-section {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--surface-border);
+}
+
+.w-full {
+  width: 100%;
+}

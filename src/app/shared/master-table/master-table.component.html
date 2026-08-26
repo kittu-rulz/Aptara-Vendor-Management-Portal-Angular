@@ -14,7 +14,7 @@
 
     <div class="toolbar-actions">
       <p-button label="Export Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true" (click)="exportExcel()"></p-button>
-      <p-button [label]="addLabel" icon="pi pi-plus" (click)="openAdd()"></p-button>
+      <p-button [label]="addLabel" icon="pi pi-plus" [routerLink]="['/masters', masterType, 'add']"></p-button>
     </div>
   </div>
 
@@ -29,7 +29,7 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>
-          <button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button>
+          <a class="row-action" title="Edit" [routerLink]="['/masters', masterType, indexOf(row), 'edit']"><i class="pi pi-pencil"></i></a>
           <button
             class="row-action"
             [class.is-disable]="row['active']"
@@ -39,6 +39,8 @@
           >
             <i class="pi" [class.pi-power-off]="row['active']" [class.pi-refresh]="!row['active']"></i>
           </button>
+          <a class="row-action" title="View" [routerLink]="['/masters', masterType, indexOf(row), 'view']"><i class="pi pi-eye"></i></a>
+          <a class="row-action" title="History" [routerLink]="['/masters', masterType, indexOf(row), 'history']"><i class="pi pi-history"></i></a>
         </td>
         <td *ngFor="let col of columns">{{ row[col.key] }}</td>
         <td>
@@ -56,11 +58,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<app-entity-dialog
-  [(visible)]="dialogVisible"
-  [title]="dialogTitle"
-  [fields]="dialogFields"
-  [model]="dialogModel"
-  (save)="onSave($event)"
-></app-entity-dialog>

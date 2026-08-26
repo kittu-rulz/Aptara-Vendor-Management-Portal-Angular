@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
+import { Component, Input, WritableSignal, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { MasterRow } from '../../core/mock-data';
-import { EntityDialogComponent, EntityField } from '../entity-dialog/entity-dialog.component';
 
 export interface MasterColumn {
   key: string;
@@ -14,24 +14,24 @@ export interface MasterColumn {
 
 type ActiveFilter = 'all' | 'Active' | 'Disabled';
 
-/** Generic list table shared by all 8 row-based Masters pages — they only
- * differ by which columns they show and what the "Add" button is labeled,
- * so one configurable component replaces 8 near-identical ones. Also owns
- * the Edit/Add/Disable interactivity: the original prototype's masters all
- * follow the same pattern (edit-master modal, add-master in the same modal
- * with blank fields, a Disable toggle) so it's wired here once. */
+/** Generic list table shared by all 8 row-based Masters pages. Add/Edit/View
+ * navigate to the routed MasterFormPageComponent and History to
+ * MasterHistoryPageComponent (matching the real app, where every one of
+ * these is its own page — see master-registry.ts), rather than opening a
+ * dialog. */
 @Component({
   selector: 'app-master-table',
   standalone: true,
-  imports: [CommonModule, TableModule, TagModule, ButtonModule, EntityDialogComponent],
+  imports: [CommonModule, RouterLink, TableModule, TagModule, ButtonModule],
   templateUrl: './master-table.component.html',
   styleUrl: './master-table.component.css'
 })
-export class MasterTableComponent implements OnInit {
+export class MasterTableComponent {
   @Input() rows!: WritableSignal<MasterRow[]>;
   @Input() columns: MasterColumn[] = [];
   @Input() addLabel = 'Item';
   @Input() countLabel = 'All';
+  @Input() masterType!: string;
 
   private messages = inject(MessageService);
 
@@ -49,52 +49,15 @@ export class MasterTableComponent implements OnInit {
     return list.filter((r) => Boolean(r['active']) === wantActive);
   });
 
-  dialogVisible = false;
-  dialogTitle = '';
-  dialogModel: MasterRow = {};
-  dialogFields: EntityField[] = [];
-  private editingRow: MasterRow | null = null;
-
-  ngOnInit() {
-    // Computed once from the (static, route-provided) columns input rather
-    // than as a template-bound getter — a getter re-allocates a brand-new
-    // array and brand-new field objects on every change-detection check,
-    // which defeats *ngFor's default identity-based tracking and can spiral
-    // into a render loop (each check destroys/recreates the dialog's field
-    // DOM, which can retrigger PrimeNG's internal dialog observers, which
-    // triggers another check). This was the root cause of the dialog
-    // appearing to hang when opened.
-    this.dialogFields = this.columns.map((c) => ({ key: c.key, label: c.label, type: 'text' }));
-  }
-
   setFilter(filter: ActiveFilter) {
     this.activeFilter.set(filter);
   }
 
-  openEdit(row: MasterRow) {
-    this.editingRow = row;
-    this.dialogTitle = `Edit: ${row[this.columns[0]?.key] ?? ''}`;
-    this.dialogModel = { ...row };
-    this.dialogVisible = true;
-  }
-
-  openAdd() {
-    this.editingRow = null;
-    this.dialogTitle = `Add ${this.addLabel}`;
-    const blank: MasterRow = { active: true };
-    for (const col of this.columns) blank[col.key] = '';
-    this.dialogModel = blank;
-    this.dialogVisible = true;
-  }
-
-  onSave(draft: Record<string, any>) {
-    if (this.editingRow) {
-      this.rows.update((list) => list.map((r) => (r === this.editingRow ? { ...r, ...draft } : r)));
-      this.messages.add({ severity: 'success', summary: 'Master Data Saved', detail: 'Configuration parameters updated in master table.' });
-    } else {
-      this.rows.update((list) => [...list, { active: true, ...draft } as MasterRow]);
-      this.messages.add({ severity: 'success', summary: `${this.addLabel} Added`, detail: `New ${this.addLabel.toLowerCase()} record created.` });
-    }
+  /** Row identity for routing is the row's position in the underlying
+   * signal array — there's no backend id, and array order is stable for
+   * the lifetime of the session. */
+  indexOf(row: MasterRow): number {
+    return this.rows().indexOf(row);
   }
 
   toggleActive(row: MasterRow) {

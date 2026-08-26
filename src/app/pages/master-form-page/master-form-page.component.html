@@ -1,0 +1,34 @@
+<div class="form-card">
+  <h2>{{ title }}</h2>
+
+  <div class="form-field" *ngFor="let f of config.fields">
+    <label>{{ f.label }}<span class="req">*</span></label>
+    <input
+      *ngIf="(f.type || 'text') === 'text'"
+      pInputText
+      class="w-full"
+      [(ngModel)]="draft[f.key]"
+      [readonly]="mode === 'view'"
+    />
+    <input
+      *ngIf="f.type === 'number'"
+      pInputText
+      type="number"
+      class="w-full"
+      [(ngModel)]="draft[f.key]"
+      [readonly]="mode === 'view'"
+    />
+    <p-dropdown
+      *ngIf="f.type === 'select'"
+      [options]="f.options || []"
+      [(ngModel)]="draft[f.key]"
+      [disabled]="mode === 'view'"
+      styleClass="w-full"
+    ></p-dropdown>
+  </div>
+
+  <div class="form-actions">
+    <p-button *ngIf="mode !== 'view'" [label]="mode === 'add' ? 'Add' : 'Update'" icon="pi pi-check" severity="success" (click)="save()"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" severity="danger" (click)="cancel()"></p-button>
+  </div>
+</div>

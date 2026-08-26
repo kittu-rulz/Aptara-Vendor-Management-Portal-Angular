@@ -9,6 +9,8 @@ import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { AuditComponent } from './pages/audit/audit.component';
 import { ReportPageComponent } from './pages/report-page/report-page.component';
 import { MasterPageComponent } from './pages/master-page/master-page.component';
+import { MasterFormPageComponent } from './pages/master-form-page/master-form-page.component';
+import { MasterHistoryPageComponent } from './pages/master-history-page/master-history-page.component';
 import { ConfigComponent } from './pages/config/config.component';
 import {
   invoiceReportData,
@@ -190,7 +192,8 @@ export const routes: Routes = [
           rows: natureOfServicesData,
           columns: [{ key: 'name', label: 'Nature of Service Provided' }],
           addLabel: 'Nature Of Service',
-          countLabel: 'All'
+          countLabel: 'All',
+          masterType: 'nature-of-service'
         }
       },
       {
@@ -205,7 +208,8 @@ export const routes: Routes = [
             { key: 'requestType', label: 'Request Type' }
           ],
           addLabel: 'Service Executed',
-          countLabel: 'All'
+          countLabel: 'All',
+          masterType: 'service-executed'
         }
       },
       {
@@ -217,7 +221,8 @@ export const routes: Routes = [
           rows: orgTypeData,
           columns: [{ key: 'type', label: 'Type of Organization' }],
           addLabel: 'Type of Organization',
-          countLabel: 'All'
+          countLabel: 'All',
+          masterType: 'organization-type'
         }
       },
       {
@@ -229,7 +234,8 @@ export const routes: Routes = [
           rows: gstData,
           columns: [{ key: 'type', label: 'GST Eligibility' }],
           addLabel: 'GST Eligibility',
-          countLabel: 'All'
+          countLabel: 'All',
+          masterType: 'gst-eligibility'
         }
       },
       {
@@ -241,13 +247,14 @@ export const routes: Routes = [
           rows: outsourceStatusData,
           columns: [{ key: 'status', label: 'Project Outsource Status' }],
           addLabel: 'Outsource Status',
-          countLabel: 'All'
+          countLabel: 'All',
+          masterType: 'outsource-status'
         }
       },
       {
         path: 'masters/configuration',
         component: ConfigComponent,
-        data: { title: 'Configuration', breadcrumb: crumb('Masters & Config › Configuration') }
+        data: { title: 'Configuration Setting', breadcrumb: crumb('Masters & Config › Configuration Setting') }
       },
       {
         path: 'masters/entity',
@@ -263,7 +270,8 @@ export const routes: Routes = [
             { key: 'loc', label: 'Location' }
           ],
           addLabel: 'Entity',
-          countLabel: 'All Entities'
+          countLabel: 'All Entities',
+          masterType: 'entity'
         }
       },
       {
@@ -278,7 +286,8 @@ export const routes: Routes = [
             { key: 'code', label: 'Segment Code' }
           ],
           addLabel: 'Market Segment',
-          countLabel: 'All Segments'
+          countLabel: 'All Segments',
+          masterType: 'market-segment'
         }
       },
       {
@@ -296,8 +305,29 @@ export const routes: Routes = [
             { key: 'desc', label: 'Description' }
           ],
           addLabel: 'Currency',
-          countLabel: 'All Currencies'
+          countLabel: 'All Currencies',
+          masterType: 'currency'
         }
+      },
+      {
+        path: 'masters/:masterType/add',
+        component: MasterFormPageComponent,
+        data: { title: 'Master Data', breadcrumb: crumb('Masters & Config'), mode: 'add' }
+      },
+      {
+        path: 'masters/:masterType/:index/edit',
+        component: MasterFormPageComponent,
+        data: { title: 'Master Data', breadcrumb: crumb('Masters & Config'), mode: 'edit' }
+      },
+      {
+        path: 'masters/:masterType/:index/view',
+        component: MasterFormPageComponent,
+        data: { title: 'Master Data', breadcrumb: crumb('Masters & Config'), mode: 'view' }
+      },
+      {
+        path: 'masters/:masterType/:index/history',
+        component: MasterHistoryPageComponent,
+        data: { title: 'Master Data History', breadcrumb: crumb('Masters & Config') }
       }
     ]
   }

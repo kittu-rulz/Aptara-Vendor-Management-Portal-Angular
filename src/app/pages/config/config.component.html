@@ -18,18 +18,26 @@
     </ng-template>
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><button class="row-action" title="Edit" (click)="openEdit(row)"><i class="pi pi-pencil"></i></button></td>
+        <td>
+          <ng-container *ngIf="!isEditing(row)">
+            <button class="row-action" title="Edit" (click)="startEdit(row)"><i class="pi pi-pencil"></i></button>
+          </ng-container>
+          <ng-container *ngIf="isEditing(row)">
+            <button class="row-action is-enable" title="Confirm" (click)="confirmEdit(row)"><i class="pi pi-check"></i></button>
+            <button class="row-action is-disable" title="Cancel" (click)="cancelEdit()"><i class="pi pi-times"></i></button>
+          </ng-container>
+        </td>
         <td><strong>{{ row.key }}</strong></td>
-        <td>{{ row.val }}</td>
+        <td>
+          <p-dropdown
+            *ngIf="isEditing(row)"
+            [options]="boolOptions"
+            [(ngModel)]="draftValue"
+            styleClass="w-full"
+          ></p-dropdown>
+          <ng-container *ngIf="!isEditing(row)">{{ row.val }}</ng-container>
+        </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
-
-<app-entity-dialog
-  [(visible)]="dialogVisible"
-  [title]="dialogTitle"
-  [fields]="dialogFields"
-  [model]="dialogModel"
-  (save)="onSave($event)"
-></app-entity-dialog>

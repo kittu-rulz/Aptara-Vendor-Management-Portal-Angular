@@ -18,4 +18,5 @@ export class MasterPageComponent {
   columns: MasterColumn[] = this.data['columns'] ?? [];
   addLabel: string = this.data['addLabel'] ?? 'Item';
   countLabel: string = this.data['countLabel'] ?? 'All';
+  masterType: string = this.data['masterType'] ?? '';
 }
