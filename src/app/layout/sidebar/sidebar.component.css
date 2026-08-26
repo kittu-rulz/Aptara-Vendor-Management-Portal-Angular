@@ -88,6 +88,33 @@
   color: var(--text-color);
 }
 
+.nav-item {
+  position: relative;
+}
+
+.nav-tooltip {
+  display: none;
+}
+
+.sidebar.collapsed .nav-item:hover .nav-tooltip {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  padding: 6px 10px;
+  background: var(--surface-card);
+  color: var(--text-color);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-main);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 200;
+}
+
 .nav-item.active {
   background: var(--highlight-bg);
   color: var(--highlight-text-color);
@@ -162,6 +189,26 @@
 }
 
 .sidebar.collapsed .nav-sub-item {
+  white-space: nowrap;
+}
+
+/* Only relevant inside the collapsed flyout — the expanded inline
+   accordion already shows this label in its own toggle row right above,
+   so a second copy there would just be noise. */
+.nav-flyout-title {
+  display: none;
+}
+
+.sidebar.collapsed .nav-flyout-title {
+  display: block;
+  padding: 4px 10px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--surface-border);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   white-space: nowrap;
 }
 

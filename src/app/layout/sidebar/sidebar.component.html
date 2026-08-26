@@ -20,6 +20,7 @@
       <i [class]="item.icon"></i>
       <span *ngIf="!nav.sidebarCollapsed()">{{ item.label }}</span>
       <span class="nav-badge" *ngIf="item.badge && !nav.sidebarCollapsed()">{{ item.badge }}</span>
+      <span class="nav-tooltip" *ngIf="nav.sidebarCollapsed()">{{ item.label }}</span>
     </a>
 
     <div class="nav-section-title" *ngIf="!nav.sidebarCollapsed()">ANALYTICS &amp; REPORTS</div>
@@ -30,6 +31,7 @@
         <i class="pi pi-chevron-down dropdown-arrow" *ngIf="!nav.sidebarCollapsed()"></i>
       </div>
       <div class="nav-sub-menu">
+        <div class="nav-flyout-title">{{ nav.analytics.label }}</div>
         <a
           *ngFor="let child of nav.analytics.children"
           class="nav-sub-item"
@@ -50,6 +52,7 @@
         <i class="pi pi-chevron-down dropdown-arrow" *ngIf="!nav.sidebarCollapsed()"></i>
       </div>
       <div class="nav-sub-menu">
+        <div class="nav-flyout-title">{{ nav.masters.label }}</div>
         <a
           *ngFor="let child of nav.masters.children"
           class="nav-sub-item"
@@ -65,6 +68,7 @@
     <a *ngIf="nav.showAuditTrail" class="nav-item" [routerLink]="nav.auditTrail.route" routerLinkActive="active">
       <i [class]="nav.auditTrail.icon"></i>
       <span *ngIf="!nav.sidebarCollapsed()">{{ nav.auditTrail.label }}</span>
+      <span class="nav-tooltip" *ngIf="nav.sidebarCollapsed()">{{ nav.auditTrail.label }}</span>
     </a>
   </nav>
 
